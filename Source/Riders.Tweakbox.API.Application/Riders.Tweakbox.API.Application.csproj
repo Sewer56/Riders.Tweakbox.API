@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Auth\**" />
+    <Compile Remove="Models\Matches\**" />
+    <EmbeddedResource Remove="Models\Auth\**" />
+    <EmbeddedResource Remove="Models\Matches\**" />
+    <None Remove="Models\Auth\**" />
+    <None Remove="Models\Matches\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="FastExpressionCompiler" Version="3.0.4" />
+	<PackageReference Include="FluentValidation" Version="10.0.4" />
+	<PackageReference Include="Mapster" Version="7.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Riders.Tweakbox.API.Application.Commands\Riders.Tweakbox.API.Application.Commands.csproj" />
+    <ProjectReference Include="..\Riders.Tweakbox.API.Domain\Riders.Tweakbox.API.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
