@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Refit;
 using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.Browser;
 using Riders.Tweakbox.API.Application.Commands.v1.Browser.Result;
 
-namespace Riders.Tweakbox.API.SDK
+namespace Riders.Tweakbox.API.SDK.Interfaces
 {
     public interface IServerBrowserApi
     {

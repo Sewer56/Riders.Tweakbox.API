@@ -4,7 +4,7 @@ using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.User;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 
-namespace Riders.Tweakbox.API.SDK
+namespace Riders.Tweakbox.API.SDK.Interfaces
 {
     public interface IIdentity
     {

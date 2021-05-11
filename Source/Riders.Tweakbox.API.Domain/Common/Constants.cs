@@ -22,7 +22,7 @@
         public static class Auth
         {
             public const int MinPasswordLength       = 6;
-            public const int MaxFailedAccessAttempts = 5;
+            public const int MaxFailedAccessAttempts = 15;
             public const int LockoutTimeSpan         = 5;
             public const int RefreshTokenExpiryDays  = 180;
         }

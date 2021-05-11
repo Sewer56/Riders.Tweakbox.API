@@ -1,4 +1,6 @@
-﻿namespace Riders.Tweakbox.API.Application.Commands.v1.Match
+﻿using System;
+
+namespace Riders.Tweakbox.API.Application.Commands.v1.Match
 {
     /// <summary>
     /// Information related to an individual player who played a match.
