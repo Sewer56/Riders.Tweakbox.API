@@ -35,11 +35,11 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
 
         
         /// <inheritdoc />
-        public async Task<AuthenticationResult> TryRegisterDefaultAdminUserAsync(string username, string password, CancellationToken cancellationToken)
+        public async Task<AuthenticationResult> TryRegisterDefaultAdminUserAsync(string email, string username, string password, CancellationToken cancellationToken)
         {
             if (!_userManager.Users.Any())
             {
-                var result = await RegisterAsync(username, password, cancellationToken);
+                var result = await RegisterAsync(email, username, password, cancellationToken);
                 await _userManager.AddToRoleAsync(await _userManager.FindByNameAsync(username), Roles.Admin);
                 return result;
             }
@@ -48,7 +48,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         }
 
         /// <inheritdoc />
-        public async Task<AuthenticationResult> RegisterAsync(string username, string password, CancellationToken cancellationToken)
+        public async Task<AuthenticationResult> RegisterAsync(string email, string username, string password, CancellationToken cancellationToken)
         {
             var existingUser = await _userManager.FindByNameAsync(username);
             if (existingUser != null)
@@ -60,7 +60,11 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
                 };
             }
 
-            var newUser    = new ApplicationUser() { UserName = username };
+            var newUser    = new ApplicationUser()
+            {
+                Email = email,
+                UserName = username
+            };
             var createUser = await _userManager.CreateAsync(newUser, password);
 
             if (!createUser.Succeeded)

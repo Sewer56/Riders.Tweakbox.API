@@ -18,6 +18,7 @@ namespace Integration.Tests.Common
     {
         protected readonly HttpClient TestClient;
         protected const string DefaultUserName = "ArgieArgieArgie";
+        protected const string DefaultEmail = "Admin@IStillLoveYou.net";
 
         protected TestBase()
         {
@@ -37,6 +38,7 @@ namespace Integration.Tests.Common
         {
             var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
             {
+                Email = DefaultEmail,
                 UserName = DefaultUserName,
                 Password = "IStillLoveYou!11!111",
             });

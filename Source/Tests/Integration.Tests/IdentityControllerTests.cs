@@ -24,6 +24,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
             {
+                Email = DefaultEmail,
                 UserName = DefaultUserName,
                 Password = "RandomPassword",
             });
@@ -42,6 +43,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
             {
+                Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
                 Password = "RandomPassword",
             });
@@ -60,6 +62,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
             {
+                Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
                 Password = "UPPERCASEONLY123",
             });
@@ -78,6 +81,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
             {
+                Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
                 Password = "Arg1e",
             });
@@ -96,6 +100,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
             {
+                Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
                 Password = "RandomPassword123",
             });
@@ -115,6 +120,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
             {
+                Email = DefaultEmail,
                 UserName = $"aaaaaaaaaabbbbbbbbbbccccccccccddd",
                 Password = "RandomPassword123",
             });

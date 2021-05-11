@@ -43,7 +43,7 @@ namespace Riders.Tweakbox.API.Controllers
         [HttpPost(Routes.Identity.Register)]
         public async Task<IActionResult> Register(UserRegistrationRequest request, CancellationToken cancellationToken)
         {
-            return HandleAuthResponse(await _identityService.RegisterAsync(request.UserName, request.Password, cancellationToken));
+            return HandleAuthResponse(await _identityService.RegisterAsync(request.Email, request.UserName, request.Password, cancellationToken));
         }
 
         /// <summary>

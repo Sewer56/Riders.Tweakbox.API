@@ -25,10 +25,10 @@
             public const string Base = "v1/Browser";
         }
 
-        public static string ToRestGetAll(this string basePath) => basePath + RestGetAll;
-        public static string ToRestGet(this string basePath) => basePath + RestGet;
-        public static string ToRestUpdate(this string basePath) => basePath + RestUpdate;
-        public static string ToRestCreate(this string basePath) => basePath + RestCreate;
-        public static string ToRestDelete(this string basePath) => basePath + RestDelete;
+        public static string ToRestGetAll(this string basePath) => basePath + '/' + RestGetAll;
+        public static string ToRestGet(this string basePath) => basePath + '/' + RestGet;
+        public static string ToRestUpdate(this string basePath) => basePath + '/' + RestUpdate;
+        public static string ToRestCreate(this string basePath) => basePath + '/' + RestCreate;
+        public static string ToRestDelete(this string basePath) => basePath + '/' + RestDelete;
     }
 }

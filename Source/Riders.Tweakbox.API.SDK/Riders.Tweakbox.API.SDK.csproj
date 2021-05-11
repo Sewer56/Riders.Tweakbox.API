@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Refit" Version="6.0.38" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Riders.Tweakbox.API.Application.Commands\Riders.Tweakbox.API.Application.Commands.csproj" />
   </ItemGroup>
 

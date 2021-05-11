@@ -6,8 +6,8 @@ namespace Riders.Tweakbox.API.Application.Services
 {
     public interface IIdentityService
     {
-        Task<AuthenticationResult> TryRegisterDefaultAdminUserAsync(string username, string password, CancellationToken cancellationToken);
-        Task<AuthenticationResult> RegisterAsync(string username, string password, CancellationToken cancellationToken);
+        Task<AuthenticationResult> TryRegisterDefaultAdminUserAsync(string email, string username, string password, CancellationToken cancellationToken);
+        Task<AuthenticationResult> RegisterAsync(string email, string username, string password, CancellationToken cancellationToken);
         Task<AuthenticationResult> LoginAsync(string username, string password, CancellationToken cancellationToken);
         Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken);
     }

@@ -41,7 +41,7 @@ namespace Riders.Tweakbox.API
             var configuration   = scope.ServiceProvider.GetRequiredService<IConfiguration>();
             var adminUser       = new DefaultAdminUser();
             configuration.Bind(nameof(adminUser), adminUser);
-            await identityService.TryRegisterDefaultAdminUserAsync(adminUser.Username, adminUser.Password, CancellationToken.None);
+            await identityService.TryRegisterDefaultAdminUserAsync(adminUser.AdminEmail, adminUser.Username, adminUser.Password, CancellationToken.None);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

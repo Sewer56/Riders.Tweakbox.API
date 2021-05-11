@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Riders.Tweakbox.API.Application.Commands.v1;
 using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.Match.Validation;
 using Riders.Tweakbox.API.Application.Models.Config;
@@ -129,6 +130,7 @@ namespace Riders.Tweakbox.API
                 c.IncludeXmlComments(GetXmlPathForAssembly(typeof(Player).Assembly));                // Domain
                 c.IncludeXmlComments(GetXmlPathForAssembly(typeof(ApplicationDbContext).Assembly));  // Infrastructure
                 c.IncludeXmlComments(GetXmlPathForAssembly(typeof(IIdentityService).Assembly));      // Application
+                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(MatchTypeDto).Assembly));          // Contract
 
                 // Authentication
                 var scheme = new OpenApiSecurityScheme()

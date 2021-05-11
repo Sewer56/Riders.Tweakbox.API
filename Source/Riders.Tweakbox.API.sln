@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "Tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration.Tests", "Tests\Integration.Tests\Integration.Tests.csproj", "{8283DD88-785D-46A6-B346-EB8CB85A6FC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riders.Tweakbox.Library.SDK", "Riders.Tweakbox.Library.SDK\Riders.Tweakbox.Library.SDK.csproj", "{7F0A76C8-41E0-48A7-BBDB-E0714575E15C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riders.Tweakbox.Library.SDK", "Riders.Tweakbox.API.SDK\Riders.Tweakbox.API.SDK.csproj", "{7F0A76C8-41E0-48A7-BBDB-E0714575E15C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riders.Tweakbox.API.Application.Commands", "Riders.Tweakbox.API.Application.Commands\Riders.Tweakbox.API.Application.Commands.csproj", "{1DF9580D-FBEA-4CC2-A253-2081DF87C408}"
 EndProject
