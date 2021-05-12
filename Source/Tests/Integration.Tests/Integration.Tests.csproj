@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Riders.Tweakbox.API.SDK\Riders.Tweakbox.API.SDK.csproj" />
     <ProjectReference Include="..\..\Riders.Tweakbox.API\Riders.Tweakbox.API.csproj" />
     <ProjectReference Include="..\Application.Tests\Application.Tests.csproj" />
   </ItemGroup>

@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Net.Http.Json;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Integration.Tests.Common;
-using Riders.Tweakbox.API.Application.Commands;
-using Riders.Tweakbox.API.Application.Commands.v1.Match.Result;
 using Xunit;
 
 namespace Integration.Tests
@@ -18,13 +14,11 @@ namespace Integration.Tests
             await AuthenticateAsync();
 
             // Act
-            var response = await TestClient.GetAsync(Routes.Match.Base.ToRestGetAll());
+            var response = await Api.Match.GetAll();
             
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Empty(await response.Content.ReadFromJsonAsync<List<GetMatchResult>>());
+            Assert.Empty(response.Content);
         }
-
-
     }
 }

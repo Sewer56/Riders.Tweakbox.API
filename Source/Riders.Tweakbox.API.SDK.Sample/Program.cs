@@ -6,6 +6,7 @@ using Riders.Tweakbox.API.Application.Commands.v1;
 using Riders.Tweakbox.API.Application.Commands.v1.Browser;
 using Riders.Tweakbox.API.Application.Commands.v1.Browser.Result;
 using Riders.Tweakbox.API.Application.Commands.v1.User;
+using static System.String;
 
 namespace Riders.Tweakbox.API.SDK.Sample
 {
@@ -37,15 +38,6 @@ namespace Riders.Tweakbox.API.SDK.Sample
                 Console.WriteLine($"Registered, Token: {registerResponse.Content.Token}");
             }
 
-            // Login
-            var loginResponse = await tweakbox.Identity.Login(new UserLoginRequest()
-            {
-                Username = Username,
-                Password = Password
-            });
-
-            Console.WriteLine($"Login: {loginResponse.Content.Token}");
-
             // Create Server
             var serverCreate = await tweakbox.Browser.CreateOrRefresh(new PostServerRequest()
             {
@@ -60,9 +52,21 @@ namespace Riders.Tweakbox.API.SDK.Sample
             });
 
             var getAll = await tweakbox.Browser.GetAll();
+            if (getAll.StatusCode == HttpStatusCode.BadRequest)
+                Console.WriteLine("Failed to Get Server Browser Data");
 
             // Delete Server
             await tweakbox.Browser.Delete(serverCreate.Content.Id, 1);
+
+            // Login
+            var loginResponse = await tweakbox.TryAuthenticate(Username, Password);
+            loginResponse.Switch(response => Console.WriteLine($"Login: {response.Token}"), 
+                error => Console.WriteLine($"Failed to Login: {Join("\n", error.Errors)}"));
+
+            // Get Past Match Data (Uses Authentication)
+            var matches = await tweakbox.Match.GetAll();
+            if (matches.StatusCode == HttpStatusCode.BadRequest)
+                Console.WriteLine("Failed to Get Match Data");
         }
     }
 }

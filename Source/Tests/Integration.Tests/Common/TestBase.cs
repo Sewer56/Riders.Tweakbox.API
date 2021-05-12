@@ -1,25 +1,26 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Riders.Tweakbox.API;
-using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.User;
-using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Riders.Tweakbox.API.Infrastructure.Common;
+using Riders.Tweakbox.API.SDK;
 
 namespace Integration.Tests.Common
 {
     public abstract class TestBase
     {
+        public TweakboxApi Api { get; private set; }
+
         protected readonly HttpClient TestClient;
         protected const string DefaultUserName = "ArgieArgieArgie";
         protected const string DefaultEmail = "Admin@IStillLoveYou.net";
-
+        protected const string DefaultPassword = "IStillLoveYou!11!111";
+        
         protected TestBase()
         {
             var appFactory = new WebApplicationFactory<Startup>();
@@ -27,24 +28,25 @@ namespace Integration.Tests.Common
 
             using var scope = appFactory.Services.CreateScope();
             Task.Run(() => ClearDatabase(scope.ServiceProvider)).Wait();
+
+            Api = new TweakboxApi(handler => appFactory.CreateDefaultClient(handler));
         }
 
         protected async Task AuthenticateAsync()
         {
-            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await GetJwtAsync());
-        }
-
-        protected async Task<string> GetJwtAsync()
-        {
-            var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
+            var registerResult = await Api.Identity.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = DefaultUserName,
-                Password = "IStillLoveYou!11!111",
+                Password = DefaultPassword,
             });
 
-            var registrationResponse = await response.Content.ReadFromJsonAsync<AuthSuccessResponse>();
-            return registrationResponse.Token;
+            if (registerResult.StatusCode != HttpStatusCode.OK)
+                throw new Exception("Failed to Register");
+
+            var loginResult = await Api.TryAuthenticate(DefaultUserName, DefaultPassword);
+            if (loginResult.IsT1)
+                throw new Exception("Failed to Login");
         }
 
         private static async Task ClearDatabase(IServiceProvider provider)

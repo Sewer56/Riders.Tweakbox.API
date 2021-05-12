@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Integration.Tests.Common;
-using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.User;
-using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Xunit;
 
 namespace Integration.Tests
@@ -22,7 +19,7 @@ namespace Integration.Tests
 
             // Act
             // Try Create Default User Again
-            var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
+            var response = await Api.Identity.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = DefaultUserName,
@@ -32,7 +29,7 @@ namespace Integration.Tests
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var registrationResponse = await response.Content.ReadFromJsonAsync<ErrorReponse>();
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
             Assert.NotEmpty(registrationResponse.Errors);
         }
 
@@ -41,7 +38,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
+            var response = await Api.Identity.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -51,7 +48,7 @@ namespace Integration.Tests
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var registrationResponse = await response.Content.ReadFromJsonAsync<ErrorReponse>();
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
             Assert.NotEmpty(registrationResponse.Errors);
         }
 
@@ -60,7 +57,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
+            var response = await Api.Identity.Register( new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -70,7 +67,7 @@ namespace Integration.Tests
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var registrationResponse = await response.Content.ReadFromJsonAsync<ErrorReponse>();
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
             Assert.NotEmpty(registrationResponse.Errors);
         }
 
@@ -79,7 +76,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
+            var response = await Api.Identity.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -89,7 +86,7 @@ namespace Integration.Tests
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var registrationResponse = await response.Content.ReadFromJsonAsync<ErrorReponse>();
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
             Assert.NotEmpty(registrationResponse.Errors);
         }
 
@@ -98,7 +95,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
+            var response = await Api.Identity.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -107,10 +104,8 @@ namespace Integration.Tests
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            var registrationResponse = await response.Content.ReadFromJsonAsync<AuthSuccessResponse>();
-            Assert.False(String.IsNullOrEmpty(registrationResponse.Token));
-            Assert.False(String.IsNullOrEmpty(registrationResponse.RefreshToken));
+            Assert.False(String.IsNullOrEmpty(response.Content.Token));
+            Assert.False(String.IsNullOrEmpty(response.Content.RefreshToken));
         }
 
         [Fact]
@@ -118,7 +113,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await TestClient.PostAsJsonAsync(Routes.Identity.Register, new UserRegistrationRequest()
+            var response = await Api.Identity.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"aaaaaaaaaabbbbbbbbbbccccccccccddd",
@@ -128,7 +123,7 @@ namespace Integration.Tests
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var registrationResponse = await response.Content.ReadFromJsonAsync<ErrorReponse>();
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
             Assert.NotEmpty(registrationResponse.Errors);
         }
     }

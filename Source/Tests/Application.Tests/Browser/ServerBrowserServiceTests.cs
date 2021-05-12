@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Application.Tests.Browser
 {
-    public class ServerBrowserTests
+    public class ServerBrowserServiceTests
     {
         [Fact]
         public void RefreshServerList_RemovesItemWhenExpired()
