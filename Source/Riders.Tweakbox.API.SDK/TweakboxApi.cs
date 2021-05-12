@@ -1,4 +1,7 @@
-﻿using Refit;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+using Refit;
+using Riders.Tweakbox.API.SDK.Common;
 using Riders.Tweakbox.API.SDK.Interfaces;
 
 namespace Riders.Tweakbox.API.SDK
@@ -24,7 +27,15 @@ namespace Riders.Tweakbox.API.SDK
 
         private TService MakeRestService<TService>()
         {
-            return RestService.For<TService>(_url);
+            return RestService.For<TService>(_url, new RefitSettings(RefitConstants.ContentSerializer)
+            {
+                
+            });
+        }
+
+        private Task<string> HeaderValueGetter()
+        {
+            return Task.FromResult("");
         }
     }
 }

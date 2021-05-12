@@ -5,4 +5,8 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Riders.Tweakbox.API.SDK\Riders.Tweakbox.API.SDK.csproj" />
+  </ItemGroup>
+
 </Project>

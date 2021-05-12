@@ -15,7 +15,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// <response code="400">User details are incorrect.</response>
         /// <response code="200">Success</response>
         /// <returns><seealso cref="AuthSuccessResponse"/> if successful, else <seealso cref="Application.Commands.v1.Error.ErrorResponse"/></returns>
-        [Post(Routes.Identity.Login)]
+        [Post("/" + Routes.Identity.Login)]
         public Task<ApiResponse<AuthSuccessResponse>> Login([Body] UserLoginRequest request);
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// <response code="400">User details are incorrect.</response>
         /// <response code="200">Success</response>
         /// <returns><seealso cref="AuthSuccessResponse"/> if successful, else <seealso cref="Riders.Tweakbox.API.Application.Commands.v1.Error.ErrorResponse"/></returns>
-        [Post(Routes.Identity.Register)]
+        [Post("/" + Routes.Identity.Register)]
         public Task<ApiResponse<AuthSuccessResponse>> Register([Body] UserRegistrationRequest request);
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// <response code="400">Token details are incorrect.</response>
         /// <response code="200">Success</response>
         /// <returns><seealso cref="AuthSuccessResponse"/> if successful, else <seealso cref="Riders.Tweakbox.API.Application.Commands.v1.Error.ErrorResponse"/></returns>
-        [Post(Routes.Identity.Refresh)]
+        [Post("/" + Routes.Identity.Refresh)]
         public Task<ApiResponse<AuthSuccessResponse>> Refresh([Body] RefreshTokenRequest request);
     }
 }

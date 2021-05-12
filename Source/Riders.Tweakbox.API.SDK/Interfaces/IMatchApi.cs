@@ -4,15 +4,17 @@ using Refit;
 using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.Match;
 using Riders.Tweakbox.API.Application.Commands.v1.Match.Result;
+using Riders.Tweakbox.API.SDK.Common;
 
 namespace Riders.Tweakbox.API.SDK.Interfaces
 {
+    [Headers(RefitConstants.BearerAuthentication)]
     public interface IMatchApi
     {
         /// <summary>
         /// Retrieves all matches from the database.
         /// </summary>
-        [Get(Routes.Match.Base + "/" + Routes.RestGetAll)]
+        [Get("/" + Routes.Match.Base + "/" + Routes.RestGetAll)]
         public Task<ApiResponse<List<GetMatchResult>>> GetAll();
 
         /// <summary>
@@ -20,7 +22,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// </summary>
         /// <param name="id">Unique identifier for the match.</param>
         /// <response code="400">Requested match was not found.</response>
-        [Get(Routes.Match.Base + "/" + Routes.RestGet)]
+        [Get("/" + Routes.Match.Base + "/" + Routes.RestGet)]
         public Task<ApiResponse<GetMatchResult>> Get(int id);
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// <param name="item">Altered details of the match.</param>
         /// <response code="400">Requested match was not found.</response>
         /// <response code="204">Success (No Content)</response>
-        [Get(Routes.Match.Base + "/" + Routes.RestUpdate)]
+        [Get("/" + Routes.Match.Base + "/" + Routes.RestUpdate)]
         public Task Update(int id, [Body] PostMatchRequest item);
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// </summary>
         /// <param name="item">The details of the match.</param>
         /// <response code="201">Successfully created.</response>
-        [Get(Routes.Match.Base + "/" + Routes.RestCreate)]
+        [Get("/" + Routes.Match.Base + "/" + Routes.RestCreate)]
         public Task<ApiResponse<GetMatchResult>> Create([Body] PostMatchRequest item);
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// <param name="id">Unique identifier for the match.</param>
         /// <response code="400">Requested match was not found.</response>
         /// <response code="204">Success (No Content)</response>
-        [Get(Routes.Match.Base + "/" + Routes.RestDelete)]
+        [Get("/" + Routes.Match.Base + "/" + Routes.RestDelete)]
         public Task Delete(int id);
     }
 }
