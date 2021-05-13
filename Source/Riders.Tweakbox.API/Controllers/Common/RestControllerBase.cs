@@ -20,7 +20,7 @@ namespace Riders.Tweakbox.API.Controllers.Common
         /// Retrieves all items from the resource.
         /// </summary>
         [HttpGet(Routes.RestGetAll)]
-        public virtual async Task<ActionResult<List<TGetType>>> GetAll(CancellationToken cancellationToken) => throw new NotImplementedException();
+        public virtual async Task<ActionResult<PagedResponse<TGetType>>> GetAll([FromQuery] PaginationQuery query, CancellationToken cancellationToken) => throw new NotImplementedException();
 
         /// <summary>
         /// Retrieves a single item from the resource.

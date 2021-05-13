@@ -162,11 +162,11 @@ namespace Integration.Tests
             });
 
             // Call API requiring auth.
-            var matchResponse = await Api.Match.GetAll();
+            var matchResponse = await Api.Match.GetAll(null);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, matchResponse.StatusCode);
-            Assert.Empty(matchResponse.Content);
+            Assert.Empty(matchResponse.Content.Items);
         }
 
         [Fact]

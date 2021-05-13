@@ -14,11 +14,11 @@ namespace Integration.Tests
             await AuthenticateAsync();
 
             // Act
-            var response = await Api.Match.GetAll();
+            var response = await Api.Match.GetAll(null);
             
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Empty(response.Content);
+            Assert.Empty(response.Content.Items);
         }
     }
 }

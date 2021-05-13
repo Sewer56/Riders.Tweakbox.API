@@ -15,7 +15,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// Retrieves all matches from the database.
         /// </summary>
         [Get("/" + Routes.Match.Base + "/" + Routes.RestGetAll)]
-        public Task<ApiResponse<List<GetMatchResult>>> GetAll();
+        public Task<ApiResponse<PagedResponse<GetMatchResult>>> GetAll([Query] PaginationQuery query = null);
 
         /// <summary>
         /// Retrieves a single match from the database.

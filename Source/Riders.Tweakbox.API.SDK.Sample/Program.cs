@@ -64,7 +64,7 @@ namespace Riders.Tweakbox.API.SDK.Sample
                 error => Console.WriteLine($"Failed to Login: {Join("\n", error.Errors)}"));
 
             // Get Past Match Data (Uses Authentication)
-            var matches = await tweakbox.Match.GetAll();
+            var matches = await tweakbox.Match.GetAll(null);
             if (matches.StatusCode == HttpStatusCode.BadRequest)
                 Console.WriteLine("Failed to Get Match Data");
         }

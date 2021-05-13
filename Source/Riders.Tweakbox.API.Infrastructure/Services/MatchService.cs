@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.Match;
 using Riders.Tweakbox.API.Application.Commands.v1.Match.Result;
 using Riders.Tweakbox.API.Application.Models;
@@ -23,9 +25,14 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<GetMatchResult>> GetAll(CancellationToken token)
+        public async Task<List<GetMatchResult>> GetAll(PaginationQuery paginationQuery, CancellationToken token)
         {
-            var matches = await _context.Matches.Include(x => x.Players).ToListAsync(token);
+            int skip = paginationQuery.PageSize * paginationQuery.PageNumber;
+            var matches = await _context.Matches.Include(x => x.Players)
+                .Skip(skip)
+                .Take(paginationQuery.PageSize)
+                .ToListAsync(token);
+
             var result  = new List<GetMatchResult>(matches.Count);
             foreach (var match in matches)
                 result.Add(Mapping.Mapper.Map<GetMatchResult>(match));

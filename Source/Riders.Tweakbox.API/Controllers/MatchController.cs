@@ -30,9 +30,10 @@ namespace Riders.Tweakbox.API.Controllers
         /// <summary>
         /// Retrieves all matches from the database.
         /// </summary>
-        public override async Task<ActionResult<List<GetMatchResult>>> GetAll(CancellationToken cancellationToken)
+        public override async Task<ActionResult<PagedResponse<GetMatchResult>>> GetAll([FromQuery] PaginationQuery query, CancellationToken cancellationToken)
         {
-            return await _service.GetAll(cancellationToken);
+            var result = await _service.GetAll(query.SanitizeOrDefault(), cancellationToken);
+            return Ok(new PagedResponse<GetMatchResult>(result, query.PageNumber, query.PageSize));
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Riders.Tweakbox.API.Controllers
             if (result == null)
                 return NotFound();
 
-            return result;
+            return Ok(result);
         }
 
         /// <summary>

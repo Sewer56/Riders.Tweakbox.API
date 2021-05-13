@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Riders.Tweakbox.API.Application.Commands;
 
 namespace Riders.Tweakbox.API.Application.Services.Base
 {
@@ -9,7 +10,7 @@ namespace Riders.Tweakbox.API.Application.Services.Base
         /// <summary>
         /// Gets all items stored in the database.
         /// </summary>
-        Task<List<TGetItem>> GetAll(CancellationToken token);
+        Task<List<TGetItem>> GetAll(PaginationQuery paginationQuery, CancellationToken token);
 
         /// <summary>
         /// Get a single items stored in the database.
