@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Text;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,66 +54,10 @@ namespace Riders.Tweakbox.API
             services.AddControllers();
 
             // Auth
-            var jwtSettings = new JwtSettings();
-            Configuration.Bind(nameof(jwtSettings), jwtSettings);
-            services.AddSingleton(jwtSettings);
-
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                RequireExpirationTime = false,
-                ValidateLifetime = false
-            };
-
-            services.AddSingleton(tokenValidationParameters);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
-            {
-                x.SaveToken = true;
-                x.TokenValidationParameters = tokenValidationParameters;
-            });
-
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            AddJwtAuthentication(services);
             services.AddAuthorizationCore();
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings.
-                options.Password.RequireDigit           = true;
-                options.Password.RequireLowercase       = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase       = false;
-                options.Password.RequiredLength         = Constants.Auth.MinPasswordLength;
-                options.Password.RequiredUniqueChars    = 1;
-
-                // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan  = TimeSpan.FromMinutes(Constants.Auth.LockoutTimeSpan);
-                options.Lockout.MaxFailedAccessAttempts = Constants.Auth.MaxFailedAccessAttempts;
-                options.Lockout.AllowedForNewUsers      = false;
-
-                // User settings.
-                options.User.RequireUniqueEmail        = false;
-            });
-
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    return new BadRequestObjectResult(
-                        new ErrorReponse()
-                        {
-                            Errors = context.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
-                        });
-                };
-            });
+            AddIdentity(services);
+            AddErrorHandling(services);
 
             // Middleware
             services.AddMvcCore().AddFluentValidation(x =>
@@ -122,30 +65,7 @@ namespace Riders.Tweakbox.API
                 x.RegisterValidatorsFromAssemblyContaining<GetMatchResultValidator>();
             });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Riders.Tweakbox.API", Version = "v1" });
-
-                // Set the comments path for the Swagger JSON and UI.
-                c.IncludeXmlComments(GetXmlPathForAssembly(Assembly.GetExecutingAssembly()));        // API
-                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(Player).Assembly));                // Domain
-                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(ApplicationDbContext).Assembly));  // Infrastructure
-                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(IIdentityService).Assembly));      // Application
-                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(MatchTypeDto).Assembly));          // Contract
-
-                // Authentication
-                var scheme = new OpenApiSecurityScheme()
-                {
-                    Description = "JWT Authorization header using the Bearer scheme.",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = JwtBearerDefaults.AuthenticationScheme
-                };
-
-                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, scheme);
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement() { { scheme, Array.Empty<string>() } });
-            });
+            AddSwagger(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -180,5 +100,102 @@ namespace Riders.Tweakbox.API
         }
 
         private string GetXmlPathForAssembly(Assembly asm) { return Path.Combine(AppContext.BaseDirectory, $"{asm.GetName().Name}.xml"); }
+
+        private void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Riders.Tweakbox.API", Version = "v1"});
+
+                // Set the comments path for the Swagger JSON and UI.
+                c.IncludeXmlComments(GetXmlPathForAssembly(Assembly.GetExecutingAssembly())); // API
+                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(Player).Assembly)); // Domain
+                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(ApplicationDbContext).Assembly)); // Infrastructure
+                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(IIdentityService).Assembly)); // Application
+                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(MatchTypeDto).Assembly)); // Contract
+
+                // Authentication
+                var scheme = new OpenApiSecurityScheme()
+                {
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme
+                };
+
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, scheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement() {{scheme, Array.Empty<string>()}});
+            });
+        }
+
+        private static void AddIdentity(IServiceCollection services)
+        {
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = Constants.Auth.MinPasswordLength;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(Constants.Auth.LockoutTimeSpan);
+                options.Lockout.MaxFailedAccessAttempts = Constants.Auth.MaxFailedAccessAttempts;
+                options.Lockout.AllowedForNewUsers = false;
+
+                // User settings.
+                options.User.RequireUniqueEmail = false;
+            });
+        }
+
+        private static void AddErrorHandling(IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    return new BadRequestObjectResult(
+                        new ErrorReponse()
+                        {
+                            Errors = context.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
+                        });
+                };
+            });
+        }
+
+        private void AddJwtAuthentication(IServiceCollection services)
+        {
+            var jwtSettings = new JwtSettings();
+            Configuration.Bind(nameof(jwtSettings), jwtSettings);
+            services.AddSingleton(jwtSettings);
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                RequireExpirationTime = false,
+                ValidateLifetime = false
+            };
+
+            services.AddSingleton(tokenValidationParameters);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.SaveToken = true;
+                x.TokenValidationParameters = tokenValidationParameters;
+            });
+        }
     }
 }
