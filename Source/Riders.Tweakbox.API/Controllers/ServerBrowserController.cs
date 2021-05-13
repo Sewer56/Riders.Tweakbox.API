@@ -24,6 +24,7 @@ namespace Riders.Tweakbox.API.Controllers
         /// <summary>
         /// Retrieves a list of all active servers that are in-lobby.
         /// </summary>
+        /// <response code="200">Success</response>
         [HttpGet(Routes.RestGetAll)]
         public IActionResult GetAll()
         {
@@ -37,6 +38,7 @@ namespace Riders.Tweakbox.API.Controllers
         ///     Details of the server in question.
         ///     Server assumes the IP of the user making this request is the IP of the lobby.
         /// </param>
+        /// <response code="200">Success</response>
         [HttpPost(Routes.RestCreate)]
         public IActionResult CreateOrRefresh(PostServerRequest item)
         {
@@ -50,14 +52,16 @@ namespace Riders.Tweakbox.API.Controllers
         ///     Unique ID returned by the Create (<seealso cref="CreateOrRefresh"/>) call.
         /// </param>
         /// <param name="port">The port under which the server is being hosted.</param>
+        /// <response code="404">Server to delete not found.</response>
+        /// <response code="200">Success</response>
         [HttpDelete(Routes.RestDelete)]
         public IActionResult Delete(Guid id, int port)
         {
             var deleted = _browserService.Delete(_currentUserService.IpAddress, port, id);
             if (!deleted)
-                return NotFound();
+                return NotFound(false);
 
-            return Ok();
+            return Ok(true);
         }
     }
 }

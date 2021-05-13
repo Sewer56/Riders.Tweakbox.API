@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Riders.Tweakbox.API.Application.Commands.v1.Browser.Result;
 
 namespace Riders.Tweakbox.API.Application.Commands.v1.Browser
 {
-    public class PostServerRequest
+    public class PostServerRequest : IEquatable<PostServerRequest>
     {
         /// <summary>
         /// Name of the server.
@@ -24,5 +27,34 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser
         /// List of players from the server.
         /// </summary>
         public List<ServerPlayerInfoResult> Players { get; set; }
+
+        /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
+        public bool Equals(PostServerRequest other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Name == other.Name 
+                   && Port == other.Port 
+                   && Type == other.Type 
+                   && Players.ListsEqual(other.Players);
+        }
+
+        /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((PostServerRequest) obj);
+        }
+
+        /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Port, (int) Type, Players);
+        }
     }
 }

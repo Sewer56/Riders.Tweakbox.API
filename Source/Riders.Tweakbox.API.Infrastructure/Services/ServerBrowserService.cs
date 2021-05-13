@@ -31,7 +31,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         public GetAllServerResult GetAll()
         {
             var infos = _infos.ToStructEnumerable().Select(x => Mapping.Mapper.Map<GetServerResult>(x.Value), x => x);
-            return new GetAllServerResult(infos.ToEnumerable());
+            return new GetAllServerResult(infos.ToList());
         }
 
         /// <inheritdoc />

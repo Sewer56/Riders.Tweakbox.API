@@ -23,7 +23,7 @@ namespace Integration.Tests
             {
                 Email = DefaultEmail,
                 UserName = DefaultUserName,
-                Password = "RandomPassword",
+                Password = DefaultPassword,
             });
 
             // Assert
@@ -57,7 +57,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await Api.Identity.Register( new UserRegistrationRequest()
+            var response = await Api.Identity.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -109,7 +109,7 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Register_CannotExceedMaxLength()
+        public async Task Register_NameCannotExceedMaxLength()
         {
             // Arrange & Act
             // Try Create Default User Again
@@ -118,6 +118,130 @@ namespace Integration.Tests
                 Email = DefaultEmail,
                 UserName = $"aaaaaaaaaabbbbbbbbbbccccccccccddd",
                 Password = "RandomPassword123",
+            });
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
+            Assert.NotEmpty(registrationResponse.Errors);
+        }
+
+        [Fact]
+        public async Task Refresh_ReturnsToken()
+        {
+            // Arrange & Act
+            // Try Create Default User Again
+            await AuthenticateAsync();
+
+            var lastResponse = Api.Handler.CachedAuthResponse;
+            var response = await Api.Identity.Refresh(new RefreshTokenRequest()
+            {
+                RefreshToken = lastResponse.RefreshToken,
+                Token = lastResponse.Token
+            });
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotEqual(lastResponse.Token, response.Content.Token);
+            Assert.NotEqual(lastResponse.RefreshToken, response.Content.RefreshToken);
+        }
+
+        [Fact]
+        public async Task Refresh_ReturnsValidToken()
+        {
+            // Arrange & Act
+            // Try Create Default User Again
+            await AuthenticateAsync();
+
+            var lastResponse = Api.Handler.CachedAuthResponse;
+            await Api.Identity.Refresh(new RefreshTokenRequest()
+            {
+                RefreshToken = lastResponse.RefreshToken,
+                Token = lastResponse.Token
+            });
+
+            // Call API requiring auth.
+            var matchResponse = await Api.Match.GetAll();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, matchResponse.StatusCode);
+            Assert.Empty(matchResponse.Content);
+        }
+
+        [Fact]
+        public async Task Refresh_ReturnsBadRequestForInvalidToken()
+        {
+            // Arrange & Act
+            // Try Create Default User Again
+            await AuthenticateAsync();
+
+            var lastResponse = Api.Handler.CachedAuthResponse;
+            var response = await Api.Identity.Refresh(new RefreshTokenRequest()
+            {
+                RefreshToken = lastResponse.RefreshToken,
+                Token = lastResponse.Token + 'a'
+            });
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
+            Assert.NotEmpty(registrationResponse.Errors);
+        }
+
+        [Fact]
+        public async Task Refresh_ReturnsNothingForInvalidRefreshToken()
+        {
+            // Arrange & Act
+            // Try Create Default User Again
+            await AuthenticateAsync();
+
+            var lastResponse = Api.Handler.CachedAuthResponse;
+            var response = await Api.Identity.Refresh(new RefreshTokenRequest()
+            {
+                RefreshToken = lastResponse.RefreshToken + 'a',
+                Token = lastResponse.Token
+            });
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
+            Assert.NotEmpty(registrationResponse.Errors);
+        }
+
+        [Fact]
+        public async Task Login_HasBadUsername()
+        {
+            // Arrange & Act
+            // Try Create Default User Again
+            await AuthenticateAsync();
+
+            var response = await Api.Identity.Login(new UserLoginRequest()
+            {
+                Username = DefaultUserName + 'a',
+                Password = DefaultPassword
+            });
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var registrationResponse = await response.Error.GetContentAsAsync<ErrorReponse>();
+            Assert.NotEmpty(registrationResponse.Errors);
+        }
+
+        [Fact]
+        public async Task Login_HasBadPassword()
+        {
+            // Arrange & Act
+            // Try Create Default User Again
+            await AuthenticateAsync();
+
+            var response = await Api.Identity.Login(new UserLoginRequest()
+            {
+                Username = DefaultUserName,
+                Password = DefaultPassword + 'a'
             });
 
             // Assert

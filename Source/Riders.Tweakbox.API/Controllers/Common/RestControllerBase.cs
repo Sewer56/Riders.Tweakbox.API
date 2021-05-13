@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace Riders.Tweakbox.API.Controllers.Common
     /// <summary>
     /// Provides a base class for implementing RESTful controllers.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public abstract class RestControllerBase<TGetType, TPostType> : ControllerBase
     {
         /// <summary>

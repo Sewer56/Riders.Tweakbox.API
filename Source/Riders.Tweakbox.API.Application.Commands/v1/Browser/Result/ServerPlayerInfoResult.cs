@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
 {
@@ -15,6 +16,7 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
         public int Latency { get; set; }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public bool Equals(ServerPlayerInfoResult other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -23,6 +25,7 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -32,6 +35,7 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
             return HashCode.Combine(Name, Latency);

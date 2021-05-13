@@ -12,6 +12,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// <summary>
         /// Retrieves a list of all active servers that are in-lobby.
         /// </summary>
+        /// <response code="200">Success</response>
         [Get("/" + Routes.Browser.Base + "/" + Routes.RestGetAll)]
         public Task<ApiResponse<GetAllServerResult>> GetAll();
 
@@ -24,6 +25,7 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         ///     Details of the server in question.
         ///     Server assumes the IP of the user making this request is the IP of the lobby.
         /// </param>
+        /// <response code="200">Success</response>
         [Post("/" + Routes.Browser.Base + "/" + Routes.RestCreate)]
         public Task<ApiResponse<ServerCreatedResult>> CreateOrRefresh([Body] PostServerRequest item);
 
@@ -34,7 +36,9 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         ///     Unique ID returned by the Create (<seealso cref="CreateOrRefresh"/>) call.
         /// </param>
         /// <param name="port">The port under which the server is being hosted.</param>
+        /// <response code="404">Server to delete not found.</response>
+        /// <response code="200">Success</response>
         [Delete("/" + Routes.Browser.Base + "/" + Routes.RestDelete)]
-        public Task Delete(Guid id, int port);
+        public Task<ApiResponse<bool>> Delete(Guid id, int port);
     }
 }

@@ -93,7 +93,7 @@ namespace Application.Tests.Integrity.Helpers
             return result;
         }
 
-        public static Faker<PostServerRequest> GetPostServerFaker()
+        public static Faker<PostServerRequest> GetPostServerRequestFaker()
         {
             return new Faker<PostServerRequest>()
                 .StrictMode(true)

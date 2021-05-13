@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Riders.Tweakbox.API;
@@ -23,7 +22,7 @@ namespace Integration.Tests.Common
         
         protected TestBase()
         {
-            var appFactory = new WebApplicationFactory<Startup>();
+            var appFactory = new TestWebApplicationFactory();
             TestClient     = appFactory.CreateClient();
 
             using var scope = appFactory.Services.CreateScope();

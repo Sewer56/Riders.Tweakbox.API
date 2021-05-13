@@ -24,16 +24,17 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         private readonly JwtSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ApplicationDbContext _context;
+        private IDateTimeService _dateTimeService;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, ApplicationDbContext context)
+        public IdentityService(UserManager<ApplicationUser> userManager, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, ApplicationDbContext context, IDateTimeService dateTimeService)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
+            _dateTimeService = dateTimeService;
         }
 
-        
         /// <inheritdoc />
         public async Task<AuthenticationResult> TryRegisterDefaultAdminUserAsync(string email, string username, string password, CancellationToken cancellationToken)
         {
@@ -115,7 +116,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
                 return new AuthenticationResult() { Errors = new []{ "This refresh token doesn't exist." }};
 
             // Check Token Expiry
-            if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
+            if (_dateTimeService.GetCurrentDateTime() > storedRefreshToken.ExpiryDate)
                 return new AuthenticationResult() { Errors = new []{ "This token has expired." }};
 
             if (storedRefreshToken.Invalidated)
@@ -124,7 +125,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             if (storedRefreshToken.Used)
                 return new AuthenticationResult() { Errors = new []{ "This token has been used." }};
 
-            if (storedRefreshToken.JwtId == jti)
+            if (storedRefreshToken.JwtId != jti)
                 return new AuthenticationResult() { Errors = new []{ "The refresh token does not match this JWT." }};
 
             // Save Token
@@ -158,7 +159,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -202,7 +203,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         private bool IsJwtWithValidAlgorithm(SecurityToken token)
         {
             return (token is JwtSecurityToken jwtSecurityToken) && 
-                   jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature, StringComparison.OrdinalIgnoreCase);
+                   jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
