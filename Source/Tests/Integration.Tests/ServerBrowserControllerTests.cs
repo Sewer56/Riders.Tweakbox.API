@@ -15,7 +15,7 @@ namespace Integration.Tests
         public async Task CreateOrRefresh_CanCreateItem()
         {
             // Act & Arrange
-            var generator = DataGenerators.GetPostServerRequestFaker();
+            var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
             var result    = await Api.Browser.CreateOrRefresh(item);
 
@@ -30,7 +30,7 @@ namespace Integration.Tests
         public async Task GetAll_CanQueryItems()
         {
             // Act & Arrange
-            var generator = DataGenerators.GetPostServerRequestFaker();
+            var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
             await Api.Browser.CreateOrRefresh(item);
             var getAll    = await Api.Browser.GetAll();
@@ -44,7 +44,7 @@ namespace Integration.Tests
         public async Task Delete_CanDeleteItem()
         {
             // Act & Arrange
-            var generator = DataGenerators.GetPostServerRequestFaker();
+            var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
             var result    = await Api.Browser.CreateOrRefresh(item);
             await Api.Browser.Delete(result.Content.Id, item.Port);
@@ -58,7 +58,7 @@ namespace Integration.Tests
         public async Task Delete_WithInvalidId_ReturnsNotFound()
         {
             // Act & Arrange
-            var generator = DataGenerators.GetPostServerRequestFaker();
+            var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
             var result    = await Api.Browser.CreateOrRefresh(item);
             var response  = await Api.Browser.Delete(Guid.NewGuid(), item.Port);
@@ -71,7 +71,7 @@ namespace Integration.Tests
         public async Task Delete_WithInvalidPort_ReturnsNotFound()
         {
             // Act & Arrange
-            var generator = DataGenerators.GetPostServerRequestFaker();
+            var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
             var result    = await Api.Browser.CreateOrRefresh(item);
             var response  = await Api.Browser.Delete(result.Content.Id, item.Port + 1 % 65535);

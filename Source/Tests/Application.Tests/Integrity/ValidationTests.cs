@@ -26,7 +26,7 @@ namespace Application.Tests.Integrity
         public void CanValidateCorrectGetMatchCommandData()
         {
             // Arrange
-            var generator = DataGenerators.GetMatchCommandFaker();
+            var generator = DataGenerators.Match.GetMatchCommand(0, 100);
             var validator = Validator.Get<GetMatchResult>();
 
             for (int x = 0; x < 100; x++)
@@ -44,7 +44,7 @@ namespace Application.Tests.Integrity
         public void CanValidateCorrectPostMatchCommandData()
         {
             // Arrange
-            var generator = DataGenerators.GetMatchCommandFaker();
+            var generator = DataGenerators.Match.GetMatchCommand(0, 100);
             var validator = Validator.Get<PostMatchRequest>();
 
             for (int x = 0; x < 100; x++)
@@ -62,7 +62,7 @@ namespace Application.Tests.Integrity
         public void CanValidateIncorrectGetMatchCommandData()
         {
             // Arrange
-            var generator = DataGenerators.GetMatchCommandFaker();
+            var generator = DataGenerators.Match.GetMatchCommand(0, 100);
             var validator = Validator.Get<GetMatchResult>();
 
             for (int x = 0; x < 100; x++)
@@ -94,7 +94,7 @@ namespace Application.Tests.Integrity
         public void CanValidateIncorrectPostMatchCommandData()
         {
             // Arrange
-            var generator = DataGenerators.GetMatchCommandFaker();
+            var generator = DataGenerators.Match.GetMatchCommand(0, 100);
             var validator = Validator.Get<PostMatchRequest>();
 
             for (int x = 0; x < 100; x++)

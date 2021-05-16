@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -13,12 +12,7 @@ namespace Integration.Tests.Common
     {
         protected override IHostBuilder CreateHostBuilder()
         {
-            return Host
-                .CreateDefaultBuilder(new string[0])
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
+            return Program.CreateHostBuilder(null)
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<IStartupFilter, CustomStartupFilter>();
@@ -37,6 +31,4 @@ namespace Integration.Tests.Common
             }
         }
     }
-
-    
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Riders.Tweakbox.API.Infrastructure.Common;
 
 namespace Riders.Tweakbox.API.Infrastructure.Migrations
@@ -14,33 +15,6 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.5");
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -141,6 +115,33 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Riders.Tweakbox.API.Domain.Models.Database.ApplicationRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles");
+                });
+
             modelBuilder.Entity("Riders.Tweakbox.API.Domain.Models.Database.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
@@ -153,6 +154,9 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Country")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -174,71 +178,6 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("Riders.Tweakbox.API.Domain.Models.Database.Match", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CompletedTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("MatchType")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("StageNo")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MatchType");
-
-                    b.ToTable("Matches");
-                });
-
-            modelBuilder.Entity("Riders.Tweakbox.API.Domain.Models.Database.Player", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Country")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("NumGames1v1")
                         .HasColumnType("INTEGER");
@@ -291,6 +230,15 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                     b.Property<int>("NumWinsSolo")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("INTEGER");
+
                     b.Property<short>("Rating1v1")
                         .HasColumnType("INTEGER");
 
@@ -312,17 +260,56 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                     b.Property<short>("RatingSolo")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-                    b.ToTable("Players");
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Riders.Tweakbox.API.Domain.Models.Database.Match", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CompletedTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MatchType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("StageNo")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchType");
+
+                    b.ToTable("Matches");
                 });
 
             modelBuilder.Entity("Riders.Tweakbox.API.Domain.Models.Database.PlayerRaceDetails", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("MatchId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<byte>("Board")
@@ -337,15 +324,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                     b.Property<int>("FinishTimeFrames")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MatchId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MatchId");
+                    b.HasKey("MatchId", "PlayerId");
 
                     b.HasIndex("PlayerId");
 
@@ -384,7 +363,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                    b.HasOne("Riders.Tweakbox.API.Domain.Models.Database.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -411,7 +390,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                    b.HasOne("Riders.Tweakbox.API.Domain.Models.Database.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -433,17 +412,6 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Riders.Tweakbox.API.Domain.Models.Database.Player", b =>
-                {
-                    b.HasOne("Riders.Tweakbox.API.Domain.Models.Database.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("Riders.Tweakbox.API.Domain.Models.Database.PlayerRaceDetails", b =>
                 {
                     b.HasOne("Riders.Tweakbox.API.Domain.Models.Database.Match", "Match")
@@ -452,7 +420,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Riders.Tweakbox.API.Domain.Models.Database.Player", "Player")
+                    b.HasOne("Riders.Tweakbox.API.Domain.Models.Database.ApplicationUser", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -33,7 +33,7 @@ namespace Integration.Tests.Common
 
         protected async Task AuthenticateAsync()
         {
-            var registerResult = await Api.Identity.Register(new UserRegistrationRequest()
+            var registerResult = await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = DefaultUserName,

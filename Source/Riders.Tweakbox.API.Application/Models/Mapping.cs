@@ -48,7 +48,9 @@ namespace Riders.Tweakbox.API.Application.Models
                 }
             }
 
-            result.Add(team);
+            if (team.Count > 0)
+                result.Add(team);
+
             command.Teams = result;
         }
 
@@ -67,8 +69,10 @@ namespace Riders.Tweakbox.API.Application.Models
                     team = new List<PostMatchPlayerInfo>();
                 }
             }
+            
+            if (team.Count > 0)
+                result.Add(team);
 
-            result.Add(team);
             request.Teams = result;
         }
 

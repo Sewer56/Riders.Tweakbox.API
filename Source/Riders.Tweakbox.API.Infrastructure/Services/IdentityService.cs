@@ -9,10 +9,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Riders.Tweakbox.API.Application.Commands;
+using Riders.Tweakbox.API.Application.Commands.v1.Match.Result;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
+using Riders.Tweakbox.API.Application.Models;
 using Riders.Tweakbox.API.Application.Models.Config;
 using Riders.Tweakbox.API.Application.Services;
 using Riders.Tweakbox.API.Domain.Common;
+using Riders.Tweakbox.API.Domain.Models;
 using Riders.Tweakbox.API.Domain.Models.Database;
 using Riders.Tweakbox.API.Infrastructure.Common;
 
@@ -38,9 +42,9 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         /// <inheritdoc />
         public async Task<AuthenticationResult> TryRegisterDefaultAdminUserAsync(string email, string username, string password, CancellationToken cancellationToken)
         {
-            if (!_userManager.Users.Any())
+            if (!_userManager.Users.AsNoTracking().Any())
             {
-                var result = await RegisterAsync(email, username, password, cancellationToken);
+                var result = await RegisterAsync(email, username, password, Country.GBR, cancellationToken);
                 await _userManager.AddToRoleAsync(await _userManager.FindByNameAsync(username), Roles.Admin);
                 return result;
             }
@@ -49,7 +53,22 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         }
 
         /// <inheritdoc />
-        public async Task<AuthenticationResult> RegisterAsync(string email, string username, string password, CancellationToken cancellationToken)
+        public async Task<List<UserDetailsResult>> GetAll(PaginationQuery paginationQuery, CancellationToken token)
+        {
+            int skip  = paginationQuery.PageSize * paginationQuery.PageNumber;
+            var users = await _context.Users.AsNoTracking().Skip(skip)
+                .Take(paginationQuery.PageSize)
+                .ToListAsync(token);
+
+            var result  = new List<UserDetailsResult>(users.Count);
+            foreach (var user in users)
+                result.Add(Mapping.Mapper.Map<UserDetailsResult>(user));
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public async Task<AuthenticationResult> RegisterAsync(string email, string username, string password, Country country, CancellationToken cancellationToken)
         {
             var existingUser = await _userManager.FindByNameAsync(username);
             if (existingUser != null)
@@ -61,18 +80,22 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
                 };
             }
 
-            var newUser    = new ApplicationUser()
+            var newUser = new ApplicationUser()
             {
                 Email = email,
-                UserName = username
+                UserName = username,
+                Country = country
             };
+
             var createUser = await _userManager.CreateAsync(newUser, password);
 
             if (!createUser.Succeeded)
                 return new AuthenticationResult() { Errors = createUser.Errors.Select(x => x.Description) };
 
             await _userManager.AddToRoleAsync(newUser, Roles.User);
-            return await GenerateAuthenticationResultForUser(newUser);
+            var result = await GenerateAuthenticationResultForUser(newUser, false);
+            await _context.SaveChangesAsync(cancellationToken);
+            return result;
         }
 
         /// <inheritdoc />
@@ -131,13 +154,13 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             // Save Token
             storedRefreshToken.Used = true;
             _context.RefreshTokens.Update(storedRefreshToken);
+            var user   = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var result = await GenerateAuthenticationResultForUser(user, false);
             await _context.SaveChangesAsync(cancellationToken);
-
-            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            return await GenerateAuthenticationResultForUser(user);
+            return result;
         }
 
-        private async Task<AuthenticationResult> GenerateAuthenticationResultForUser(ApplicationUser user)
+        private async Task<AuthenticationResult> GenerateAuthenticationResultForUser(ApplicationUser user, bool saveChanges = true)
         {
             // Create Token
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -175,7 +198,8 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             };
 
             await _context.RefreshTokens.AddAsync(refreshToken);
-            await _context.SaveChangesAsync();
+            if (saveChanges)
+                await _context.SaveChangesAsync();
 
             // Return
             return new AuthenticationResult()

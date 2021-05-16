@@ -7,6 +7,7 @@ using Riders.Tweakbox.API.Application.Commands.v1.Browser;
 using Riders.Tweakbox.API.Application.Commands.v1.Browser.Result;
 using Riders.Tweakbox.API.Application.Commands.v1.Match;
 using Riders.Tweakbox.API.Application.Commands.v1.Match.Result;
+using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Riders.Tweakbox.API.Application.Models;
 using Riders.Tweakbox.API.Domain.Models;
 using Riders.Tweakbox.API.Domain.Models.Database;
@@ -28,7 +29,7 @@ namespace Application.Tests.Mappings
         [Fact]
         public void CanMapMatchPlayersToTeams()
         {
-            var faker = DataGenerators.GetMatchCommandFaker();
+            var faker = DataGenerators.Match.GetMatchCommand(0, 100);
 
             for (int x = 0; x < 50; x++)
             {
@@ -78,6 +79,7 @@ namespace Application.Tests.Mappings
         [InlineData(typeof(ServerInfo), typeof(ServerCreatedResult))]
         [InlineData(typeof(ServerInfo), typeof(GetServerResult))]
         [InlineData(typeof(PostServerRequest), typeof(ServerInfo))]
+        [InlineData(typeof(ApplicationUser), typeof(UserDetailsResult))]
         public void ShouldSupportMapFromSourceToDestination(Type source, Type destination)
         {
             var fixture = _fixture.Create(source, new SpecimenContext(_fixture));

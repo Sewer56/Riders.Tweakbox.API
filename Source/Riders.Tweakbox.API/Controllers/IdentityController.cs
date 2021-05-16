@@ -1,11 +1,15 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.User;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Riders.Tweakbox.API.Application.Services;
+using Riders.Tweakbox.API.Domain.Common;
+using Riders.Tweakbox.API.Domain.Models;
 
 namespace Riders.Tweakbox.API.Controllers
 {
@@ -14,10 +18,28 @@ namespace Riders.Tweakbox.API.Controllers
     public class IdentityController : ControllerBase
     {
         private IIdentityService _identityService;
+        private IGeoIpService _geoIpService;
+        private ICurrentUserService _currentUserService;
 
-        public IdentityController(IIdentityService identityService)
+        public IdentityController(IIdentityService identityService, IGeoIpService geoIpService, ICurrentUserService currentUserService)
         {
             _identityService = identityService;
+            _geoIpService = geoIpService;
+            _currentUserService = currentUserService;
+        }
+
+        /// <summary>
+        /// Retrieves a list of users from the system.
+        /// </summary>
+        /// <param name="query">How many users to fetch at once.</param>
+        /// <param name="cancellationToken"></param>
+        /// <response code="200">Success</response>
+        [HttpGet(Routes.Identity.Get)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.User)]
+        public async Task<IActionResult> GetAll([FromQuery] PaginationQuery query, CancellationToken cancellationToken)
+        {
+            var result = await _identityService.GetAll(query.SanitizeOrDefault(), cancellationToken);
+            return Ok(new PagedResponse<UserDetailsResult>(result, query.PageNumber, query.PageSize));
         }
 
         /// <summary>
@@ -43,7 +65,10 @@ namespace Riders.Tweakbox.API.Controllers
         [HttpPost(Routes.Identity.Register)]
         public async Task<IActionResult> Register(UserRegistrationRequest request, CancellationToken cancellationToken)
         {
-            return HandleAuthResponse(await _identityService.RegisterAsync(request.Email, request.UserName, request.Password, cancellationToken));
+            var ip = _currentUserService.IpAddress;
+            var details = _geoIpService.GetDetails(ip);
+            var country = details?.Country.IsoCode.GetCountryFromShortName() ?? Country.UNK;
+            return HandleAuthResponse(await _identityService.RegisterAsync(request.Email, request.UserName, request.Password, country, cancellationToken));
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace Riders.Tweakbox.API.SDK.Sample
             var tweakbox = new TweakboxApi("https://localhost:6969");
 
             // Register
-            var registerResponse = await tweakbox.Identity.Register(new UserRegistrationRequest()
+            var registerResponse = await tweakbox.IdentityApi.Register(new UserRegistrationRequest()
             {
                 Email = "admin@tweakbox.com",
                 UserName = Username,

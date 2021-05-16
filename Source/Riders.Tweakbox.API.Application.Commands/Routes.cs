@@ -11,10 +11,12 @@
         public static class Match
         {
             public const string Base = "v1/Match";
+            public const string Create = "v1/Match";
         }
 
         public static class Identity
         {
+            public const string Get      = "v1/Identity";
             public const string Register = "v1/Identity/register";
             public const string Login    = "v1/Identity/login";
             public const string Refresh  = "v1/Identity/refresh";

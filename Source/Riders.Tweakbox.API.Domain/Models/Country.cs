@@ -762,12 +762,16 @@ namespace Riders.Tweakbox.API.Domain.Models
 
         [Display(Name = "Netherlands Antilles", GroupName = "NA", Description = "530", ShortName = "AN")]
         ANT = 251,
+
+        [Display(Name = "Unknown", GroupName = "", Description = "", ShortName = "UK")]
+        UNK = 252,
     }
     
     public static class CountryExtensions
     {
-        public static Dictionary<Country, DisplayAttribute> _countryMap;
-
+        private static Dictionary<Country, DisplayAttribute> _countryMap;
+        private static Dictionary<string, Country> _shortNameToCountry = new Dictionary<string, Country>(StringComparer.OrdinalIgnoreCase);
+        
         static CountryExtensions()
         {
             _countryMap = new Dictionary<Country, DisplayAttribute>();
@@ -777,10 +781,20 @@ namespace Riders.Tweakbox.API.Domain.Models
             {
                 var memInfo     = type.GetMember(country.ToString());
                 var attributes  = memInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);
-                _countryMap[country] = (DisplayAttribute) attributes[0];
+                var displayAttr = (DisplayAttribute) attributes[0];
+
+                _countryMap[country] = displayAttr;
+                _shortNameToCountry[displayAttr.ShortName] = country;
             }
         }
 
         public static DisplayAttribute GetDisplayAttribute(this Country country) => _countryMap[country];
+        public static Country GetCountryFromShortName(this string shortName)
+        {
+            if (_shortNameToCountry.TryGetValue(shortName, out var country))
+                return country;
+
+            return Country.UNK;
+        }
     }
 }

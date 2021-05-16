@@ -28,7 +28,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         public async Task<List<GetMatchResult>> GetAll(PaginationQuery paginationQuery, CancellationToken token)
         {
             int skip = paginationQuery.PageSize * paginationQuery.PageNumber;
-            var matches = await _context.Matches.Include(x => x.Players)
+            var matches = await _context.Matches.AsNoTracking().Include(x => x.Players)
                 .Skip(skip)
                 .Take(paginationQuery.PageSize)
                 .ToListAsync(token);
@@ -43,7 +43,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         /// <inheritdoc/>
         public async Task<GetMatchResult> Get(int id, CancellationToken token)
         {
-            var result = await _context.Matches.Include(x => x.Players).SingleOrDefaultAsync(match => match.Id == id, token);
+            var result = await _context.Matches.AsNoTracking().Include(x => x.Players).SingleOrDefaultAsync(match => match.Id == id, token);
             if (result != null)
                 return Mapping.Mapper.Map<GetMatchResult>(result);
             
@@ -65,8 +65,19 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         /// <inheritdoc/>
         public async Task<GetMatchResult> Create(PostMatchRequest item, CancellationToken token)
         {
-            var match = Mapping.Mapper.Map<Match>(item);
+            var match   = Mapping.Mapper.Map<Match>(item);
+            var players = match.Players;
+            match.Players = null;
+
+            // Save Match
             await _context.Matches.AddAsync(match, token);
+            await _context.SaveChangesAsync(token);
+
+            // Save Players
+            foreach (var prop in players)
+                prop.MatchId = match.Id;
+
+            await _context.RaceDetails.AddRangeAsync(players, token);
             await _context.SaveChangesAsync(token);
             return Mapping.Mapper.Map<GetMatchResult>(item);
         }

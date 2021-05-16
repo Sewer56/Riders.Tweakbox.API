@@ -70,7 +70,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         /// Removes dead servers.
         /// This is automatically triggered at a fixed time interval.
         /// </summary>
-        public void RefreshServerList(object? state)
+        public void RefreshServerList(object state)
         {
             var itemsToRemove = new List<ServerAddressPortPair>(1024);
 

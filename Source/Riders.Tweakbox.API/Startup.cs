@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -40,7 +41,8 @@ namespace Riders.Tweakbox.API
         public virtual void ConfigureServices(IServiceCollection services)
         {
             // Database
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("Tweakbox"))); // Needed for dotnet ef.
+            var databasePath = Configuration.GetConnectionString("Tweakbox");
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(databasePath)); // Needed for dotnet ef.
 
             // Services
             services.AddScoped<IMatchService, MatchService>();
@@ -48,7 +50,12 @@ namespace Riders.Tweakbox.API
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddSingleton<IDateTimeService, DateTimeService>();
             services.AddSingleton<IServerBrowserService, ServerBrowserService>();
+            services.AddSingleton<IGeoIpService, GeoIpService>();
             services.AddSingleton(Configuration);
+
+            var geoIpSettings = new GeoIpSettings();
+            Configuration.Bind(nameof(GeoIpSettings), geoIpSettings);
+            services.AddSingleton(geoIpSettings);
 
             // Controller
             services.AddControllers();
@@ -109,7 +116,7 @@ namespace Riders.Tweakbox.API
 
                 // Set the comments path for the Swagger JSON and UI.
                 c.IncludeXmlComments(GetXmlPathForAssembly(Assembly.GetExecutingAssembly())); // API
-                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(Player).Assembly)); // Domain
+                c.IncludeXmlComments(GetXmlPathForAssembly(typeof(ApplicationUser).Assembly)); // Domain
                 c.IncludeXmlComments(GetXmlPathForAssembly(typeof(ApplicationDbContext).Assembly)); // Infrastructure
                 c.IncludeXmlComments(GetXmlPathForAssembly(typeof(IIdentityService).Assembly)); // Application
                 c.IncludeXmlComments(GetXmlPathForAssembly(typeof(MatchTypeDto).Assembly)); // Contract
@@ -118,14 +125,25 @@ namespace Riders.Tweakbox.API
                 var scheme = new OpenApiSecurityScheme()
                 {
                     Description = "JWT Authorization header using the Bearer scheme.",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
                     Scheme = JwtBearerDefaults.AuthenticationScheme
                 };
 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, scheme);
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement() {{scheme, Array.Empty<string>()}});
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {   
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme
+                            }
+                        },
+                        new List<string>()
+                    } 
+                });
             });
         }
 

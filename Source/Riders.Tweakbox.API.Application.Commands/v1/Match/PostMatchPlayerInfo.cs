@@ -10,7 +10,7 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Match
         /// <summary>
         /// Unique Id of the player associated with this info.
         /// </summary>
-        public int PlayerId         { get; set; }
+        public int PlayerId { get; set; }
 
         /// <summary>
         /// The character that was used by the player.

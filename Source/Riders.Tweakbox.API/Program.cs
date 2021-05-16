@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Riders.Tweakbox.API.Application.Models.Config;
 using Riders.Tweakbox.API.Application.Services;
 using Riders.Tweakbox.API.Domain.Common;

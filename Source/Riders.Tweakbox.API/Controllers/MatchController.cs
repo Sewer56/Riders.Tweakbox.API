@@ -59,7 +59,7 @@ namespace Riders.Tweakbox.API.Controllers
         /// <param name="cancellationToken"></param>
         /// <response code="400">Requested match was not found.</response>
         /// <response code="204">Success (No Content)</response>
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
         public override async Task<IActionResult> Update(int id, PostMatchRequest item, CancellationToken cancellationToken)
         {
             var result = await _service.Update(id, item, cancellationToken);
@@ -75,7 +75,7 @@ namespace Riders.Tweakbox.API.Controllers
         /// <param name="item">The details of the match.</param>
         /// <param name="cancellationToken"></param>
         /// <response code="201">Successfully created.</response>
-        public override async Task<ActionResult<GetMatchResult>> Create(PostMatchRequest item, CancellationToken cancellationToken)
+        public override async Task<ActionResult<GetMatchResult>> Create([FromBody] PostMatchRequest item, CancellationToken cancellationToken)
         {
             var result = await _service.Create(item, cancellationToken);
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
@@ -88,7 +88,7 @@ namespace Riders.Tweakbox.API.Controllers
         /// <param name="cancellationToken"></param>
         /// <response code="400">Requested match was not found.</response>
         /// <response code="204">Success (No Content)</response>
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
         public override async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             var result = await _service.Delete(id, cancellationToken);

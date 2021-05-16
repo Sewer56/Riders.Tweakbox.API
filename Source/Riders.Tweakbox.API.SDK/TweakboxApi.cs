@@ -16,7 +16,7 @@ namespace Riders.Tweakbox.API.SDK
     /// </summary>
     public class TweakboxApi : IDisposable
     {
-        public IIdentity Identity        { get; private set; }
+        public IIdentityApi IdentityApi        { get; private set; }
         public IMatchApi Match           { get; private set; }
         public IServerBrowserApi Browser { get; private set; }
         public TweakboxAuthenticationHandler Handler { get; private set; }
@@ -44,7 +44,7 @@ namespace Riders.Tweakbox.API.SDK
 
         private void SetupServices()
         {
-            Identity = MakeRestService<IIdentity>(Client);
+            IdentityApi = MakeRestService<IIdentityApi>(Client);
             Match    = MakeRestService<IMatchApi>(Client);
             Browser  = MakeRestService<IServerBrowserApi>(Client);
         }

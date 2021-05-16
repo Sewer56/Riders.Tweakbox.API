@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Riders.Tweakbox.API.Domain.Models.Database
 {
     public class PlayerRaceDetails
     {
-        [Key]
-        public int Id { get; set; }
-
-        public int PlayerId    { get; set; }
-        public Player Player   { get; set; }
+        public int PlayerId { get; set; }
+        [ForeignKey(nameof(PlayerId))]
+        public ApplicationUser Player { get; set; }
 
         public int MatchId     { get; set; }
         public Match Match     { get; set; }

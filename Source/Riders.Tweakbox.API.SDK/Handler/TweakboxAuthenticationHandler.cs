@@ -52,7 +52,7 @@ namespace Riders.Tweakbox.API.SDK.Handler
                 Password = password
             };
 
-            var result = await Owner.Identity.Login(LoginRequest);
+            var result = await Owner.IdentityApi.Login(LoginRequest);
 
             if (result.StatusCode == HttpStatusCode.BadRequest)
                 return JsonSerializer.Deserialize<ErrorReponse>(result.Error.Content, RefitConstants.SerializerOptions);
@@ -71,7 +71,7 @@ namespace Riders.Tweakbox.API.SDK.Handler
                 return CachedAuthResponse.Token;
 
             // Refresh token.
-            var result = await Owner.Identity.Refresh(new RefreshTokenRequest()
+            var result = await Owner.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 Token = CachedAuthResponse.Token,
                 RefreshToken = CachedAuthResponse.RefreshToken,

@@ -19,10 +19,10 @@ namespace Application.Tests.Browser
             dateTimeProvider.Setup(x => x.GetCurrentDateTime()).Returns(DateTime.UtcNow - TimeSpan.FromSeconds(Constants.ServerBrowser.RefreshTimeSeconds));
             
             var browserService = new ServerBrowserService(dateTimeProvider.Object);
-            var ip             = DataGenerators.GetRandomIP();
+            var ip             = DataGenerators.ServerBrowser.GetIP();
 
             // Act
-            var result = browserService.CreateOrRefresh(ip, DataGenerators.GetPostServerRequestFaker().Generate());
+            var result = browserService.CreateOrRefresh(ip, DataGenerators.ServerBrowser.GetPostServerRequest().Generate());
             Assert.NotEmpty(browserService.GetAll().Results);
 
             dateTimeProvider.Setup(x => x.GetCurrentDateTime()).Returns(DateTime.UtcNow);
@@ -40,10 +40,10 @@ namespace Application.Tests.Browser
             dateTimeProvider.Setup(x => x.GetCurrentDateTime()).Returns(DateTime.UtcNow - TimeSpan.FromSeconds(Constants.ServerBrowser.RefreshTimeSeconds));
             
             var browserService = new ServerBrowserService(dateTimeProvider.Object);
-            var ip             = DataGenerators.GetRandomIP();
+            var ip             = DataGenerators.ServerBrowser.GetIP();
 
             // Act
-            var result = browserService.CreateOrRefresh(ip, DataGenerators.GetPostServerRequestFaker().Generate());
+            var result = browserService.CreateOrRefresh(ip, DataGenerators.ServerBrowser.GetPostServerRequest().Generate());
 
             // Assert
             Assert.NotEmpty(browserService.GetAll().Results);
@@ -54,8 +54,8 @@ namespace Application.Tests.Browser
         {
             // Arrange
             var browserService = new ServerBrowserService(new DateTimeService());
-            var ip             = DataGenerators.GetRandomIP();
-            var data           = DataGenerators.GetPostServerRequestFaker().Generate();
+            var ip             = DataGenerators.ServerBrowser.GetIP();
+            var data           = DataGenerators.ServerBrowser.GetPostServerRequest().Generate();
 
             // Act
             var result   = browserService.CreateOrRefresh(ip, data);
@@ -72,8 +72,8 @@ namespace Application.Tests.Browser
         {
             // Arrange
             var browserService = new ServerBrowserService(new DateTimeService());
-            var ip             = DataGenerators.GetRandomIP();
-            var data           = DataGenerators.GetPostServerRequestFaker().Generate();
+            var ip             = DataGenerators.ServerBrowser.GetIP();
+            var data           = DataGenerators.ServerBrowser.GetPostServerRequest().Generate();
 
             // Act
             var result   = browserService.CreateOrRefresh(ip, data);
@@ -89,8 +89,8 @@ namespace Application.Tests.Browser
         {
             // Arrange
             var browserService = new ServerBrowserService(new DateTimeService());
-            var ip             = DataGenerators.GetRandomIP();
-            var data           = DataGenerators.GetPostServerRequestFaker().Generate();
+            var ip             = DataGenerators.ServerBrowser.GetIP();
+            var data           = DataGenerators.ServerBrowser.GetPostServerRequest().Generate();
 
             // Act
             var result   = browserService.CreateOrRefresh(ip, data);
@@ -107,7 +107,7 @@ namespace Application.Tests.Browser
             // Arrange
             var browserService = new ServerBrowserService(new DateTimeService());
             var ip             = IPAddress.Parse("127.0.0.1");
-            var data           = DataGenerators.GetPostServerRequestFaker().Generate();
+            var data           = DataGenerators.ServerBrowser.GetPostServerRequest().Generate();
 
             // Act
             bool success = browserService.Delete(ip, data.Port, Guid.Empty);

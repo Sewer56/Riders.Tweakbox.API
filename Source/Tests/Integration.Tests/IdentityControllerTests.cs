@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Integration.Tests.Common;
+using Integration.Tests.Helpers;
+using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.User;
 using Xunit;
@@ -11,7 +14,7 @@ namespace Integration.Tests
     public class IdentityControllerTests : TestBase
     {
         [Fact]
-        public async Task Register_UserNameIsUnique()
+        public async Task Register_WithAlreadyUsedUsername_ReturnsError()
         {
             // Arrange
             // Create Default User
@@ -19,7 +22,7 @@ namespace Integration.Tests
 
             // Act
             // Try Create Default User Again
-            var response = await Api.Identity.Register(new UserRegistrationRequest()
+            var response = await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = DefaultUserName,
@@ -34,11 +37,11 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Register_PasswordHasDigits()
+        public async Task Register_WithoutDigitsInPassword_ReturnsError()
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await Api.Identity.Register(new UserRegistrationRequest()
+            var response = await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -53,11 +56,11 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Register_PasswordHasLowercase()
+        public async Task Register_WithoutLowercase_ReturnsError()
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await Api.Identity.Register(new UserRegistrationRequest()
+            var response = await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -72,11 +75,11 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Register_PasswordTooShort()
+        public async Task Register_WithPasswordTooShort_ReturnsError()
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await Api.Identity.Register(new UserRegistrationRequest()
+            var response = await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -95,7 +98,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await Api.Identity.Register(new UserRegistrationRequest()
+            var response = await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"{DefaultUserName}2",
@@ -109,11 +112,94 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Register_NameCannotExceedMaxLength()
+        public async Task GetAll_WhenUnauthorized_CannotQueryUsers()
+        {
+            // Authenticate for GetAll Endpoint
+            string userName = $"{DefaultUserName}2";
+
+            // Arrange & Act
+            // Try Create Default User Again
+            await Api.IdentityApi.Register(new UserRegistrationRequest()
+            {
+                Email = DefaultEmail,
+                UserName = userName,
+                Password = "RandomPassword123",
+            });
+
+            var getResponse = await Api.IdentityApi.GetAll(null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, getResponse.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetAll_CanQueryUsers()
+        {
+            // Authenticate for GetAll Endpoint
+            string userName = $"{DefaultUserName}2";
+            await AuthenticateAsync();
+
+            // Arrange & Act
+            // Try Create Default User Again
+            await Api.IdentityApi.Register(new UserRegistrationRequest()
+            {
+                Email = DefaultEmail,
+                UserName = userName,
+                Password = "RandomPassword123",
+            });
+
+            var getResponse = await Api.IdentityApi.GetAll(null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+            Assert.NotNull(getResponse.Content.Items.FirstOrDefault(x => x.UserName.Equals(userName)));
+        }
+
+        [Fact]
+        public async Task GetAll_CanQueryUsers_SupportsPagination()
+        {
+            const int numUsers   = 25;
+            const int pageSize   = 10;
+            const int pageOneNumber = 0;
+            const int pageTwoNumber = 1;
+
+            // Authenticate for GetAll Endpoint
+            await AuthenticateAsync();
+
+            // Arrange & Act
+            // Try Create Default User Again
+            var actualUsers = await Api.IdentityApi.SeedUsers(numUsers);
+
+            var getFirstPage = await Api.IdentityApi.GetAll(new PaginationQuery()
+            {
+                PageNumber = pageOneNumber,
+                PageSize   = pageSize
+            });
+
+            var getSecondPage = await Api.IdentityApi.GetAll(new PaginationQuery()
+            {
+                PageNumber = pageTwoNumber,
+                PageSize   = pageSize
+            });
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, getFirstPage.StatusCode);
+            Assert.Equal(pageSize, getFirstPage.Content.Items.Count);
+            Assert.Equal(pageSize, getFirstPage.Content.PageSize);
+            Assert.Equal(pageOneNumber, getFirstPage.Content.PageNumber);
+
+            Assert.Equal(HttpStatusCode.OK, getSecondPage.StatusCode);
+            Assert.Equal(pageSize, getSecondPage.Content.Items.Count);
+            Assert.Equal(pageSize, getSecondPage.Content.PageSize);
+            Assert.Equal(pageTwoNumber, getSecondPage.Content.PageNumber);
+        }
+
+        [Fact]
+        public async Task Register_WithTooLongName_ReturnsError()
         {
             // Arrange & Act
             // Try Create Default User Again
-            var response = await Api.Identity.Register(new UserRegistrationRequest()
+            var response = await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
                 Email = DefaultEmail,
                 UserName = $"aaaaaaaaaabbbbbbbbbbccccccccccddd",
@@ -135,7 +221,7 @@ namespace Integration.Tests
             await AuthenticateAsync();
 
             var lastResponse = Api.Handler.CachedAuthResponse;
-            var response = await Api.Identity.Refresh(new RefreshTokenRequest()
+            var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
                 Token = lastResponse.Token
@@ -155,7 +241,7 @@ namespace Integration.Tests
             await AuthenticateAsync();
 
             var lastResponse = Api.Handler.CachedAuthResponse;
-            await Api.Identity.Refresh(new RefreshTokenRequest()
+            await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
                 Token = lastResponse.Token
@@ -170,14 +256,14 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Refresh_ReturnsBadRequestForInvalidToken()
+        public async Task Refresh_WithInvalidToken_ReturnsError()
         {
             // Arrange & Act
             // Try Create Default User Again
             await AuthenticateAsync();
 
             var lastResponse = Api.Handler.CachedAuthResponse;
-            var response = await Api.Identity.Refresh(new RefreshTokenRequest()
+            var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
                 Token = lastResponse.Token + 'a'
@@ -191,14 +277,14 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Refresh_ReturnsNothingForInvalidRefreshToken()
+        public async Task Refresh_WithInvalidRefreshToken_ReturnsError()
         {
             // Arrange & Act
             // Try Create Default User Again
             await AuthenticateAsync();
 
             var lastResponse = Api.Handler.CachedAuthResponse;
-            var response = await Api.Identity.Refresh(new RefreshTokenRequest()
+            var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken + 'a',
                 Token = lastResponse.Token
@@ -212,13 +298,13 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Login_HasBadUsername()
+        public async Task Login_WithBadUsername_ReturnsError()
         {
             // Arrange & Act
             // Try Create Default User Again
             await AuthenticateAsync();
 
-            var response = await Api.Identity.Login(new UserLoginRequest()
+            var response = await Api.IdentityApi.Login(new UserLoginRequest()
             {
                 Username = DefaultUserName + 'a',
                 Password = DefaultPassword
@@ -232,13 +318,13 @@ namespace Integration.Tests
         }
 
         [Fact]
-        public async Task Login_HasBadPassword()
+        public async Task Login_WithInvalidPassword_ReturnsError()
         {
             // Arrange & Act
             // Try Create Default User Again
             await AuthenticateAsync();
 
-            var response = await Api.Identity.Login(new UserLoginRequest()
+            var response = await Api.IdentityApi.Login(new UserLoginRequest()
             {
                 Username = DefaultUserName,
                 Password = DefaultPassword + 'a'
