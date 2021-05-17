@@ -20,5 +20,10 @@ namespace Riders.Tweakbox.API.Domain.Models.Database
         /// </summary>
         public int FinishTimeFrames { get; set; }
         public int FastestLapFrames { get; set; }
+
+        /// <summary>
+        /// Player rating in the respective gamemode after completing this match.
+        /// </summary>
+        public int Rating { get; set; }
     }
 }

@@ -18,9 +18,29 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Match.Validation
             RuleFor(x => x.StageNo).InclusiveBetween((byte) Constants.Race.MinStageNo, (byte) Constants.Race.MaxStageNo).WithMessage($"Invalid Stage Number. Must be between {Constants.Race.MinStageNo} and {Constants.Race.MaxStageNo}");
             RuleFor(x => x.CompletedTime).LessThan(command => DateTime.UtcNow).WithMessage(x => $"Are you a time traveller? You completed a match in the future. Completed time: {x.CompletedTime}, Now: {DateTime.UtcNow}");
             RuleFor(x => x.Teams).NotNull().WithMessage("Must have more than 0 teams. (Teams is null)");
-            RuleFor(x => x.Teams.Count).Equal(x => x.MatchType.GetNumTeams()).WithMessage("Incorrect number of teams for match type.");
+            RuleFor(x => x.Teams).Must(NotHaveNullEntry).WithMessage("One of the teams is set to null.");
+            RuleFor(x => x.Teams).Must(HaveCorrectTeamCount).WithMessage("Incorrect number of teams for match type.");
             RuleFor(x => x.Teams).Must(HaveTheRightMemberCount).WithMessage("Incorrect player count in team.");
             RuleFor(x => x.Teams).Must(BeValid).WithMessage($"Incorrect player info. {_badPlayerInfoMessage}");
+        }
+
+        private bool NotHaveNullEntry(List<List<PostMatchPlayerInfo>> teams)
+        {
+            foreach (var team in teams)
+            {
+                if (team == null)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool HaveCorrectTeamCount(PostMatchRequest request, List<List<PostMatchPlayerInfo>> teams)
+        {
+            if (request.MatchType.HasFixedTeamCount())
+                return request.MatchType.GetNumTeams() == teams.Count;
+
+            return true;
         }
 
         private bool BeValid(List<List<PostMatchPlayerInfo>> teams)
@@ -44,7 +64,13 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Match.Validation
         private bool HaveTheRightMemberCount(PostMatchRequest request, List<List<PostMatchPlayerInfo>> teams)
         {
             int playersPerTeam = request.MatchType.GetNumPlayersPerTeam();
-            return teams.All(team => playersPerTeam == team.Count);
+            foreach (var team in teams)
+            {
+                if (playersPerTeam != team.Count) 
+                    return false;
+            }
+
+            return true;
         }
     }
 }

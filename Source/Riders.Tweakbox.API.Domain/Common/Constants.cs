@@ -32,5 +32,14 @@
             public const int DeletedServerPollTimeSeconds = 30;
             public const int RefreshTimeSeconds = 60;
         }
+
+        public static class Skill
+        {        
+            public const double DefaultBeta                     = DefaultInitialMean / 6.0;
+            public const double DefaultDrawProbability          = 0.10;
+            public const double DefaultDynamicsFactor           = DefaultInitialMean / 300.0;
+            public const double DefaultInitialMean              = 1000.0;
+            public const double DefaultInitialStandardDeviation = DefaultInitialMean / 3.0;
+        }
     }
 }

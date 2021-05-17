@@ -16,11 +16,13 @@ namespace Riders.Tweakbox.API.Application.Commands.v1
     {
         /// <summary>
         /// Unranked / Custom / Default.
+        /// Any number of teams.
         /// </summary>
         Default = 0,
 
         /// <summary>
         /// Ranked 1v1v1v1...
+        /// Any number of teams.
         /// </summary>
         RankedSolo = 1,
 
@@ -57,6 +59,25 @@ namespace Riders.Tweakbox.API.Application.Commands.v1
 
     public static class MatchTypeExtensions
     {
+        public static bool HasFixedTeamCount(this MatchTypeDto matchTypeDto)
+        {
+            switch (matchTypeDto)
+            {
+                case MatchTypeDto.Default:
+                case MatchTypeDto.RankedSolo:
+                    return false;
+                case MatchTypeDto.Ranked1v1:
+                case MatchTypeDto.Ranked2v2:
+                case MatchTypeDto.Ranked3v3:
+                case MatchTypeDto.Ranked4v4:
+                case MatchTypeDto.Ranked2v2v2:
+                case MatchTypeDto.Ranked2v2v2v2:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(matchTypeDto), matchTypeDto, null);
+            }
+        }
+
         public static int GetNumPlayersPerTeam(this MatchTypeDto matchTypeDto)
         {
             return matchTypeDto switch

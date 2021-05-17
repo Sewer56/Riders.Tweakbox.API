@@ -31,28 +31,28 @@ namespace Application.Tests.Integrity.Helpers
 
         public static class Match
         {
-            public static Faker<GetMatchResult> GetMatchCommand(int minPlayerId, int maxPlayerId)
+            public static Faker<GetMatchResult> GetMatchCommand(int minPlayerId, int maxPlayerId, MatchTypeDto? matchType = null, int? numTeams = null, int? numPlayersPerTeam = null)
             {
                 return new Faker<GetMatchResult>()
                     .StrictMode(true)
                     .RuleFor(x => x.Id, x => x.IndexGlobal)
                     .RuleFor(x => x.CompletedTime, () => DateTime.UtcNow)
-                    .RuleFor(x => x.MatchType, x => x.PickRandom<MatchTypeDto>())
+                    .RuleFor(x => x.MatchType, x => matchType ?? x.PickRandom<MatchTypeDto>())
                     .RuleFor(x => x.StageNo, x => x.Random.Int(Constants.Race.MinStageNo, Constants.Race.MaxStageNo))
-                    .RuleFor(x => x.Teams, (faker, result) => MakeValidGetTeamData(result, minPlayerId, maxPlayerId));
+                    .RuleFor(x => x.Teams, (faker, result) => MakeValidGetTeamData(result, minPlayerId, maxPlayerId, numTeams, numPlayersPerTeam));
             }
 
             public static Faker<GetMatchPlayerInfo> GetPlayerInfo(int matchId, int playerId)
             {
                 return new Faker<GetMatchPlayerInfo>()
                     .StrictMode(true)
-                    .RuleFor(x => x.Id, x => x.IndexGlobal)
                     .RuleFor(x => x.MatchId, x => matchId)
                     .RuleFor(x => x.PlayerId, x => playerId)
                     .RuleFor(x => x.Board, x => x.Random.Byte(Constants.Race.MinGearNo, Constants.Race.MaxGearNo))
                     .RuleFor(x => x.Character, x => x.Random.Byte(Constants.Race.MinCharacterNo, Constants.Race.MaxCharacterNo))
                     .RuleFor(x => x.FastestLapFrames, x => x.Random.Int(-1, 3600))
                     .RuleFor(x => x.FinishTimeFrames, x => x.Random.Int(3600, 10800))
+                    .RuleFor(x => x.Rating, x => x.Random.Int(300, 2000))
                     .FinishWith((faker, info) =>
                     {
                         if (info.FastestLapFrames == -1)
@@ -60,11 +60,11 @@ namespace Application.Tests.Integrity.Helpers
                     });
             }
 
-            private static List<List<GetMatchPlayerInfo>> MakeValidGetTeamData(GetMatchResult command, int minPlayerId, int maxPlayerId)
+            private static List<List<GetMatchPlayerInfo>> MakeValidGetTeamData(GetMatchResult command, int minPlayerId, int maxPlayerId, int? numTeams, int? numPlayersPerTeam)
             {
-                var teamCount    = command.MatchType.GetNumTeams();
-                var playerCount  = command.MatchType.GetNumPlayersPerTeam();
-                var ids    = GetUniqueIntegers(minPlayerId, maxPlayerId, teamCount * playerCount);
+                var teamCount    = numTeams ?? command.MatchType.GetNumTeams();
+                var playerCount  = numPlayersPerTeam ?? command.MatchType.GetNumPlayersPerTeam();
+                var ids    = GetUniqueIntegers(minPlayerId, maxPlayerId + 1, teamCount * playerCount);
                 var result = new List<List<GetMatchPlayerInfo>>(teamCount);
 
                 for (int x = 0; x < teamCount; x++)
@@ -140,10 +140,11 @@ namespace Application.Tests.Integrity.Helpers
         /// <param name="min">Min value (inclusive)</param>
         /// <param name="max">Max value (exclusive)</param>
         /// <param name="absoluteMax">Absolute max value that can be generated (exclusive).</param>
+        /// <param name="absoluteMin">Absolute minimum value that can be generated.</param>
         /// <returns></returns>
-        public static int GetRandomNumberOutsideRange(int min, int max, int absoluteMax = int.MaxValue)
+        public static int GetRandomNumberOutsideRange(int min, int max, int absoluteMin = 0, int absoluteMax = int.MaxValue)
         {
-            var minResult = Random.Next(int.MinValue, min);
+            var minResult = Random.Next(absoluteMin, min);
             var maxResult = Random.Next(max + 1, absoluteMax);
             var returnMin = Convert.ToBoolean(Random.Next(0, 1));
             return returnMin ? minResult : maxResult;

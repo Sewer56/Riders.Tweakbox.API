@@ -6,11 +6,6 @@
     public class GetMatchPlayerInfo
     {
         /// <summary>
-        /// Unique Id of the match player info.
-        /// </summary>
-        public int Id               { get; set; }
-
-        /// <summary>
         /// Unique Id of the match associated with this info.
         /// </summary>
         public int MatchId           { get; set; }
@@ -41,5 +36,10 @@
         /// If this is -1, the player did not finish.
         /// </summary>
         public int FastestLapFrames { get; set; }
+
+        /// <summary>
+        /// Player rating in the respective gamemode after completing this match.
+        /// </summary>
+        public int Rating { get; set; }
     }
 }

@@ -12,17 +12,20 @@ using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.User;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Riders.Tweakbox.API.SDK.Common;
+using Riders.Tweakbox.API.SDK.Helpers;
 
 namespace Riders.Tweakbox.API.SDK.Handler
 {
     public class TweakboxAuthenticationHandler : DelegatingHandler
     {
         public TweakboxApi Owner { get; private set; }
+        public DateTimeProvider DateTimeProvider { get; private set; }
         
         /// <inheritdoc />
-        public TweakboxAuthenticationHandler(TweakboxApi owner)
+        public TweakboxAuthenticationHandler(TweakboxApi owner, DateTimeProvider dateTimeProvider)
         {
             Owner = owner;
+            DateTimeProvider = dateTimeProvider;
         }
 
         public AuthSuccessResponse CachedAuthResponse     { get; internal set; }
@@ -67,15 +70,19 @@ namespace Riders.Tweakbox.API.SDK.Handler
             if (CachedAuthResponse == null)
                 return "";
 
-            if (DateTime.UtcNow <= Token.ValidTo)
+            if (DateTimeProvider.GetCurrentDateTimeUtc() <= Token.ValidTo)
                 return CachedAuthResponse.Token;
 
             // Refresh token.
-            var result = await Owner.IdentityApi.Refresh(new RefreshTokenRequest()
+            // Note: Clearing of CachedAuthResponse necessary to prevent stack overflow as this will be called again.
+            var request = new RefreshTokenRequest()
             {
                 Token = CachedAuthResponse.Token,
                 RefreshToken = CachedAuthResponse.RefreshToken,
-            });
+            };
+
+            CachedAuthResponse = null;
+            var result = await Owner.IdentityApi.Refresh(request);
 
             // Successful Refresh
             if (result.StatusCode != HttpStatusCode.BadRequest)

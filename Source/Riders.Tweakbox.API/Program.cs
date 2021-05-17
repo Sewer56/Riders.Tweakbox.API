@@ -25,7 +25,7 @@ namespace Riders.Tweakbox.API
             await host.RunAsync();
         }
 
-        public static async Task InitialSetupDatabase(this IServiceProvider serviceProvider)
+        public static async Task<DefaultAdminUser> InitialSetupDatabase(this IServiceProvider serviceProvider)
         {
             // Entity Framework: Run migrations at Startup.
             using var scope = serviceProvider.CreateScope();
@@ -40,9 +40,10 @@ namespace Riders.Tweakbox.API
             // Register default admin user.
             var identityService = scope.ServiceProvider.GetRequiredService<IIdentityService>();
             var configuration   = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-            var adminUser       = new DefaultAdminUser();
+            var adminUser = new DefaultAdminUser();
             configuration.Bind(nameof(adminUser), adminUser);
             await identityService.TryRegisterDefaultAdminUserAsync(adminUser.AdminEmail, adminUser.Username, adminUser.Password, CancellationToken.None);
+            return adminUser;
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

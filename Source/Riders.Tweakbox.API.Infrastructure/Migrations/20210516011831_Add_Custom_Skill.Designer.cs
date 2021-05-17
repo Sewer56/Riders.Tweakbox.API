@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Riders.Tweakbox.API.Infrastructure.Common;
 
 namespace Riders.Tweakbox.API.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210516011831_Add_Custom_Skill")]
+    partial class Add_Custom_Skill
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,56 +241,32 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Rating1v1")
-                        .HasColumnType("REAL");
+                    b.Property<short>("Rating1v1")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("Rating2v2")
-                        .HasColumnType("REAL");
+                    b.Property<short>("Rating2v2")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("Rating2v2v2")
-                        .HasColumnType("REAL");
+                    b.Property<short>("Rating2v2v2")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("Rating2v2v2v2")
-                        .HasColumnType("REAL");
+                    b.Property<short>("Rating2v2v2v2")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("Rating3v3")
-                        .HasColumnType("REAL");
+                    b.Property<short>("Rating3v3")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("Rating4v4")
-                        .HasColumnType("REAL");
+                    b.Property<short>("Rating4v4")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("RatingCustom")
-                        .HasColumnType("REAL");
+                    b.Property<short>("RatingCustom")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("RatingSolo")
-                        .HasColumnType("REAL");
+                    b.Property<short>("RatingSolo")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
-
-                    b.Property<float>("StandardDeviation1v1")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("StandardDeviation2v2")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("StandardDeviation2v2v2")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("StandardDeviation2v2v2v2")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("StandardDeviation3v3")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("StandardDeviation4v4")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("StandardDeviationCustom")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("StandardDeviationSolo")
-                        .HasColumnType("REAL");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");

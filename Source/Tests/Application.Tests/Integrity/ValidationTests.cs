@@ -81,11 +81,11 @@ namespace Application.Tests.Integrity
                 AssertInvalidMember(fixture, x => x.CompletedTime, (x, value) => x.CompletedTime = value, DateTime.UtcNow.AddMinutes(DataGenerators.Random.NextDouble() + 1), validator, "Match Type Validation Failed");
                 AssertInvalidMember(fixture, x => x.Teams, (x, value) => x.Teams = value, null, validator, "Team Null Validation Failed");
                 AssertInvalidMember(fixture, x => x.Teams, (x, value) => x.Teams = value, 
-                                    AllocateListWithSize<List<GetMatchPlayerInfo>>(DataGenerators.GetRandomNumberOutsideRange(teamCount, teamCount + 1, 128)), 
+                                    AllocateListWithSize<List<GetMatchPlayerInfo>>(DataGenerators.GetRandomNumberOutsideRange(teamCount, teamCount + 1, 0, 128)), 
                                     validator, "Team Count Validation Failed");
 
                 AssertInvalidMember(fixture, x => x.Teams, (x, value) => x.Teams = value, 
-                                    AllocateListOfListsWithSize<GetMatchPlayerInfo>(teamCount, DataGenerators.GetRandomNumberOutsideRange(teamPlayerCount, teamPlayerCount + 1, 128)), 
+                                    AllocateListOfListsWithSize<GetMatchPlayerInfo>(teamCount, DataGenerators.GetRandomNumberOutsideRange(teamPlayerCount, teamPlayerCount + 1, 0, 128)), 
                                     validator, "Player Count Validation Failed");
             }
         }
@@ -112,12 +112,12 @@ namespace Application.Tests.Integrity
                 AssertInvalidMember(fixture, x => x.MatchType, (x, value) => x.MatchType = value, DataGenerators.GetEnumOutsideRange<MatchTypeDto>(), validator, "Match Type Validation Failed");
                 AssertInvalidMember(fixture, x => x.CompletedTime, (x, value) => x.CompletedTime = value, DateTime.UtcNow.AddMinutes(DataGenerators.Random.NextDouble() + 1), validator, "Match Type Validation Failed");
                 AssertInvalidMember(fixture, x => x.Teams, (x, value) => x.Teams = value, null, validator, "Team Null Validation Failed");
-                AssertInvalidMember(fixture, x => x.Teams, (x, value) => x.Teams = value, 
-                                    AllocateListWithSize<List<PostMatchPlayerInfo>>(DataGenerators.GetRandomNumberOutsideRange(teamCount, teamCount + 1, 128)), 
+                  AssertInvalidMember(fixture, x => x.Teams, (x, value) => x.Teams = value, 
+                                    AllocateListWithSize<List<PostMatchPlayerInfo>>(DataGenerators.GetRandomNumberOutsideRange(teamCount, teamCount + 1, 0, 128)), 
                                     validator, "Team Count Validation Failed");
 
                 AssertInvalidMember(fixture, x => x.Teams, (x, value) => x.Teams = value, 
-                                    AllocateListOfListsWithSize<PostMatchPlayerInfo>(teamCount, DataGenerators.GetRandomNumberOutsideRange(teamPlayerCount, teamPlayerCount + 1, 128)), 
+                                    AllocateListOfListsWithSize<PostMatchPlayerInfo>(teamCount, DataGenerators.GetRandomNumberOutsideRange(teamPlayerCount, teamPlayerCount + 1, 0, 128)), 
                                     validator, "Player Count Validation Failed");
             }
         }

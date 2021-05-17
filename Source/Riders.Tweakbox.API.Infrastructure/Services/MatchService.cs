@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Moserware.Skills;
 using Riders.Tweakbox.API.Application.Commands;
 using Riders.Tweakbox.API.Application.Commands.v1.Match;
 using Riders.Tweakbox.API.Application.Commands.v1.Match.Result;
@@ -46,7 +47,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             var result = await _context.Matches.AsNoTracking().Include(x => x.Players).SingleOrDefaultAsync(match => match.Id == id, token);
             if (result != null)
                 return Mapping.Mapper.Map<GetMatchResult>(result);
-            
+
             return null;
         }
 
@@ -79,13 +80,13 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
 
             await _context.RaceDetails.AddRangeAsync(players, token);
             await _context.SaveChangesAsync(token);
-            return Mapping.Mapper.Map<GetMatchResult>(item);
+            return Mapping.Mapper.Map<GetMatchResult>(match);
         }
 
         /// <inheritdoc/>
         public async Task<bool> Delete(int id, CancellationToken token)
         {
-            var item = await _context.Matches.FindAsync(id, token);
+            var item = await _context.Matches.FindAsync(id);
             if (item == null)
                 return false;
 

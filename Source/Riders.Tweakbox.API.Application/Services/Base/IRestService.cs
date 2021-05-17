@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Moserware.Skills;
 using Riders.Tweakbox.API.Application.Commands;
 
 namespace Riders.Tweakbox.API.Application.Services.Base

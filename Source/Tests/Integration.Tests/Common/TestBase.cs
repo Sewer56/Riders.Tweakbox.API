@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Riders.Tweakbox.API;
 using Riders.Tweakbox.API.Application.Commands.v1.User;
+using Riders.Tweakbox.API.Application.Models.Config;
 using Riders.Tweakbox.API.Infrastructure.Common;
 using Riders.Tweakbox.API.SDK;
 
@@ -13,25 +14,34 @@ namespace Integration.Tests.Common
 {
     public abstract class TestBase
     {
-        public TweakboxApi Api { get; private set; }
+        public TweakboxApi Api { get; protected set; }
 
+        protected DefaultAdminUser AdminUserDetails { get; set; }
         protected readonly HttpClient TestClient;
+        protected readonly TestWebApplicationFactory Factory;
         protected const string DefaultUserName = "ArgieArgieArgie";
         protected const string DefaultEmail = "Admin@IStillLoveYou.net";
         protected const string DefaultPassword = "IStillLoveYou!11!111";
         
         protected TestBase()
         {
-            var appFactory = new TestWebApplicationFactory();
-            TestClient     = appFactory.CreateClient();
+            Factory = new TestWebApplicationFactory();
+            TestClient = Factory.CreateClient();
 
-            using var scope = appFactory.Services.CreateScope();
+            using var scope = Factory.Services.CreateScope();
             Task.Run(() => ClearDatabase(scope.ServiceProvider)).Wait();
 
-            Api = new TweakboxApi(handler => appFactory.CreateDefaultClient(handler));
+            Api = new TweakboxApi(handler => Factory.CreateDefaultClient(handler));
         }
 
-        protected async Task AuthenticateAsync()
+        protected async Task AuthenticateAsAdminAsync()
+        {
+            var loginResult = await Api.TryAuthenticate(AdminUserDetails.Username, AdminUserDetails.Password);
+            if (loginResult.IsT1)
+                throw new Exception("Failed to Login");
+        }
+
+        protected async Task RegisterAndAuthenticateAsync()
         {
             var registerResult = await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
@@ -48,7 +58,7 @@ namespace Integration.Tests.Common
                 throw new Exception("Failed to Login");
         }
 
-        private static async Task ClearDatabase(IServiceProvider provider)
+        private async Task ClearDatabase(IServiceProvider provider)
         {
             var context = provider.GetRequiredService<ApplicationDbContext>();
             var types   = context.Model.GetEntityTypes();
@@ -76,7 +86,7 @@ namespace Integration.Tests.Common
             }
 
             // Now setup db after clearing
-            await provider.InitialSetupDatabase();
+            AdminUserDetails = await provider.InitialSetupDatabase();
         }
     }
 }

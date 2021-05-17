@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -20,11 +19,13 @@ namespace Riders.Tweakbox.API.Controllers
     public class MatchController : RestControllerBase<GetMatchResult, PostMatchRequest>
     {
         private IMatchService _service;
+        private ISkillCalculatorService _skillCalculatorService;
 
         /// <inheritdoc />
-        public MatchController(IMatchService service)
+        public MatchController(IMatchService service, ISkillCalculatorService skillCalculatorService)
         {
             _service = service;
+            _skillCalculatorService = skillCalculatorService;
         }
 
         /// <summary>
@@ -58,15 +59,15 @@ namespace Riders.Tweakbox.API.Controllers
         /// <param name="item">Altered details of the match.</param>
         /// <param name="cancellationToken"></param>
         /// <response code="400">Requested match was not found.</response>
-        /// <response code="204">Success (No Content)</response>
+        /// <response code="200">Success</response>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
         public override async Task<IActionResult> Update(int id, PostMatchRequest item, CancellationToken cancellationToken)
         {
             var result = await _service.Update(id, item, cancellationToken);
             if (result == false)
-                return NotFound();
+                return NotFound(false);
 
-            return NoContent();
+            return Ok(true);
         }
 
         /// <summary>
@@ -77,7 +78,8 @@ namespace Riders.Tweakbox.API.Controllers
         /// <response code="201">Successfully created.</response>
         public override async Task<ActionResult<GetMatchResult>> Create([FromBody] PostMatchRequest item, CancellationToken cancellationToken)
         {
-            var result = await _service.Create(item, cancellationToken);
+            await _skillCalculatorService.UpdateRatings(item);
+            var result     = await _service.Create(item, cancellationToken);
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
@@ -87,15 +89,15 @@ namespace Riders.Tweakbox.API.Controllers
         /// <param name="id">Unique identifier for the match.</param>
         /// <param name="cancellationToken"></param>
         /// <response code="400">Requested match was not found.</response>
-        /// <response code="204">Success (No Content)</response>
+        /// <response code="200">Success</response>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.Admin)]
         public override async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             var result = await _service.Delete(id, cancellationToken);
             if (result == false)
-                return NotFound();
+                return NotFound(false);
 
-            return NoContent();
+            return Ok(true);
         }
     }
 }

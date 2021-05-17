@@ -18,7 +18,7 @@ namespace Integration.Tests
         {
             // Arrange
             // Create Default User
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             // Act
             // Try Create Default User Again
@@ -137,7 +137,7 @@ namespace Integration.Tests
         {
             // Authenticate for GetAll Endpoint
             string userName = $"{DefaultUserName}2";
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             // Arrange & Act
             // Try Create Default User Again
@@ -164,7 +164,7 @@ namespace Integration.Tests
             const int pageTwoNumber = 1;
 
             // Authenticate for GetAll Endpoint
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             // Arrange & Act
             // Try Create Default User Again
@@ -218,7 +218,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             var lastResponse = Api.Handler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
@@ -238,7 +238,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             var lastResponse = Api.Handler.CachedAuthResponse;
             await Api.IdentityApi.Refresh(new RefreshTokenRequest()
@@ -260,7 +260,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             var lastResponse = Api.Handler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
@@ -281,7 +281,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             var lastResponse = Api.Handler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
@@ -302,7 +302,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             var response = await Api.IdentityApi.Login(new UserLoginRequest()
             {
@@ -322,7 +322,7 @@ namespace Integration.Tests
         {
             // Arrange & Act
             // Try Create Default User Again
-            await AuthenticateAsync();
+            await RegisterAndAuthenticateAsync();
 
             var response = await Api.IdentityApi.Login(new UserLoginRequest()
             {

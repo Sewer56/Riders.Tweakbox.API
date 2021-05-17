@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace Riders.Tweakbox.API.Application.Commands.v1.Match
 {
@@ -24,7 +26,7 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Match
 
         /// <summary>
         /// Amount of frames between timer hitting 0:00 and race end.
-        /// If this is -1, the player did not finish.
+        /// Set this to int.MaxValue if the player did not finish.
         /// </summary>
         public int FinishTimeFrames { get; set; }
 
@@ -33,5 +35,13 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Match
         /// If this is -1, the player did not finish.
         /// </summary>
         public int FastestLapFrames { get; set; }
+
+        /// <summary>
+        /// [Internal Use Only]
+        /// Player rating in the respective gamemode after completing this match.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JsonIgnore]
+        public float Rating { get; set; }
     }
 }

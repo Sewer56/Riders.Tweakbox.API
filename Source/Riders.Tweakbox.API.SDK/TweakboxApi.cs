@@ -7,6 +7,7 @@ using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Riders.Tweakbox.API.SDK.Common;
 using Riders.Tweakbox.API.SDK.Handler;
+using Riders.Tweakbox.API.SDK.Helpers;
 using Riders.Tweakbox.API.SDK.Interfaces;
 
 namespace Riders.Tweakbox.API.SDK
@@ -22,9 +23,9 @@ namespace Riders.Tweakbox.API.SDK
         public TweakboxAuthenticationHandler Handler { get; private set; }
         public HttpClient Client { get; private set; }
 
-        public TweakboxApi(string url)
+        public TweakboxApi(string url, DateTimeProvider provider = null)
         {
-            Handler  = new TweakboxAuthenticationHandler(this);
+            Handler  = new TweakboxAuthenticationHandler(this, provider ?? new DateTimeProvider());
             Handler.InnerHandler = new HttpClientHandler();
 
             Client   = new HttpClient(Handler);
@@ -35,9 +36,9 @@ namespace Riders.Tweakbox.API.SDK
         /// <summary>
         /// Intended for testing but feel free to use.
         /// </summary>
-        public TweakboxApi(Func<DelegatingHandler, HttpClient> getClient)
+        public TweakboxApi(Func<DelegatingHandler, HttpClient> getClient, DateTimeProvider provider = null)
         {
-            Handler = new TweakboxAuthenticationHandler(this);
+            Handler = new TweakboxAuthenticationHandler(this, provider ?? new DateTimeProvider());
             Client  = getClient(Handler);
             SetupServices();
         }
