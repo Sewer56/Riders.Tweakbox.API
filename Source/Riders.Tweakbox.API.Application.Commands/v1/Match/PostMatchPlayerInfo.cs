@@ -38,10 +38,27 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Match
 
         /// <summary>
         /// [Internal Use Only]
+        /// The team number assigned to the player.
+        /// This is automatically set during mapping!
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JsonIgnore]
+        public int TeamNo { get; set; }
+
+        /// <summary>
+        /// [Internal Use Only]
         /// Player rating in the respective gamemode after completing this match.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JsonIgnore]
         public float Rating { get; set; }
+
+        /// <summary>
+        /// [Internal Use Only]
+        /// Player standard deviation in the respective gamemode after completing this match.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JsonIgnore]
+        public float StdDev { get; set; }
     }
 }

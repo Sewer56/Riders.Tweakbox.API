@@ -15,8 +15,17 @@ namespace Riders.Tweakbox.API.SDK.Interfaces
         /// </summary>
         /// <param name="query">How many users to fetch at once.</param>
         /// <response code="200">Success</response>
-        [Get("/" + Routes.Identity.Get)]
+        [Get("/" + Routes.Identity.GetAll)]
         public Task<ApiResponse<PagedResponse<UserDetailsResult>>> GetAll([Query] PaginationQuery query);
+
+        /// <summary>
+        /// Retrieves an individual user from the system.
+        /// Requires to be signed in!
+        /// </summary>
+        /// <param name="id">The unique identifier of the user.</param>
+        /// <response code="200">Success</response>
+        [Get("/" + Routes.Identity.Get)]
+        public Task<ApiResponse<PagedResponse<UserDetailsResult>>> Get([Query] int id);
 
         /// <summary>
         /// Logs a user into the system and returns a token to be used by subsequent API calls.

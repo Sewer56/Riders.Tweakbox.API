@@ -35,7 +35,7 @@ namespace Integration.Tests
         [Fact]
         public async Task GetAll_WithSingleMatch_ReturnsOne()
         {
-            const int players = 16;
+            const int players = 8;
             const int matches = 1;
 
             // Arrange
@@ -43,7 +43,7 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act
-            await Api.Match.SeedMatches(matches, users.minId, users.maxId);
+            await Api.Match.SeedMatches(matches, users.minId, users.maxId, 2, MatchTypeDto.RankedSolo);
             var response = await Api.Match.GetAll(null);
             
             // Assert
@@ -92,6 +92,45 @@ namespace Integration.Tests
                 if (newRating.rating == originalRating.rating)
                     Assert.NotEqual(originalRating.stdDev, newRating.stdDev);
             } 
+        }
+
+        [Theory]
+        [InlineData(MatchTypeDto.Default)]
+        [InlineData(MatchTypeDto.RankedSolo)]
+        [InlineData(MatchTypeDto.Ranked1v1)]
+        [InlineData(MatchTypeDto.Ranked2v2)]
+        [InlineData(MatchTypeDto.Ranked2v2v2)]
+        [InlineData(MatchTypeDto.Ranked2v2v2v2)]
+        [InlineData(MatchTypeDto.Ranked3v3)]
+        [InlineData(MatchTypeDto.Ranked4v4)]
+        public async Task Create_WithAllGameModes_IncrementsTotalGamesPlayed(MatchTypeDto gameMode)
+        {
+            var teams = gameMode.GetNumTeams();
+            var players = teams * gameMode.GetNumPlayersPerTeam();
+            const int matches = 1;
+
+            // Arrange & Create Players
+            await RegisterAndAuthenticateAsync();
+            var users = await SeedPlayersAsync(players);
+
+            // Test Cases
+            // Act
+            await Api.Match.SeedMatches(matches, users.minId, users.maxId, 250, gameMode);
+            
+            // Assert
+            var newUsers = await Api.IdentityApi.GetAll(new PaginationQuery() { PageSize = players, PageNumber = 0 });
+
+            // Assert Games Played
+            for (int x = 0; x < players; x++)
+            {
+                var newPlayer      = newUsers.Content.Items[x];
+                var originalPlayer = users.users.Items.Find(x => x.Id == newPlayer.Id);
+
+                var newGamesPlayed      = newPlayer.GetGamesPlayed(gameMode);
+                var originalGamesPlayed = originalPlayer.GetGamesPlayed(gameMode);
+
+                Assert.Equal(originalGamesPlayed.totalGames + 1, newGamesPlayed.totalGames);
+            }
         }
 
         [Fact]

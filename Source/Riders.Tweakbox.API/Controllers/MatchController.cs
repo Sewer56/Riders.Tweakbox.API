@@ -19,13 +19,13 @@ namespace Riders.Tweakbox.API.Controllers
     public class MatchController : RestControllerBase<GetMatchResult, PostMatchRequest>
     {
         private IMatchService _service;
-        private ISkillCalculatorService _skillCalculatorService;
+        private IStatisticsCalculatorService _statisticsCalculatorService;
 
         /// <inheritdoc />
-        public MatchController(IMatchService service, ISkillCalculatorService skillCalculatorService)
+        public MatchController(IMatchService service, IStatisticsCalculatorService statisticsCalculatorService)
         {
             _service = service;
-            _skillCalculatorService = skillCalculatorService;
+            _statisticsCalculatorService = statisticsCalculatorService;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Riders.Tweakbox.API.Controllers
         /// <response code="201">Successfully created.</response>
         public override async Task<ActionResult<GetMatchResult>> Create([FromBody] PostMatchRequest item, CancellationToken cancellationToken)
         {
-            await _skillCalculatorService.UpdateRatings(item);
+            await _statisticsCalculatorService.UpdateRatings(item);
             var result     = await _service.Create(item, cancellationToken);
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }

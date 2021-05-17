@@ -38,6 +38,11 @@
         public int FastestLapFrames { get; set; }
 
         /// <summary>
+        /// Player team number.
+        /// </summary>
+        public int TeamNo { get; set; }
+
+        /// <summary>
         /// Player rating in the respective gamemode after completing this match.
         /// </summary>
         public int Rating { get; set; }

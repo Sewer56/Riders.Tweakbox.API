@@ -140,5 +140,23 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.User.Result
             }
         }
 
+        /// <summary>
+        /// Gets the win counter for a specified game-mode.
+        /// </summary>
+        public (int totalGames, int wonGames) GetGamesPlayed(MatchTypeDto matchType)
+        {
+            return matchType switch
+            {
+                MatchTypeDto.Default => (NumGamesCustom, NumWinsCustom),
+                MatchTypeDto.RankedSolo => (NumGamesSolo, NumWinsSolo),
+                MatchTypeDto.Ranked1v1 => (NumGames1v1, NumWins1v1),
+                MatchTypeDto.Ranked2v2 => (NumGames2v2, NumWins2v2),
+                MatchTypeDto.Ranked3v3 => (NumGames3v3, NumWins3v3),
+                MatchTypeDto.Ranked4v4 => (NumGames4v4, NumWins4v4),
+                MatchTypeDto.Ranked2v2v2 => (NumGames2v2v2, NumWins2v2v2),
+                MatchTypeDto.Ranked2v2v2v2 => (NumGames2v2v2v2, NumWins2v2v2v2),
+                _ => throw new ArgumentOutOfRangeException(nameof(matchType), matchType, null)
+            };
+        }
     }
 }

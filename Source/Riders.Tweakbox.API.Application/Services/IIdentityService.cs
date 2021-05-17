@@ -14,5 +14,6 @@ namespace Riders.Tweakbox.API.Application.Services
         Task<AuthenticationResult> LoginAsync(string username, string password, CancellationToken cancellationToken);
         Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken);
         Task<List<UserDetailsResult>> GetAll(PaginationQuery paginationQuery, CancellationToken token);
+        Task<UserDetailsResult> Get(int id, CancellationToken token);
     }
 }

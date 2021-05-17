@@ -5,7 +5,7 @@ using Riders.Tweakbox.API.Application.Commands.v1.Match;
 
 namespace Riders.Tweakbox.API.Application.Services
 {
-    public interface ISkillCalculatorService
+    public interface IStatisticsCalculatorService
     {
         /// <summary>
         /// Updates the ratings of each player referenced in the request.

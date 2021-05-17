@@ -42,12 +42,13 @@ namespace Application.Tests.Integrity.Helpers
                     .RuleFor(x => x.Teams, (faker, result) => MakeValidGetTeamData(result, minPlayerId, maxPlayerId, numTeams, numPlayersPerTeam));
             }
 
-            public static Faker<GetMatchPlayerInfo> GetPlayerInfo(int matchId, int playerId)
+            public static Faker<GetMatchPlayerInfo> GetPlayerInfo(int matchId, int playerId, int teamId)
             {
                 return new Faker<GetMatchPlayerInfo>()
                     .StrictMode(true)
                     .RuleFor(x => x.MatchId, x => matchId)
                     .RuleFor(x => x.PlayerId, x => playerId)
+                    .RuleFor(x => x.TeamNo, x => teamId)
                     .RuleFor(x => x.Board, x => x.Random.Byte(Constants.Race.MinGearNo, Constants.Race.MaxGearNo))
                     .RuleFor(x => x.Character, x => x.Random.Byte(Constants.Race.MinCharacterNo, Constants.Race.MaxCharacterNo))
                     .RuleFor(x => x.FastestLapFrames, x => x.Random.Int(-1, 3600))
@@ -73,7 +74,7 @@ namespace Application.Tests.Integrity.Helpers
                     for (int y = 0; y < playerCount; y++)
                     {
                         int index = (playerCount * x) + y;
-                        team.Add(GetPlayerInfo(command.Id, ids[index]).Generate());
+                        team.Add(GetPlayerInfo(command.Id, ids[index], x).Generate());
                     }
 
                     result.Add(team);

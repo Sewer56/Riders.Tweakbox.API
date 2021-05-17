@@ -16,7 +16,8 @@
 
         public static class Identity
         {
-            public const string Get      = "v1/Identity";
+            public const string GetAll   = "v1/Identity";
+            public const string Get      = "v1/Identity/" + RestGet;
             public const string Register = "v1/Identity/register";
             public const string Login    = "v1/Identity/login";
             public const string Refresh  = "v1/Identity/refresh";

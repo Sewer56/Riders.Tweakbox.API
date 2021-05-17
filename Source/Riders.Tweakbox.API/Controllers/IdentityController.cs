@@ -34,12 +34,30 @@ namespace Riders.Tweakbox.API.Controllers
         /// <param name="query">How many users to fetch at once.</param>
         /// <param name="cancellationToken"></param>
         /// <response code="200">Success</response>
-        [HttpGet(Routes.Identity.Get)]
+        [HttpGet(Routes.Identity.GetAll)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.User)]
         public async Task<IActionResult> GetAll([FromQuery] PaginationQuery query, CancellationToken cancellationToken)
         {
             var result = await _identityService.GetAll(query.SanitizeOrDefault(), cancellationToken);
             return Ok(new PagedResponse<UserDetailsResult>(result, query.PageNumber, query.PageSize));
+        }
+
+        /// <summary>
+        /// Retrieves an individual user from the system.
+        /// </summary>
+        /// <param name="id">The ID of the individual user.</param>
+        /// <param name="cancellationToken"></param>
+        /// <response code="200">Success</response>
+        /// <response code="404">Not Found</response>
+        [HttpGet(Routes.Identity.Get)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.User)]
+        public async Task<IActionResult> Get(int id, CancellationToken cancellationToken)
+        {
+            var result = await _identityService.Get(id, cancellationToken);
+            if (result == null)
+                return NotFound(null);
+
+            return Ok(result);
         }
 
         /// <summary>

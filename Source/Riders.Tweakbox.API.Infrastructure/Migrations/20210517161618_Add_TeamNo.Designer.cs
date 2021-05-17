@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Riders.Tweakbox.API.Infrastructure.Common;
 
 namespace Riders.Tweakbox.API.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210517161618_Add_TeamNo")]
+    partial class Add_TeamNo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,11 +353,8 @@ namespace Riders.Tweakbox.API.Infrastructure.Migrations
                     b.Property<int>("FinishTimeFrames")
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("StdDev")
-                        .HasColumnType("REAL");
+                    b.Property<int>("Rating")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TeamNo")
                         .HasColumnType("INTEGER");

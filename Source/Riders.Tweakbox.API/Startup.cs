@@ -48,7 +48,7 @@ namespace Riders.Tweakbox.API
             services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
-            services.AddScoped<ISkillCalculatorService, SkillCalculatorService>();
+            services.AddScoped<IStatisticsCalculatorService, StatisticsCalculatorService>();
             services.AddSingleton<IDateTimeService, DateTimeService>();
             services.AddSingleton<IServerBrowserService, ServerBrowserService>();
             services.AddSingleton<IGeoIpService, GeoIpService>();

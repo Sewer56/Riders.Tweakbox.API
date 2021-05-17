@@ -187,5 +187,49 @@ namespace Riders.Tweakbox.API.Domain.Models.Database
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
+
+        public void IncrementGameCounter(MatchType matchType, bool isWinner)
+        {
+            int numWins = isWinner ? 1 : 0;
+            switch (matchType)
+            {
+                case MatchType.Default:
+                    NumGamesCustom += 1;
+                    NumWinsCustom += numWins;
+                    break;
+                case MatchType.RankedSolo:
+                    NumGamesSolo += 1;
+                    NumWinsSolo += numWins;
+                    break;
+                case MatchType.Ranked1v1:
+                    NumGames1v1 += 1;
+                    NumWins1v1 += numWins;
+                    break;
+                case MatchType.Ranked2v2:
+                    NumGames2v2 += 1;
+                    NumWins2v2 += numWins;
+                    break;
+                case MatchType.Ranked3v3:
+                    NumGames3v3 += 1;
+                    NumWins3v3 += numWins;
+                    break;
+                case MatchType.Ranked4v4:
+                    NumGames4v4 += 1;
+                    NumWins4v4 += numWins;
+                    break;
+                case MatchType.Ranked2v2v2:
+                    NumGames2v2v2 += 1;
+                    NumWins2v2v2 += numWins;
+                    break;
+                case MatchType.Ranked2v2v2v2:
+                    NumGames2v2v2v2 += 1;
+                    NumWins2v2v2v2 += numWins;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(matchType), matchType, null);
+            }
+
+            NumGamesTotal += 1;
+        }
     }
 }

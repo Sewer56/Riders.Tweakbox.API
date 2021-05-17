@@ -80,9 +80,15 @@ namespace Riders.Tweakbox.API.Application.Models
         {
             var result = new List<PlayerRaceDetails>();
 
-            foreach (var team in request.Teams)
-            foreach (var playerDetails in team)
-                result.Add(Mapper.Map<PlayerRaceDetails>(playerDetails));
+            for (var x = 0; x < request.Teams.Count; x++)
+            {
+                var team = request.Teams[x];
+                foreach (var playerDetails in team)
+                {
+                    playerDetails.TeamNo = x;
+                    result.Add(Mapper.Map<PlayerRaceDetails>(playerDetails));
+                }
+            }
 
             match.Players = result;
         }
@@ -90,9 +96,15 @@ namespace Riders.Tweakbox.API.Application.Models
         private static void GetFlattenTeamData(GetMatchResult command, Match match)
         {
             var result = new List<PlayerRaceDetails>();
-            foreach (var team in command.Teams)
-            foreach (var playerDetails in team)
-                result.Add(Mapper.Map<PlayerRaceDetails>(playerDetails));
+            for (var x = 0; x < command.Teams.Count; x++)
+            {
+                var team = command.Teams[x];
+                foreach (var playerDetails in team)
+                {
+                    playerDetails.TeamNo = x;
+                    result.Add(Mapper.Map<PlayerRaceDetails>(playerDetails));
+                }
+            }
 
             match.Players = result;
         }

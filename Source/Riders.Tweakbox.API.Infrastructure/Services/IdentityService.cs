@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Riders.Tweakbox.API.Application.Commands;
-using Riders.Tweakbox.API.Application.Commands.v1.Match.Result;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Riders.Tweakbox.API.Application.Models;
 using Riders.Tweakbox.API.Application.Models.Config;
@@ -65,6 +64,13 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
                 result.Add(Mapping.Mapper.Map<UserDetailsResult>(user));
 
             return result;
+        }
+
+        /// <inheritdoc />
+        public async Task<UserDetailsResult> Get(int id, CancellationToken token)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id, token);
+            return user == null ? null : Mapping.Mapper.Map<UserDetailsResult>(user);
         }
 
         /// <inheritdoc />

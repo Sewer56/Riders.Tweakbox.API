@@ -22,8 +22,18 @@ namespace Riders.Tweakbox.API.Domain.Models.Database
         public int FastestLapFrames { get; set; }
 
         /// <summary>
+        /// Player team number.
+        /// </summary>
+        public int TeamNo { get; set; }
+
+        /// <summary>
         /// Player rating in the respective gamemode after completing this match.
         /// </summary>
-        public int Rating { get; set; }
+        public float Rating { get; set; }
+
+        /// <summary>
+        /// Player standard deviation in the gamemode after completing match..
+        /// </summary>
+        public float StdDev { get; set; }
     }
 }
