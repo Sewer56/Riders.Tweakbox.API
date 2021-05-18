@@ -90,6 +90,41 @@ namespace Riders.Tweakbox.API.Controllers
         }
 
         /// <summary>
+        /// Allows you to request a password reset by sending a token to a specified email address.
+        /// You can then use that token with ResetPassword.
+        /// </summary>
+        /// <param name="request">Password reset details.</param>
+        /// <param name="cancellationToken"></param>
+        /// <response code="404">Email does not exist.</response>
+        /// <response code="200">Success</response>
+        [HttpPost(Routes.Identity.GetPasswordResetToken)]
+        public async Task<IActionResult> RequestResetToken(GetPasswordResetTokenRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _identityService.SendPasswordResetToken(request.Email, cancellationToken);
+            if (result == null)
+                return Ok();
+
+            return NotFound(result);            
+        }
+
+        /// <summary>
+        /// Allows you to request a password reset using a token mailed to a user's email address.
+        /// </summary>
+        /// <param name="request">Password reset details.</param>
+        /// <param name="cancellationToken"></param>
+        /// <response code="400">Bad request/internal error.</response>
+        /// <response code="200">Success</response>
+        [HttpPost(Routes.Identity.PasswordReset)]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _identityService.ResetPassword(request.Email, request.Token, request.Password, cancellationToken);
+            if (result == null)
+                return Ok();
+
+            return BadRequest(result);            
+        }
+
+        /// <summary>
         /// Refreshes a token returned by the API.
         /// </summary>
         /// <param name="request">Current token and the refresh token.</param>

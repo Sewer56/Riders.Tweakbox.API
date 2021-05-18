@@ -143,7 +143,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await Api.IdentityApi.Register(new UserRegistrationRequest()
             {
-                Email = DefaultEmail,
+                Email = $"{DefaultEmail}2",
                 UserName = userName,
                 Password = "RandomPassword123",
             });

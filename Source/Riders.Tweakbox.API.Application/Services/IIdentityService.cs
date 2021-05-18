@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Riders.Tweakbox.API.Application.Commands;
+using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Riders.Tweakbox.API.Domain.Models;
 
@@ -15,5 +16,7 @@ namespace Riders.Tweakbox.API.Application.Services
         Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken);
         Task<List<UserDetailsResult>> GetAll(PaginationQuery paginationQuery, CancellationToken token);
         Task<UserDetailsResult> Get(int id, CancellationToken token);
+        Task<ErrorReponse> SendPasswordResetToken(string email, CancellationToken cancellationToken); 
+        Task<ErrorReponse> ResetPassword(string email, string token, string newPassword, CancellationToken cancellationToken);
     }
 }

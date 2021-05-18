@@ -52,11 +52,16 @@ namespace Riders.Tweakbox.API
             services.AddSingleton<IDateTimeService, DateTimeService>();
             services.AddSingleton<IServerBrowserService, ServerBrowserService>();
             services.AddSingleton<IGeoIpService, GeoIpService>();
+            services.AddSingleton<IMailService, MailService>();
             services.AddSingleton(Configuration);
 
             var geoIpSettings = new GeoIpSettings();
             Configuration.Bind(nameof(GeoIpSettings), geoIpSettings);
             services.AddSingleton(geoIpSettings);
+
+            var mailSettings = new MailSettings();
+            Configuration.Bind(nameof(MailSettings), mailSettings);
+            services.AddSingleton(mailSettings);
 
             // Controller
             services.AddControllers();
@@ -151,7 +156,8 @@ namespace Riders.Tweakbox.API
         private static void AddIdentity(IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -169,7 +175,7 @@ namespace Riders.Tweakbox.API
                 options.Lockout.AllowedForNewUsers = false;
 
                 // User settings.
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
             });
         }
 

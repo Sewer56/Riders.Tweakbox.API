@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Riders.Tweakbox.API.Application.Commands;
+using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
 using Riders.Tweakbox.API.Application.Models;
 using Riders.Tweakbox.API.Application.Models.Config;
@@ -28,14 +29,16 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ApplicationDbContext _context;
         private IDateTimeService _dateTimeService;
+        private IMailService _mailService;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, ApplicationDbContext context, IDateTimeService dateTimeService)
+        public IdentityService(UserManager<ApplicationUser> userManager, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, ApplicationDbContext context, IDateTimeService dateTimeService, IMailService mailService)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
             _dateTimeService = dateTimeService;
+            _mailService = mailService;
         }
 
         /// <inheritdoc />
@@ -94,14 +97,55 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             };
 
             var createUser = await _userManager.CreateAsync(newUser, password);
-
+            
             if (!createUser.Succeeded)
                 return new AuthenticationResult() { Errors = createUser.Errors.Select(x => x.Description) };
 
+            await _mailService.SendConfirmationEmail(email, username);
             await _userManager.AddToRoleAsync(newUser, Roles.User);
             var result = await GenerateAuthenticationResultForUser(newUser, false);
             await _context.SaveChangesAsync(cancellationToken);
             return result;
+        }
+
+        public async Task<ErrorReponse> SendPasswordResetToken(string email, CancellationToken cancellationToken)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                return new ErrorReponse()
+                {
+                    Errors = new []{ "User with this email does not exist." }
+                };
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
+            await _mailService.SendPasswordResetToken(email, existingUser.UserName, token);
+
+            return null;
+        }
+
+        public async Task<ErrorReponse> ResetPassword(string email, string token, string newPassword, CancellationToken cancellationToken)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                return new ErrorReponse()
+                {
+                    Errors = new []{ "User with this email does not exist." }
+                };
+            }
+
+            var result = await _userManager.ResetPasswordAsync(existingUser, token, newPassword);
+            if (!result.Succeeded)
+            {
+                return new ErrorReponse()
+                {
+                    Errors = result.Errors.Select(x => x.Description)
+                };
+            }
+
+            return null;
         }
 
         /// <inheritdoc />
@@ -118,6 +162,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             }
 
             var hasValidPassword = await _userManager.CheckPasswordAsync(existingUser, password);
+            
             if (!hasValidPassword)
             {
                 return new AuthenticationResult()
@@ -206,7 +251,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             await _context.RefreshTokens.AddAsync(refreshToken);
             if (saveChanges)
                 await _context.SaveChangesAsync();
-
+            
             // Return
             return new AuthenticationResult()
             {
