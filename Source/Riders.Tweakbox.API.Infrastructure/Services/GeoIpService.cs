@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MaxMind.Db;
 using MaxMind.GeoIP2;
@@ -10,12 +11,13 @@ using Riders.Tweakbox.API.Application.Models.Config;
 using Riders.Tweakbox.API.Application.Services;
 using Riders.Tweakbox.API.Infrastructure.Helpers;
 using Riders.Tweakbox.API.Infrastructure.Services.GeoIp;
+using SharpCompress.Archives;
 
 namespace Riders.Tweakbox.API.Infrastructure.Services
 {
     public class GeoIpService : IGeoIpService, IDisposable
     {
-        private static readonly string DefaultDatabasePath = $"{Path.GetDirectoryName(typeof(GeoIpService).Assembly.Location)}/Assets/GeoLite2-City.7z";
+        private static readonly string DefaultDatabasePath = $"{Path.GetDirectoryName(typeof(GeoIpService).Assembly.Location)}/Assets/GeoLite2-City.mmdb.tar.xz";
         private static readonly string ExtractedDatabasePath = $"{Path.GetDirectoryName(typeof(GeoIpService).Assembly.Location)}/Assets/GeoIP.Database.Default";
 
         private GeoIpSettings _settings;
@@ -75,7 +77,8 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             }
             catch (Exception e)
             {
-                _logger?.LogInformation($"Failed to Update The GeoIP Database");
+                _logger?.LogInformation($"Failed to Update The GeoIP Database\n" +
+                                        $"{e.Message}");
                 return false;
             }
 

@@ -3,8 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using SharpCompress.Archives;
-using SharpCompress.Common;
+using SharpCompress.Readers;
 
 namespace Riders.Tweakbox.API.Infrastructure.Services.GeoIp
 {
@@ -22,7 +21,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services.GeoIp
         public static async Task<string> DownloadAsync(string licenseKey)
         {
             // Download
-            string downloadPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+            string downloadPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()) + ".tar.gz";
             using var webClient = new WebClient();
             string downloadUrl  = string.Format(Format, licenseKey);
             await webClient.DownloadFileTaskAsync(new Uri(downloadUrl), downloadPath);
@@ -44,7 +43,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services.GeoIp
                 var directories = Directory.GetDirectories(DatabaseDownloadPath);
                 foreach (var directory in directories)
                 {
-                    try { Directory.Delete(directory); }
+                    try { Directory.Delete(directory, true); }
                     catch (Exception e) { /* Ignore */ }
                 }
             }
@@ -84,20 +83,18 @@ namespace Riders.Tweakbox.API.Infrastructure.Services.GeoIp
             Directory.CreateDirectory(outputPath);
 
             using Stream stream = File.OpenRead(archivePath);
-            using var archive   = ArchiveFactory.Open(stream);
+            using var reader   = ReaderFactory.Open(stream);
 
-            foreach (var entry in archive.Entries)
+            while (reader.MoveToNextEntry())
             {
+                var entry = reader.Entry;
                 if (entry.IsDirectory || !entry.Key.EndsWith(Extension, StringComparison.OrdinalIgnoreCase)) 
                     continue;
 
-                entry.WriteToDirectory(outputPath, new ExtractionOptions()
-                {
-                    ExtractFullPath = false,
-                    Overwrite = true
-                });
-
-                return Path.Combine(outputPath, entry.Key);
+                var location = Path.Combine(outputPath, entry.Key);
+                Directory.CreateDirectory(Path.GetDirectoryName(location));
+                reader.WriteEntryTo(location);
+                return location;
             }
 
             return "";

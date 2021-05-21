@@ -8,13 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\GeoLite2-City.7z" />
+    <None Remove="Assets\GeoLite2-City.mmdb.tar.xz" />
     <None Remove="Assets\Templates\PasswordReset.html" />
     <None Remove="Assets\Templates\RegistrationTemplate.html" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\GeoLite2-City.7z">
+    <Content Include="Assets\GeoLite2-City.mmdb.tar.xz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Templates\PasswordReset.html">
