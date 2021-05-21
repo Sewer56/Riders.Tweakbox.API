@@ -79,6 +79,11 @@ namespace Riders.Tweakbox.API
             });
 
             AddSwagger(services);
+
+            // Let's Encrypt
+            var useLettuce = Configuration.GetValue<bool>("UseLettuceEncrypt");
+            if (useLettuce)
+                services.AddLettuceEncrypt();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

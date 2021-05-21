@@ -6,6 +6,7 @@
 	<NoWarn>$(NoWarn);1591</NoWarn>
 	<RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
 	<LangVersion>preview</LangVersion>
+	<UserSecretsId>3d9cc9c4-5b04-4671-950f-65f64d81ed11</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.0.4" />
+    <PackageReference Include="LettuceEncrypt" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
