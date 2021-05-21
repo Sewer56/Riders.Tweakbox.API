@@ -1,3 +1,28 @@
+# About
+
+Riders.Tweakbox.API is a work in progress Web API service that provides various services to [Riders.Tweakbox](https://github.com/Sewer56/Riders.Tweakbox), an all in one Netplay mod for Sonic Riders.
+
+It was created mostly for the purpose of a goal of creating something while trying out ASP.NET for the first time; but over time, turned to be a more of a fully fledged project.
+
+# Functionality
+
+✔ User Registration & Password Reset\
+✔ Mail Service (Password Reset, Registration Confirmation)\
+✔ Geolocation & Self-updating GeoIP Database\
+✔ Transparent to end-users & (hopefully) GDPR Compliant.\
+✔ Live Server Browser\
+✔ Ranked Matchmaking
+  - Solo, 1v1, 2v2, 2v2v2, 2v2v2v2 etc.
+
+✔ Match Result Tracking
+  - Including stats such as gear, character, fastest lap etc.
+  
+✔ Player Rating System (TrueSkill)\
+✔ Built-in Swagger API Testing Site\
+✔ Built-in .NET SDK/Library
+
+As the main project (Riders.Tweakbox) is still not fully mature in terms of Netplay stability, it will take some time for ranked play to be implemented; however, it will happen eventually.
+
 # Configuring the Project
 
 ## Edit The Configuration
