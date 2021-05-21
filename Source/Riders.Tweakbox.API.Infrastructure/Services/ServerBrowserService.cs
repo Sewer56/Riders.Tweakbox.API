@@ -7,6 +7,7 @@ using Riders.Tweakbox.API.Application.Commands.v1.Browser.Result;
 using Riders.Tweakbox.API.Application.Models;
 using Riders.Tweakbox.API.Application.Services;
 using Riders.Tweakbox.API.Domain.Common;
+using Riders.Tweakbox.API.Domain.Models;
 using Riders.Tweakbox.API.Domain.Models.Memory;
 using StructLinq;
 
@@ -17,13 +18,15 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
     /// </summary>
     public class ServerBrowserService : IServerBrowserService, IDisposable
     {
-        public IDateTimeService  _dateTimeService;
+        private IDateTimeService  _dateTimeService;
+        private IGeoIpService _geoIpService;
         private Dictionary<ServerAddressPortPair, ServerInfo> _infos = new Dictionary<ServerAddressPortPair, ServerInfo>();
         private Timer _refreshTimer;
 
-        public ServerBrowserService(IDateTimeService dateTimeService)
+        public ServerBrowserService(IDateTimeService dateTimeService, IGeoIpService geoIpService)
         {
             _dateTimeService = dateTimeService;
+            _geoIpService = geoIpService;
             _refreshTimer = new Timer(RefreshServerList, null, TimeSpan.Zero, TimeSpan.FromSeconds(Constants.ServerBrowser.DeletedServerPollTimeSeconds));
         }
 
@@ -40,10 +43,19 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             var pair     = new ServerAddressPortPair() { Address = source, Port = item.Port };
             var hasValue = _infos.TryGetValue(pair, out var existing);
             if (!hasValue)
-                existing = new ServerInfo() { Address = source.ToString() };
+            {
+                var city    = _geoIpService.GetDetails(source);
+                var country = city?.Country.IsoCode.GetCountryFromShortName() ?? Country.UNK;
+                existing = new ServerInfo()
+                {
+                    Address = source.ToString(),
+                    Country = country
+                };
+            }
 
             existing.LastRefreshTime = _dateTimeService.GetCurrentDateTime();
             existing.Id = Guid.NewGuid();
+
             Mapping.Mapper.From(item).AdaptTo(existing);
             _infos[pair] = existing;
 

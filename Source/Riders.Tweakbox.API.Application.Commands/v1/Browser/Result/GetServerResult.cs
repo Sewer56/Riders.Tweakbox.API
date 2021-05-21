@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
+using Riders.Tweakbox.API.Application.Commands.v1.User;
 
 namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
 {
@@ -21,6 +23,12 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
         /// The type associated with this server.
         /// </summary>
         public MatchTypeDto Type { get; set; }
+
+        /// <summary>
+        /// The country associated with this server.
+        /// Derived from the IP Address.
+        /// </summary>
+        public CountryDto Country { get; set; }
 
         /// <summary>
         /// Name of the server.

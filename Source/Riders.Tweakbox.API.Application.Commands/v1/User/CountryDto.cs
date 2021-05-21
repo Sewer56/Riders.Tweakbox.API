@@ -4,795 +4,826 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Riders.Tweakbox.API.Application.Commands.v1.User
 {
+    /// <summary>
+    /// List of countries by their ISO 3166-1 alpha-3 name. 
+    /// </summary>
     public enum CountryDto
     {
-        [Display(Name = "Andorra", GroupName = "EU", Description = "020", ShortName = "AD")]
+        [Country(Name = "Andorra", Continent = Continent.Europe, TwoLetterCode ="AD")]
         AND = 0,
 
-        [Display(Name = "United Arab Emirates", GroupName = "AS", Description = "784", ShortName = "AE")]
+        [Country(Name = "United Arab Emirates", Continent = Continent.Asia, TwoLetterCode ="AE")]
         ARE = 1,
 
-        [Display(Name = "Afghanistan", GroupName = "AS", Description = "004", ShortName = "AF")]
+        [Country(Name = "Afghanistan", Continent = Continent.Asia, TwoLetterCode ="AF")]
         AFG = 2,
 
-        [Display(Name = "Antigua and Barbuda", GroupName = "NA", Description = "028", ShortName = "AG")]
+        [Country(Name = "Antigua and Barbuda", Continent = Continent.NorthAmerica, TwoLetterCode ="AG")]
         ATG = 3,
 
-        [Display(Name = "Anguilla", GroupName = "NA", Description = "660", ShortName = "AI")]
+        [Country(Name = "Anguilla", Continent = Continent.NorthAmerica, TwoLetterCode ="AI")]
         AIA = 4,
 
-        [Display(Name = "Albania", GroupName = "EU", Description = "008", ShortName = "AL")]
+        [Country(Name = "Albania", Continent = Continent.Europe, TwoLetterCode ="AL")]
         ALB = 5,
 
-        [Display(Name = "Armenia", GroupName = "AS", Description = "051", ShortName = "AM")]
+        [Country(Name = "Armenia", Continent = Continent.Asia, TwoLetterCode ="AM")]
         ARM = 6,
 
-        [Display(Name = "Angola", GroupName = "AF", Description = "024", ShortName = "AO")]
+        [Country(Name = "Angola", Continent = Continent.Africa, TwoLetterCode ="AO")]
         AGO = 7,
 
-        [Display(Name = "Antarctica", GroupName = "AN", Description = "010", ShortName = "AQ")]
+        [Country(Name = "Antarctica", Continent = Continent.Antarctica, TwoLetterCode ="AQ")]
         ATA = 8,
 
-        [Display(Name = "Argentina", GroupName = "SA", Description = "032", ShortName = "AR")]
+        [Country(Name = "Argentina", Continent = Continent.SouthAmerica, TwoLetterCode ="AR")]
         ARG = 9,
 
-        [Display(Name = "American Samoa", GroupName = "OC", Description = "016", ShortName = "AS")]
+        [Country(Name = "American Samoa", Continent = Continent.Oceania, TwoLetterCode ="AS")]
         ASM = 10,
 
-        [Display(Name = "Austria", GroupName = "EU", Description = "040", ShortName = "AT")]
+        [Country(Name = "Austria", Continent = Continent.Europe, TwoLetterCode ="AT")]
         AUT = 11,
 
-        [Display(Name = "Australia", GroupName = "OC", Description = "036", ShortName = "AU")]
+        [Country(Name = "Australia", Continent = Continent.Oceania, TwoLetterCode ="AU")]
         AUS = 12,
 
-        [Display(Name = "Aruba", GroupName = "NA", Description = "533", ShortName = "AW")]
+        [Country(Name = "Aruba", Continent = Continent.NorthAmerica, TwoLetterCode ="AW")]
         ABW = 13,
 
-        [Display(Name = "Aland Islands", GroupName = "EU", Description = "248", ShortName = "AX")]
+        [Country(Name = "Aland Islands", Continent = Continent.Europe, TwoLetterCode ="AX")]
         ALA = 14,
 
-        [Display(Name = "Azerbaijan", GroupName = "AS", Description = "031", ShortName = "AZ")]
+        [Country(Name = "Azerbaijan", Continent = Continent.Asia, TwoLetterCode ="AZ")]
         AZE = 15,
 
-        [Display(Name = "Bosnia and Herzegovina", GroupName = "EU", Description = "070", ShortName = "BA")]
+        [Country(Name = "Bosnia and Herzegovina", Continent = Continent.Europe, TwoLetterCode ="BA")]
         BIH = 16,
 
-        [Display(Name = "Barbados", GroupName = "NA", Description = "052", ShortName = "BB")]
+        [Country(Name = "Barbados", Continent = Continent.NorthAmerica, TwoLetterCode ="BB")]
         BRB = 17,
 
-        [Display(Name = "Bangladesh", GroupName = "AS", Description = "050", ShortName = "BD")]
+        [Country(Name = "Bangladesh", Continent = Continent.Asia, TwoLetterCode ="BD")]
         BGD = 18,
 
-        [Display(Name = "Belgium", GroupName = "EU", Description = "056", ShortName = "BE")]
+        [Country(Name = "Belgium", Continent = Continent.Europe, TwoLetterCode ="BE")]
         BEL = 19,
 
-        [Display(Name = "Burkina Faso", GroupName = "AF", Description = "854", ShortName = "BF")]
+        [Country(Name = "Burkina Faso", Continent = Continent.Africa, TwoLetterCode ="BF")]
         BFA = 20,
 
-        [Display(Name = "Bulgaria", GroupName = "EU", Description = "100", ShortName = "BG")]
+        [Country(Name = "Bulgaria", Continent = Continent.Europe, TwoLetterCode ="BG")]
         BGR = 21,
 
-        [Display(Name = "Bahrain", GroupName = "AS", Description = "048", ShortName = "BH")]
+        [Country(Name = "Bahrain", Continent = Continent.Asia, TwoLetterCode ="BH")]
         BHR = 22,
 
-        [Display(Name = "Burundi", GroupName = "AF", Description = "108", ShortName = "BI")]
+        [Country(Name = "Burundi", Continent = Continent.Africa, TwoLetterCode ="BI")]
         BDI = 23,
 
-        [Display(Name = "Benin", GroupName = "AF", Description = "204", ShortName = "BJ")]
+        [Country(Name = "Benin", Continent = Continent.Africa, TwoLetterCode ="BJ")]
         BEN = 24,
 
-        [Display(Name = "Saint Barthelemy", GroupName = "NA", Description = "652", ShortName = "BL")]
+        [Country(Name = "Saint Barthelemy", Continent = Continent.NorthAmerica, TwoLetterCode ="BL")]
         BLM = 25,
 
-        [Display(Name = "Bermuda", GroupName = "NA", Description = "060", ShortName = "BM")]
+        [Country(Name = "Bermuda", Continent = Continent.NorthAmerica, TwoLetterCode ="BM")]
         BMU = 26,
 
-        [Display(Name = "Brunei", GroupName = "AS", Description = "096", ShortName = "BN")]
+        [Country(Name = "Brunei", Continent = Continent.Asia, TwoLetterCode ="BN")]
         BRN = 27,
 
-        [Display(Name = "Bolivia", GroupName = "SA", Description = "068", ShortName = "BO")]
+        [Country(Name = "Bolivia", Continent = Continent.SouthAmerica, TwoLetterCode ="BO")]
         BOL = 28,
 
-        [Display(Name = "Bonaire, Saint Eustatius and Saba ", GroupName = "NA", Description = "535", ShortName = "BQ")]
+        [Country(Name = "Bonaire, Saint Eustatius and Saba ", Continent = Continent.NorthAmerica, TwoLetterCode ="BQ")]
         BES = 29,
 
-        [Display(Name = "Brazil", GroupName = "SA", Description = "076", ShortName = "BR")]
+        [Country(Name = "Brazil", Continent = Continent.SouthAmerica, TwoLetterCode ="BR")]
         BRA = 30,
 
-        [Display(Name = "Bahamas", GroupName = "NA", Description = "044", ShortName = "BS")]
+        [Country(Name = "Bahamas", Continent = Continent.NorthAmerica, TwoLetterCode ="BS")]
         BHS = 31,
 
-        [Display(Name = "Bhutan", GroupName = "AS", Description = "064", ShortName = "BT")]
+        [Country(Name = "Bhutan", Continent = Continent.Asia, TwoLetterCode ="BT")]
         BTN = 32,
 
-        [Display(Name = "Bouvet Island", GroupName = "AN", Description = "074", ShortName = "BV")]
+        [Country(Name = "Bouvet Island", Continent = Continent.Antarctica, TwoLetterCode ="BV")]
         BVT = 33,
 
-        [Display(Name = "Botswana", GroupName = "AF", Description = "072", ShortName = "BW")]
+        [Country(Name = "Botswana", Continent = Continent.Africa, TwoLetterCode ="BW")]
         BWA = 34,
 
-        [Display(Name = "Belarus", GroupName = "EU", Description = "112", ShortName = "BY")]
+        [Country(Name = "Belarus", Continent = Continent.Europe, TwoLetterCode ="BY")]
         BLR = 35,
 
-        [Display(Name = "Belize", GroupName = "NA", Description = "084", ShortName = "BZ")]
+        [Country(Name = "Belize", Continent = Continent.NorthAmerica, TwoLetterCode ="BZ")]
         BLZ = 36,
 
-        [Display(Name = "Canada", GroupName = "NA", Description = "124", ShortName = "CA")]
+        [Country(Name = "Canada", Continent = Continent.NorthAmerica, TwoLetterCode ="CA")]
         CAN = 37,
 
-        [Display(Name = "Cocos Islands", GroupName = "AS", Description = "166", ShortName = "CC")]
+        [Country(Name = "Cocos Islands", Continent = Continent.Asia, TwoLetterCode ="CC")]
         CCK = 38,
 
-        [Display(Name = "Democratic Republic of the Congo", GroupName = "AF", Description = "180", ShortName = "CD")]
+        [Country(Name = "Democratic Republic of the Congo", Continent = Continent.Africa, TwoLetterCode ="CD")]
         COD = 39,
 
-        [Display(Name = "Central African Republic", GroupName = "AF", Description = "140", ShortName = "CF")]
+        [Country(Name = "Central African Republic", Continent = Continent.Africa, TwoLetterCode ="CF")]
         CAF = 40,
 
-        [Display(Name = "Republic of the Congo", GroupName = "AF", Description = "178", ShortName = "CG")]
+        [Country(Name = "Republic of the Congo", Continent = Continent.Africa, TwoLetterCode ="CG")]
         COG = 41,
 
-        [Display(Name = "Switzerland", GroupName = "EU", Description = "756", ShortName = "CH")]
+        [Country(Name = "Switzerland", Continent = Continent.Europe, TwoLetterCode ="CH")]
         CHE = 42,
 
-        [Display(Name = "Ivory Coast", GroupName = "AF", Description = "384", ShortName = "CI")]
+        [Country(Name = "Ivory Coast", Continent = Continent.Africa, TwoLetterCode ="CI")]
         CIV = 43,
 
-        [Display(Name = "Cook Islands", GroupName = "OC", Description = "184", ShortName = "CK")]
+        [Country(Name = "Cook Islands", Continent = Continent.Oceania, TwoLetterCode ="CK")]
         COK = 44,
 
-        [Display(Name = "Chile", GroupName = "SA", Description = "152", ShortName = "CL")]
+        [Country(Name = "Chile", Continent = Continent.SouthAmerica, TwoLetterCode ="CL")]
         CHL = 45,
 
-        [Display(Name = "Cameroon", GroupName = "AF", Description = "120", ShortName = "CM")]
+        [Country(Name = "Cameroon", Continent = Continent.Africa, TwoLetterCode ="CM")]
         CMR = 46,
 
-        [Display(Name = "China", GroupName = "AS", Description = "156", ShortName = "CN")]
+        [Country(Name = "China", Continent = Continent.Asia, TwoLetterCode ="CN")]
         CHN = 47,
 
-        [Display(Name = "Colombia", GroupName = "SA", Description = "170", ShortName = "CO")]
+        [Country(Name = "Colombia", Continent = Continent.SouthAmerica, TwoLetterCode ="CO")]
         COL = 48,
 
-        [Display(Name = "Costa Rica", GroupName = "NA", Description = "188", ShortName = "CR")]
+        [Country(Name = "Costa Rica", Continent = Continent.NorthAmerica, TwoLetterCode ="CR")]
         CRI = 49,
 
-        [Display(Name = "Cuba", GroupName = "NA", Description = "192", ShortName = "CU")]
+        [Country(Name = "Cuba", Continent = Continent.NorthAmerica, TwoLetterCode ="CU")]
         CUB = 50,
 
-        [Display(Name = "Cabo Verde", GroupName = "AF", Description = "132", ShortName = "CV")]
+        [Country(Name = "Cabo Verde", Continent = Continent.Africa, TwoLetterCode ="CV")]
         CPV = 51,
 
-        [Display(Name = "Curacao", GroupName = "NA", Description = "531", ShortName = "CW")]
+        [Country(Name = "Curacao", Continent = Continent.NorthAmerica, TwoLetterCode ="CW")]
         CUW = 52,
 
-        [Display(Name = "Christmas Island", GroupName = "OC", Description = "162", ShortName = "CX")]
+        [Country(Name = "Christmas Island", Continent = Continent.Oceania, TwoLetterCode ="CX")]
         CXR = 53,
 
-        [Display(Name = "Cyprus", GroupName = "EU", Description = "196", ShortName = "CY")]
+        [Country(Name = "Cyprus", Continent = Continent.Europe, TwoLetterCode ="CY")]
         CYP = 54,
 
-        [Display(Name = "Czechia", GroupName = "EU", Description = "203", ShortName = "CZ")]
+        [Country(Name = "Czechia", Continent = Continent.Europe, TwoLetterCode ="CZ")]
         CZE = 55,
 
-        [Display(Name = "Germany", GroupName = "EU", Description = "276", ShortName = "DE")]
+        [Country(Name = "Germany", Continent = Continent.Europe, TwoLetterCode ="DE")]
         DEU = 56,
 
-        [Display(Name = "Djibouti", GroupName = "AF", Description = "262", ShortName = "DJ")]
+        [Country(Name = "Djibouti", Continent = Continent.Africa, TwoLetterCode ="DJ")]
         DJI = 57,
 
-        [Display(Name = "Denmark", GroupName = "EU", Description = "208", ShortName = "DK")]
+        [Country(Name = "Denmark", Continent = Continent.Europe, TwoLetterCode ="DK")]
         DNK = 58,
 
-        [Display(Name = "Dominica", GroupName = "NA", Description = "212", ShortName = "DM")]
+        [Country(Name = "Dominica", Continent = Continent.NorthAmerica, TwoLetterCode ="DM")]
         DMA = 59,
 
-        [Display(Name = "Dominican Republic", GroupName = "NA", Description = "214", ShortName = "DO")]
+        [Country(Name = "Dominican Republic", Continent = Continent.NorthAmerica, TwoLetterCode ="DO")]
         DOM = 60,
 
-        [Display(Name = "Algeria", GroupName = "AF", Description = "012", ShortName = "DZ")]
+        [Country(Name = "Algeria", Continent = Continent.Africa, TwoLetterCode ="DZ")]
         DZA = 61,
 
-        [Display(Name = "Ecuador", GroupName = "SA", Description = "218", ShortName = "EC")]
+        [Country(Name = "Ecuador", Continent = Continent.SouthAmerica, TwoLetterCode ="EC")]
         ECU = 62,
 
-        [Display(Name = "Estonia", GroupName = "EU", Description = "233", ShortName = "EE")]
+        [Country(Name = "Estonia", Continent = Continent.Europe, TwoLetterCode ="EE")]
         EST = 63,
 
-        [Display(Name = "Egypt", GroupName = "AF", Description = "818", ShortName = "EG")]
+        [Country(Name = "Egypt", Continent = Continent.Africa, TwoLetterCode ="EG")]
         EGY = 64,
 
-        [Display(Name = "Western Sahara", GroupName = "AF", Description = "732", ShortName = "EH")]
+        [Country(Name = "Western Sahara", Continent = Continent.Africa, TwoLetterCode ="EH")]
         ESH = 65,
 
-        [Display(Name = "Eritrea", GroupName = "AF", Description = "232", ShortName = "ER")]
+        [Country(Name = "Eritrea", Continent = Continent.Africa, TwoLetterCode ="ER")]
         ERI = 66,
 
-        [Display(Name = "Spain", GroupName = "EU", Description = "724", ShortName = "ES")]
+        [Country(Name = "Spain", Continent = Continent.Europe, TwoLetterCode ="ES")]
         ESP = 67,
 
-        [Display(Name = "Ethiopia", GroupName = "AF", Description = "231", ShortName = "ET")]
+        [Country(Name = "Ethiopia", Continent = Continent.Africa, TwoLetterCode ="ET")]
         ETH = 68,
 
-        [Display(Name = "Finland", GroupName = "EU", Description = "246", ShortName = "FI")]
+        [Country(Name = "Finland", Continent = Continent.Europe, TwoLetterCode ="FI")]
         FIN = 69,
 
-        [Display(Name = "Fiji", GroupName = "OC", Description = "242", ShortName = "FJ")]
+        [Country(Name = "Fiji", Continent = Continent.Oceania, TwoLetterCode ="FJ")]
         FJI = 70,
 
-        [Display(Name = "Falkland Islands", GroupName = "SA", Description = "238", ShortName = "FK")]
+        [Country(Name = "Falkland Islands", Continent = Continent.SouthAmerica, TwoLetterCode ="FK")]
         FLK = 71,
 
-        [Display(Name = "Micronesia", GroupName = "OC", Description = "583", ShortName = "FM")]
+        [Country(Name = "Micronesia", Continent = Continent.Oceania, TwoLetterCode ="FM")]
         FSM = 72,
 
-        [Display(Name = "Faroe Islands", GroupName = "EU", Description = "234", ShortName = "FO")]
+        [Country(Name = "Faroe Islands", Continent = Continent.Europe, TwoLetterCode ="FO")]
         FRO = 73,
 
-        [Display(Name = "France", GroupName = "EU", Description = "250", ShortName = "FR")]
+        [Country(Name = "France", Continent = Continent.Europe, TwoLetterCode ="FR")]
         FRA = 74,
 
-        [Display(Name = "Gabon", GroupName = "AF", Description = "266", ShortName = "GA")]
+        [Country(Name = "Gabon", Continent = Continent.Africa, TwoLetterCode ="GA")]
         GAB = 75,
 
-        [Display(Name = "United Kingdom", GroupName = "EU", Description = "826", ShortName = "GB")]
+        [Country(Name = "United Kingdom", Continent = Continent.Europe, TwoLetterCode ="GB")]
         GBR = 76,
 
-        [Display(Name = "Grenada", GroupName = "NA", Description = "308", ShortName = "GD")]
+        [Country(Name = "Grenada", Continent = Continent.NorthAmerica, TwoLetterCode ="GD")]
         GRD = 77,
 
-        [Display(Name = "Georgia", GroupName = "AS", Description = "268", ShortName = "GE")]
+        [Country(Name = "Georgia", Continent = Continent.Asia, TwoLetterCode ="GE")]
         GEO = 78,
 
-        [Display(Name = "French Guiana", GroupName = "SA", Description = "254", ShortName = "GF")]
+        [Country(Name = "French Guiana", Continent = Continent.SouthAmerica, TwoLetterCode ="GF")]
         GUF = 79,
 
-        [Display(Name = "Guernsey", GroupName = "EU", Description = "831", ShortName = "GG")]
+        [Country(Name = "Guernsey", Continent = Continent.Europe, TwoLetterCode ="GG")]
         GGY = 80,
 
-        [Display(Name = "Ghana", GroupName = "AF", Description = "288", ShortName = "GH")]
+        [Country(Name = "Ghana", Continent = Continent.Africa, TwoLetterCode ="GH")]
         GHA = 81,
 
-        [Display(Name = "Gibraltar", GroupName = "EU", Description = "292", ShortName = "GI")]
+        [Country(Name = "Gibraltar", Continent = Continent.Europe, TwoLetterCode ="GI")]
         GIB = 82,
 
-        [Display(Name = "Greenland", GroupName = "NA", Description = "304", ShortName = "GL")]
+        [Country(Name = "Greenland", Continent = Continent.NorthAmerica, TwoLetterCode ="GL")]
         GRL = 83,
 
-        [Display(Name = "Gambia", GroupName = "AF", Description = "270", ShortName = "GM")]
+        [Country(Name = "Gambia", Continent = Continent.Africa, TwoLetterCode ="GM")]
         GMB = 84,
 
-        [Display(Name = "Guinea", GroupName = "AF", Description = "324", ShortName = "GN")]
+        [Country(Name = "Guinea", Continent = Continent.Africa, TwoLetterCode ="GN")]
         GIN = 85,
 
-        [Display(Name = "Guadeloupe", GroupName = "NA", Description = "312", ShortName = "GP")]
+        [Country(Name = "Guadeloupe", Continent = Continent.NorthAmerica, TwoLetterCode ="GP")]
         GLP = 86,
 
-        [Display(Name = "Equatorial Guinea", GroupName = "AF", Description = "226", ShortName = "GQ")]
+        [Country(Name = "Equatorial Guinea", Continent = Continent.Africa, TwoLetterCode ="GQ")]
         GNQ = 87,
 
-        [Display(Name = "Greece", GroupName = "EU", Description = "300", ShortName = "GR")]
+        [Country(Name = "Greece", Continent = Continent.Europe, TwoLetterCode ="GR")]
         GRC = 88,
 
-        [Display(Name = "South Georgia and the South Sandwich Islands", GroupName = "AN", Description = "239",
-            ShortName = "GS")]
+        [Country(Name = "South Georgia and the South Sandwich Islands", Continent = Continent.Antarctica, TwoLetterCode ="GS")]
         SGS = 89,
 
-        [Display(Name = "Guatemala", GroupName = "NA", Description = "320", ShortName = "GT")]
+        [Country(Name = "Guatemala", Continent = Continent.NorthAmerica, TwoLetterCode ="GT")]
         GTM = 90,
 
-        [Display(Name = "Guam", GroupName = "OC", Description = "316", ShortName = "GU")]
+        [Country(Name = "Guam", Continent = Continent.Oceania, TwoLetterCode ="GU")]
         GUM = 91,
 
-        [Display(Name = "Guinea-Bissau", GroupName = "AF", Description = "624", ShortName = "GW")]
+        [Country(Name = "Guinea-Bissau", Continent = Continent.Africa, TwoLetterCode ="GW")]
         GNB = 92,
 
-        [Display(Name = "Guyana", GroupName = "SA", Description = "328", ShortName = "GY")]
+        [Country(Name = "Guyana", Continent = Continent.SouthAmerica, TwoLetterCode ="GY")]
         GUY = 93,
 
-        [Display(Name = "Hong Kong", GroupName = "AS", Description = "344", ShortName = "HK")]
+        [Country(Name = "Hong Kong", Continent = Continent.Asia, TwoLetterCode ="HK")]
         HKG = 94,
 
-        [Display(Name = "Heard Island and McDonald Islands", GroupName = "AN", Description = "334", ShortName = "HM")]
+        [Country(Name = "Heard Island and McDonald Islands", Continent = Continent.Antarctica, TwoLetterCode ="HM")]
         HMD = 95,
 
-        [Display(Name = "Honduras", GroupName = "NA", Description = "340", ShortName = "HN")]
+        [Country(Name = "Honduras", Continent = Continent.NorthAmerica, TwoLetterCode ="HN")]
         HND = 96,
 
-        [Display(Name = "Croatia", GroupName = "EU", Description = "191", ShortName = "HR")]
+        [Country(Name = "Croatia", Continent = Continent.Europe, TwoLetterCode ="HR")]
         HRV = 97,
 
-        [Display(Name = "Haiti", GroupName = "NA", Description = "332", ShortName = "HT")]
+        [Country(Name = "Haiti", Continent = Continent.NorthAmerica, TwoLetterCode ="HT")]
         HTI = 98,
 
-        [Display(Name = "Hungary", GroupName = "EU", Description = "348", ShortName = "HU")]
+        [Country(Name = "Hungary", Continent = Continent.Europe, TwoLetterCode ="HU")]
         HUN = 99,
 
-        [Display(Name = "Indonesia", GroupName = "AS", Description = "360", ShortName = "ID")]
+        [Country(Name = "Indonesia", Continent = Continent.Asia, TwoLetterCode ="ID")]
         IDN = 100,
 
-        [Display(Name = "Ireland", GroupName = "EU", Description = "372", ShortName = "IE")]
+        [Country(Name = "Ireland", Continent = Continent.Europe, TwoLetterCode ="IE")]
         IRL = 101,
 
-        [Display(Name = "Israel", GroupName = "AS", Description = "376", ShortName = "IL")]
+        [Country(Name = "Israel", Continent = Continent.Asia, TwoLetterCode ="IL")]
         ISR = 102,
 
-        [Display(Name = "Isle of Man", GroupName = "EU", Description = "833", ShortName = "IM")]
+        [Country(Name = "Isle of Man", Continent = Continent.Europe, TwoLetterCode ="IM")]
         IMN = 103,
 
-        [Display(Name = "India", GroupName = "AS", Description = "356", ShortName = "IN")]
+        [Country(Name = "India", Continent = Continent.Asia, TwoLetterCode ="IN")]
         IND = 104,
 
-        [Display(Name = "British Indian Ocean Territory", GroupName = "AS", Description = "086", ShortName = "IO")]
+        [Country(Name = "British Indian Ocean Territory", Continent = Continent.Asia, TwoLetterCode ="IO")]
         IOT = 105,
 
-        [Display(Name = "Iraq", GroupName = "AS", Description = "368", ShortName = "IQ")]
+        [Country(Name = "Iraq", Continent = Continent.Asia, TwoLetterCode ="IQ")]
         IRQ = 106,
 
-        [Display(Name = "Iran", GroupName = "AS", Description = "364", ShortName = "IR")]
+        [Country(Name = "Iran", Continent = Continent.Asia, TwoLetterCode ="IR")]
         IRN = 107,
 
-        [Display(Name = "Iceland", GroupName = "EU", Description = "352", ShortName = "IS")]
+        [Country(Name = "Iceland", Continent = Continent.Europe, TwoLetterCode ="IS")]
         ISL = 108,
 
-        [Display(Name = "Italy", GroupName = "EU", Description = "380", ShortName = "IT")]
+        [Country(Name = "Italy", Continent = Continent.Europe, TwoLetterCode ="IT")]
         ITA = 109,
 
-        [Display(Name = "Jersey", GroupName = "EU", Description = "832", ShortName = "JE")]
+        [Country(Name = "Jersey", Continent = Continent.Europe, TwoLetterCode ="JE")]
         JEY = 110,
 
-        [Display(Name = "Jamaica", GroupName = "NA", Description = "388", ShortName = "JM")]
+        [Country(Name = "Jamaica", Continent = Continent.NorthAmerica, TwoLetterCode ="JM")]
         JAM = 111,
 
-        [Display(Name = "Jordan", GroupName = "AS", Description = "400", ShortName = "JO")]
+        [Country(Name = "Jordan", Continent = Continent.Asia, TwoLetterCode ="JO")]
         JOR = 112,
 
-        [Display(Name = "Japan", GroupName = "AS", Description = "392", ShortName = "JP")]
+        [Country(Name = "Japan", Continent = Continent.Asia, TwoLetterCode ="JP")]
         JPN = 113,
 
-        [Display(Name = "Kenya", GroupName = "AF", Description = "404", ShortName = "KE")]
+        [Country(Name = "Kenya", Continent = Continent.Africa, TwoLetterCode ="KE")]
         KEN = 114,
 
-        [Display(Name = "Kyrgyzstan", GroupName = "AS", Description = "417", ShortName = "KG")]
+        [Country(Name = "Kyrgyzstan", Continent = Continent.Asia, TwoLetterCode ="KG")]
         KGZ = 115,
 
-        [Display(Name = "Cambodia", GroupName = "AS", Description = "116", ShortName = "KH")]
+        [Country(Name = "Cambodia", Continent = Continent.Asia, TwoLetterCode ="KH")]
         KHM = 116,
 
-        [Display(Name = "Kiribati", GroupName = "OC", Description = "296", ShortName = "KI")]
+        [Country(Name = "Kiribati", Continent = Continent.Oceania, TwoLetterCode ="KI")]
         KIR = 117,
 
-        [Display(Name = "Comoros", GroupName = "AF", Description = "174", ShortName = "KM")]
+        [Country(Name = "Comoros", Continent = Continent.Africa, TwoLetterCode ="KM")]
         COM = 118,
 
-        [Display(Name = "Saint Kitts and Nevis", GroupName = "NA", Description = "659", ShortName = "KN")]
+        [Country(Name = "Saint Kitts and Nevis", Continent = Continent.NorthAmerica, TwoLetterCode ="KN")]
         KNA = 119,
 
-        [Display(Name = "North Korea", GroupName = "AS", Description = "408", ShortName = "KP")]
+        [Country(Name = "North Korea", Continent = Continent.Asia, TwoLetterCode ="KP")]
         PRK = 120,
 
-        [Display(Name = "South Korea", GroupName = "AS", Description = "410", ShortName = "KR")]
+        [Country(Name = "South Korea", Continent = Continent.Asia, TwoLetterCode ="KR")]
         KOR = 121,
 
-        [Display(Name = "Kosovo", GroupName = "EU", Description = "0", ShortName = "XK")]
+        [Country(Name = "Kosovo", Continent = Continent.Europe, TwoLetterCode ="XK")]
         XKX = 122,
 
-        [Display(Name = "Kuwait", GroupName = "AS", Description = "414", ShortName = "KW")]
+        [Country(Name = "Kuwait", Continent = Continent.Asia, TwoLetterCode ="KW")]
         KWT = 123,
 
-        [Display(Name = "Cayman Islands", GroupName = "NA", Description = "136", ShortName = "KY")]
+        [Country(Name = "Cayman Islands", Continent = Continent.NorthAmerica, TwoLetterCode ="KY")]
         CYM = 124,
 
-        [Display(Name = "Kazakhstan", GroupName = "AS", Description = "398", ShortName = "KZ")]
+        [Country(Name = "Kazakhstan", Continent = Continent.Asia, TwoLetterCode ="KZ")]
         KAZ = 125,
 
-        [Display(Name = "Laos", GroupName = "AS", Description = "418", ShortName = "LA")]
+        [Country(Name = "Laos", Continent = Continent.Asia, TwoLetterCode ="LA")]
         LAO = 126,
 
-        [Display(Name = "Lebanon", GroupName = "AS", Description = "422", ShortName = "LB")]
+        [Country(Name = "Lebanon", Continent = Continent.Asia, TwoLetterCode ="LB")]
         LBN = 127,
 
-        [Display(Name = "Saint Lucia", GroupName = "NA", Description = "662", ShortName = "LC")]
+        [Country(Name = "Saint Lucia", Continent = Continent.NorthAmerica, TwoLetterCode ="LC")]
         LCA = 128,
 
-        [Display(Name = "Liechtenstein", GroupName = "EU", Description = "438", ShortName = "LI")]
+        [Country(Name = "Liechtenstein", Continent = Continent.Europe, TwoLetterCode ="LI")]
         LIE = 129,
 
-        [Display(Name = "Sri Lanka", GroupName = "AS", Description = "144", ShortName = "LK")]
+        [Country(Name = "Sri Lanka", Continent = Continent.Asia, TwoLetterCode ="LK")]
         LKA = 130,
 
-        [Display(Name = "Liberia", GroupName = "AF", Description = "430", ShortName = "LR")]
+        [Country(Name = "Liberia", Continent = Continent.Africa, TwoLetterCode ="LR")]
         LBR = 131,
 
-        [Display(Name = "Lesotho", GroupName = "AF", Description = "426", ShortName = "LS")]
+        [Country(Name = "Lesotho", Continent = Continent.Africa, TwoLetterCode ="LS")]
         LSO = 132,
 
-        [Display(Name = "Lithuania", GroupName = "EU", Description = "440", ShortName = "LT")]
+        [Country(Name = "Lithuania", Continent = Continent.Europe, TwoLetterCode ="LT")]
         LTU = 133,
 
-        [Display(Name = "Luxembourg", GroupName = "EU", Description = "442", ShortName = "LU")]
+        [Country(Name = "Luxembourg", Continent = Continent.Europe, TwoLetterCode ="LU")]
         LUX = 134,
 
-        [Display(Name = "Latvia", GroupName = "EU", Description = "428", ShortName = "LV")]
+        [Country(Name = "Latvia", Continent = Continent.Europe, TwoLetterCode ="LV")]
         LVA = 135,
 
-        [Display(Name = "Libya", GroupName = "AF", Description = "434", ShortName = "LY")]
+        [Country(Name = "Libya", Continent = Continent.Africa, TwoLetterCode ="LY")]
         LBY = 136,
 
-        [Display(Name = "Morocco", GroupName = "AF", Description = "504", ShortName = "MA")]
+        [Country(Name = "Morocco", Continent = Continent.Africa, TwoLetterCode ="MA")]
         MAR = 137,
 
-        [Display(Name = "Monaco", GroupName = "EU", Description = "492", ShortName = "MC")]
+        [Country(Name = "Monaco", Continent = Continent.Europe, TwoLetterCode ="MC")]
         MCO = 138,
 
-        [Display(Name = "Moldova", GroupName = "EU", Description = "498", ShortName = "MD")]
+        [Country(Name = "Moldova", Continent = Continent.Europe, TwoLetterCode ="MD")]
         MDA = 139,
 
-        [Display(Name = "Montenegro", GroupName = "EU", Description = "499", ShortName = "ME")]
+        [Country(Name = "Montenegro", Continent = Continent.Europe, TwoLetterCode ="ME")]
         MNE = 140,
 
-        [Display(Name = "Saint Martin", GroupName = "NA", Description = "663", ShortName = "MF")]
+        [Country(Name = "Saint Martin", Continent = Continent.NorthAmerica, TwoLetterCode ="MF")]
         MAF = 141,
 
-        [Display(Name = "Madagascar", GroupName = "AF", Description = "450", ShortName = "MG")]
+        [Country(Name = "Madagascar", Continent = Continent.Africa, TwoLetterCode ="MG")]
         MDG = 142,
 
-        [Display(Name = "Marshall Islands", GroupName = "OC", Description = "584", ShortName = "MH")]
+        [Country(Name = "Marshall Islands", Continent = Continent.Oceania, TwoLetterCode ="MH")]
         MHL = 143,
 
-        [Display(Name = "North Macedonia", GroupName = "EU", Description = "807", ShortName = "MK")]
+        [Country(Name = "North Macedonia", Continent = Continent.Europe, TwoLetterCode ="MK")]
         MKD = 144,
 
-        [Display(Name = "Mali", GroupName = "AF", Description = "466", ShortName = "ML")]
+        [Country(Name = "Mali", Continent = Continent.Africa, TwoLetterCode ="ML")]
         MLI = 145,
 
-        [Display(Name = "Myanmar", GroupName = "AS", Description = "104", ShortName = "MM")]
+        [Country(Name = "Myanmar", Continent = Continent.Asia, TwoLetterCode ="MM")]
         MMR = 146,
 
-        [Display(Name = "Mongolia", GroupName = "AS", Description = "496", ShortName = "MN")]
+        [Country(Name = "Mongolia", Continent = Continent.Asia, TwoLetterCode ="MN")]
         MNG = 147,
 
-        [Display(Name = "Macao", GroupName = "AS", Description = "446", ShortName = "MO")]
+        [Country(Name = "Macao", Continent = Continent.Asia, TwoLetterCode ="MO")]
         MAC = 148,
 
-        [Display(Name = "Northern Mariana Islands", GroupName = "OC", Description = "580", ShortName = "MP")]
+        [Country(Name = "Northern Mariana Islands", Continent = Continent.Oceania, TwoLetterCode ="MP")]
         MNP = 149,
 
-        [Display(Name = "Martinique", GroupName = "NA", Description = "474", ShortName = "MQ")]
+        [Country(Name = "Martinique", Continent = Continent.NorthAmerica, TwoLetterCode ="MQ")]
         MTQ = 150,
 
-        [Display(Name = "Mauritania", GroupName = "AF", Description = "478", ShortName = "MR")]
+        [Country(Name = "Mauritania", Continent = Continent.Africa, TwoLetterCode ="MR")]
         MRT = 151,
 
-        [Display(Name = "Montserrat", GroupName = "NA", Description = "500", ShortName = "MS")]
+        [Country(Name = "Montserrat", Continent = Continent.NorthAmerica, TwoLetterCode ="MS")]
         MSR = 152,
 
-        [Display(Name = "Malta", GroupName = "EU", Description = "470", ShortName = "MT")]
+        [Country(Name = "Malta", Continent = Continent.Europe, TwoLetterCode ="MT")]
         MLT = 153,
 
-        [Display(Name = "Mauritius", GroupName = "AF", Description = "480", ShortName = "MU")]
+        [Country(Name = "Mauritius", Continent = Continent.Africa, TwoLetterCode ="MU")]
         MUS = 154,
 
-        [Display(Name = "Maldives", GroupName = "AS", Description = "462", ShortName = "MV")]
+        [Country(Name = "Maldives", Continent = Continent.Asia, TwoLetterCode ="MV")]
         MDV = 155,
 
-        [Display(Name = "Malawi", GroupName = "AF", Description = "454", ShortName = "MW")]
+        [Country(Name = "Malawi", Continent = Continent.Africa, TwoLetterCode ="MW")]
         MWI = 156,
 
-        [Display(Name = "Mexico", GroupName = "NA", Description = "484", ShortName = "MX")]
+        [Country(Name = "Mexico", Continent = Continent.NorthAmerica, TwoLetterCode ="MX")]
         MEX = 157,
 
-        [Display(Name = "Malaysia", GroupName = "AS", Description = "458", ShortName = "MY")]
+        [Country(Name = "Malaysia", Continent = Continent.Asia, TwoLetterCode ="MY")]
         MYS = 158,
 
-        [Display(Name = "Mozambique", GroupName = "AF", Description = "508", ShortName = "MZ")]
+        [Country(Name = "Mozambique", Continent = Continent.Africa, TwoLetterCode ="MZ")]
         MOZ = 159,
 
-        [Display(Name = "Namibia", GroupName = "AF", Description = "516", ShortName = "NA")]
+        [Country(Name = "Namibia", Continent = Continent.Africa, TwoLetterCode ="NA")]
         NAM = 160,
 
-        [Display(Name = "New Caledonia", GroupName = "OC", Description = "540", ShortName = "NC")]
+        [Country(Name = "New Caledonia", Continent = Continent.Oceania, TwoLetterCode ="NC")]
         NCL = 161,
 
-        [Display(Name = "Niger", GroupName = "AF", Description = "562", ShortName = "NE")]
+        [Country(Name = "Niger", Continent = Continent.Africa, TwoLetterCode ="NE")]
         NER = 162,
 
-        [Display(Name = "Norfolk Island", GroupName = "OC", Description = "574", ShortName = "NF")]
+        [Country(Name = "Norfolk Island", Continent = Continent.Oceania, TwoLetterCode ="NF")]
         NFK = 163,
 
-        [Display(Name = "Nigeria", GroupName = "AF", Description = "566", ShortName = "NG")]
+        [Country(Name = "Nigeria", Continent = Continent.Africa, TwoLetterCode ="NG")]
         NGA = 164,
 
-        [Display(Name = "Nicaragua", GroupName = "NA", Description = "558", ShortName = "NI")]
+        [Country(Name = "Nicaragua", Continent = Continent.NorthAmerica, TwoLetterCode ="NI")]
         NIC = 165,
 
-        [Display(Name = "Netherlands", GroupName = "EU", Description = "528", ShortName = "NL")]
+        [Country(Name = "Netherlands", Continent = Continent.Europe, TwoLetterCode ="NL")]
         NLD = 166,
 
-        [Display(Name = "Norway", GroupName = "EU", Description = "578", ShortName = "NO")]
+        [Country(Name = "Norway", Continent = Continent.Europe, TwoLetterCode ="NO")]
         NOR = 167,
 
-        [Display(Name = "Nepal", GroupName = "AS", Description = "524", ShortName = "NP")]
+        [Country(Name = "Nepal", Continent = Continent.Asia, TwoLetterCode ="NP")]
         NPL = 168,
 
-        [Display(Name = "Nauru", GroupName = "OC", Description = "520", ShortName = "NR")]
+        [Country(Name = "Nauru", Continent = Continent.Oceania, TwoLetterCode ="NR")]
         NRU = 169,
 
-        [Display(Name = "Niue", GroupName = "OC", Description = "570", ShortName = "NU")]
+        [Country(Name = "Niue", Continent = Continent.Oceania, TwoLetterCode ="NU")]
         NIU = 170,
 
-        [Display(Name = "New Zealand", GroupName = "OC", Description = "554", ShortName = "NZ")]
+        [Country(Name = "New Zealand", Continent = Continent.Oceania, TwoLetterCode ="NZ")]
         NZL = 171,
 
-        [Display(Name = "Oman", GroupName = "AS", Description = "512", ShortName = "OM")]
+        [Country(Name = "Oman", Continent = Continent.Asia, TwoLetterCode ="OM")]
         OMN = 172,
 
-        [Display(Name = "Panama", GroupName = "NA", Description = "591", ShortName = "PA")]
+        [Country(Name = "Panama", Continent = Continent.NorthAmerica, TwoLetterCode ="PA")]
         PAN = 173,
 
-        [Display(Name = "Peru", GroupName = "SA", Description = "604", ShortName = "PE")]
+        [Country(Name = "Peru", Continent = Continent.SouthAmerica, TwoLetterCode ="PE")]
         PER = 174,
 
-        [Display(Name = "French Polynesia", GroupName = "OC", Description = "258", ShortName = "PF")]
+        [Country(Name = "French Polynesia", Continent = Continent.Oceania, TwoLetterCode ="PF")]
         PYF = 175,
 
-        [Display(Name = "Papua New Guinea", GroupName = "OC", Description = "598", ShortName = "PG")]
+        [Country(Name = "Papua New Guinea", Continent = Continent.Oceania, TwoLetterCode ="PG")]
         PNG = 176,
 
-        [Display(Name = "Philippines", GroupName = "AS", Description = "608", ShortName = "PH")]
+        [Country(Name = "Philippines", Continent = Continent.Asia, TwoLetterCode ="PH")]
         PHL = 177,
 
-        [Display(Name = "Pakistan", GroupName = "AS", Description = "586", ShortName = "PK")]
+        [Country(Name = "Pakistan", Continent = Continent.Asia, TwoLetterCode ="PK")]
         PAK = 178,
 
-        [Display(Name = "Poland", GroupName = "EU", Description = "616", ShortName = "PL")]
+        [Country(Name = "Poland", Continent = Continent.Europe, TwoLetterCode ="PL")]
         POL = 179,
 
-        [Display(Name = "Saint Pierre and Miquelon", GroupName = "NA", Description = "666", ShortName = "PM")]
+        [Country(Name = "Saint Pierre and Miquelon", Continent = Continent.NorthAmerica, TwoLetterCode ="PM")]
         SPM = 180,
 
-        [Display(Name = "Pitcairn", GroupName = "OC", Description = "612", ShortName = "PN")]
+        [Country(Name = "Pitcairn", Continent = Continent.Oceania, TwoLetterCode ="PN")]
         PCN = 181,
 
-        [Display(Name = "Puerto Rico", GroupName = "NA", Description = "630", ShortName = "PR")]
+        [Country(Name = "Puerto Rico", Continent = Continent.NorthAmerica, TwoLetterCode ="PR")]
         PRI = 182,
 
-        [Display(Name = "Palestinian Territory", GroupName = "AS", Description = "275", ShortName = "PS")]
+        [Country(Name = "Palestinian Territory", Continent = Continent.Asia, TwoLetterCode ="PS")]
         PSE = 183,
 
-        [Display(Name = "Portugal", GroupName = "EU", Description = "620", ShortName = "PT")]
+        [Country(Name = "Portugal", Continent = Continent.Europe, TwoLetterCode ="PT")]
         PRT = 184,
 
-        [Display(Name = "Palau", GroupName = "OC", Description = "585", ShortName = "PW")]
+        [Country(Name = "Palau", Continent = Continent.Oceania, TwoLetterCode ="PW")]
         PLW = 185,
 
-        [Display(Name = "Paraguay", GroupName = "SA", Description = "600", ShortName = "PY")]
+        [Country(Name = "Paraguay", Continent = Continent.SouthAmerica, TwoLetterCode ="PY")]
         PRY = 186,
 
-        [Display(Name = "Qatar", GroupName = "AS", Description = "634", ShortName = "QA")]
+        [Country(Name = "Qatar", Continent = Continent.Asia, TwoLetterCode ="QA")]
         QAT = 187,
 
-        [Display(Name = "Reunion", GroupName = "AF", Description = "638", ShortName = "RE")]
+        [Country(Name = "Reunion", Continent = Continent.Africa, TwoLetterCode ="RE")]
         REU = 188,
 
-        [Display(Name = "Romania", GroupName = "EU", Description = "642", ShortName = "RO")]
+        [Country(Name = "Romania", Continent = Continent.Europe, TwoLetterCode ="RO")]
         ROU = 189,
 
-        [Display(Name = "Serbia", GroupName = "EU", Description = "688", ShortName = "RS")]
+        [Country(Name = "Serbia", Continent = Continent.Europe, TwoLetterCode ="RS")]
         SRB = 190,
 
-        [Display(Name = "Russia", GroupName = "EU", Description = "643", ShortName = "RU")]
+        [Country(Name = "Russia", Continent = Continent.Europe, TwoLetterCode ="RU")]
         RUS = 191,
 
-        [Display(Name = "Rwanda", GroupName = "AF", Description = "646", ShortName = "RW")]
+        [Country(Name = "Rwanda", Continent = Continent.Africa, TwoLetterCode ="RW")]
         RWA = 192,
 
-        [Display(Name = "Saudi Arabia", GroupName = "AS", Description = "682", ShortName = "SA")]
+        [Country(Name = "Saudi Arabia", Continent = Continent.Asia, TwoLetterCode ="SA")]
         SAU = 193,
 
-        [Display(Name = "Solomon Islands", GroupName = "OC", Description = "090", ShortName = "SB")]
+        [Country(Name = "Solomon Islands", Continent = Continent.Oceania, TwoLetterCode ="SB")]
         SLB = 194,
 
-        [Display(Name = "Seychelles", GroupName = "AF", Description = "690", ShortName = "SC")]
+        [Country(Name = "Seychelles", Continent = Continent.Africa, TwoLetterCode ="SC")]
         SYC = 195,
 
-        [Display(Name = "Sudan", GroupName = "AF", Description = "729", ShortName = "SD")]
+        [Country(Name = "Sudan", Continent = Continent.Africa, TwoLetterCode ="SD")]
         SDN = 196,
 
-        [Display(Name = "South Sudan", GroupName = "AF", Description = "728", ShortName = "SS")]
+        [Country(Name = "South Sudan", Continent = Continent.Africa, TwoLetterCode ="SS")]
         SSD = 197,
 
-        [Display(Name = "Sweden", GroupName = "EU", Description = "752", ShortName = "SE")]
+        [Country(Name = "Sweden", Continent = Continent.Europe, TwoLetterCode ="SE")]
         SWE = 198,
 
-        [Display(Name = "Singapore", GroupName = "AS", Description = "702", ShortName = "SG")]
+        [Country(Name = "Singapore", Continent = Continent.Asia, TwoLetterCode ="SG")]
         SGP = 199,
 
-        [Display(Name = "Saint Helena", GroupName = "AF", Description = "654", ShortName = "SH")]
+        [Country(Name = "Saint Helena", Continent = Continent.Africa, TwoLetterCode ="SH")]
         SHN = 200,
 
-        [Display(Name = "Slovenia", GroupName = "EU", Description = "705", ShortName = "SI")]
+        [Country(Name = "Slovenia", Continent = Continent.Europe, TwoLetterCode ="SI")]
         SVN = 201,
 
-        [Display(Name = "Svalbard and Jan Mayen", GroupName = "EU", Description = "744", ShortName = "SJ")]
+        [Country(Name = "Svalbard and Jan Mayen", Continent = Continent.Europe, TwoLetterCode ="SJ")]
         SJM = 202,
 
-        [Display(Name = "Slovakia", GroupName = "EU", Description = "703", ShortName = "SK")]
+        [Country(Name = "Slovakia", Continent = Continent.Europe, TwoLetterCode ="SK")]
         SVK = 203,
 
-        [Display(Name = "Sierra Leone", GroupName = "AF", Description = "694", ShortName = "SL")]
+        [Country(Name = "Sierra Leone", Continent = Continent.Africa, TwoLetterCode ="SL")]
         SLE = 204,
 
-        [Display(Name = "San Marino", GroupName = "EU", Description = "674", ShortName = "SM")]
+        [Country(Name = "San Marino", Continent = Continent.Europe, TwoLetterCode ="SM")]
         SMR = 205,
 
-        [Display(Name = "Senegal", GroupName = "AF", Description = "686", ShortName = "SN")]
+        [Country(Name = "Senegal", Continent = Continent.Africa, TwoLetterCode ="SN")]
         SEN = 206,
 
-        [Display(Name = "Somalia", GroupName = "AF", Description = "706", ShortName = "SO")]
+        [Country(Name = "Somalia", Continent = Continent.Africa, TwoLetterCode ="SO")]
         SOM = 207,
 
-        [Display(Name = "Suriname", GroupName = "SA", Description = "740", ShortName = "SR")]
+        [Country(Name = "Suriname", Continent = Continent.SouthAmerica, TwoLetterCode ="SR")]
         SUR = 208,
 
-        [Display(Name = "Sao Tome and Principe", GroupName = "AF", Description = "678", ShortName = "ST")]
+        [Country(Name = "Sao Tome and Principe", Continent = Continent.Africa, TwoLetterCode ="ST")]
         STP = 209,
 
-        [Display(Name = "El Salvador", GroupName = "NA", Description = "222", ShortName = "SV")]
+        [Country(Name = "El Salvador", Continent = Continent.NorthAmerica, TwoLetterCode ="SV")]
         SLV = 210,
 
-        [Display(Name = "Sint Maarten", GroupName = "NA", Description = "534", ShortName = "SX")]
+        [Country(Name = "Sint Maarten", Continent = Continent.NorthAmerica, TwoLetterCode ="SX")]
         SXM = 211,
 
-        [Display(Name = "Syria", GroupName = "AS", Description = "760", ShortName = "SY")]
+        [Country(Name = "Syria", Continent = Continent.Asia, TwoLetterCode ="SY")]
         SYR = 212,
 
-        [Display(Name = "Eswatini", GroupName = "AF", Description = "748", ShortName = "SZ")]
+        [Country(Name = "Eswatini", Continent = Continent.Africa, TwoLetterCode ="SZ")]
         SWZ = 213,
 
-        [Display(Name = "Turks and Caicos Islands", GroupName = "NA", Description = "796", ShortName = "TC")]
+        [Country(Name = "Turks and Caicos Islands", Continent = Continent.NorthAmerica, TwoLetterCode ="TC")]
         TCA = 214,
 
-        [Display(Name = "Chad", GroupName = "AF", Description = "148", ShortName = "TD")]
+        [Country(Name = "Chad", Continent = Continent.Africa, TwoLetterCode ="TD")]
         TCD = 215,
 
-        [Display(Name = "French Southern Territories", GroupName = "AN", Description = "260", ShortName = "TF")]
+        [Country(Name = "French Southern Territories", Continent = Continent.Antarctica, TwoLetterCode ="TF")]
         ATF = 216,
 
-        [Display(Name = "Togo", GroupName = "AF", Description = "768", ShortName = "TG")]
+        [Country(Name = "Togo", Continent = Continent.Africa, TwoLetterCode ="TG")]
         TGO = 217,
 
-        [Display(Name = "Thailand", GroupName = "AS", Description = "764", ShortName = "TH")]
+        [Country(Name = "Thailand", Continent = Continent.Asia, TwoLetterCode ="TH")]
         THA = 218,
 
-        [Display(Name = "Tajikistan", GroupName = "AS", Description = "762", ShortName = "TJ")]
+        [Country(Name = "Tajikistan", Continent = Continent.Asia, TwoLetterCode ="TJ")]
         TJK = 219,
 
-        [Display(Name = "Tokelau", GroupName = "OC", Description = "772", ShortName = "TK")]
+        [Country(Name = "Tokelau", Continent = Continent.Oceania, TwoLetterCode ="TK")]
         TKL = 220,
 
-        [Display(Name = "Timor Leste", GroupName = "OC", Description = "626", ShortName = "TL")]
+        [Country(Name = "Timor Leste", Continent = Continent.Oceania, TwoLetterCode ="TL")]
         TLS = 221,
 
-        [Display(Name = "Turkmenistan", GroupName = "AS", Description = "795", ShortName = "TM")]
+        [Country(Name = "Turkmenistan", Continent = Continent.Asia, TwoLetterCode ="TM")]
         TKM = 222,
 
-        [Display(Name = "Tunisia", GroupName = "AF", Description = "788", ShortName = "TN")]
+        [Country(Name = "Tunisia", Continent = Continent.Africa, TwoLetterCode ="TN")]
         TUN = 223,
 
-        [Display(Name = "Tonga", GroupName = "OC", Description = "776", ShortName = "TO")]
+        [Country(Name = "Tonga", Continent = Continent.Oceania, TwoLetterCode ="TO")]
         TON = 224,
 
-        [Display(Name = "Turkey", GroupName = "AS", Description = "792", ShortName = "TR")]
+        [Country(Name = "Turkey", Continent = Continent.Asia, TwoLetterCode ="TR")]
         TUR = 225,
 
-        [Display(Name = "Trinidad and Tobago", GroupName = "NA", Description = "780", ShortName = "TT")]
+        [Country(Name = "Trinidad and Tobago", Continent = Continent.NorthAmerica, TwoLetterCode ="TT")]
         TTO = 226,
 
-        [Display(Name = "Tuvalu", GroupName = "OC", Description = "798", ShortName = "TV")]
+        [Country(Name = "Tuvalu", Continent = Continent.Oceania, TwoLetterCode ="TV")]
         TUV = 227,
 
-        [Display(Name = "Taiwan", GroupName = "AS", Description = "158", ShortName = "TW")]
+        [Country(Name = "Taiwan", Continent = Continent.Asia, TwoLetterCode ="TW")]
         TWN = 228,
 
-        [Display(Name = "Tanzania", GroupName = "AF", Description = "834", ShortName = "TZ")]
+        [Country(Name = "Tanzania", Continent = Continent.Africa, TwoLetterCode ="TZ")]
         TZA = 229,
 
-        [Display(Name = "Ukraine", GroupName = "EU", Description = "804", ShortName = "UA")]
+        [Country(Name = "Ukraine", Continent = Continent.Europe, TwoLetterCode ="UA")]
         UKR = 230,
 
-        [Display(Name = "Uganda", GroupName = "AF", Description = "800", ShortName = "UG")]
+        [Country(Name = "Uganda", Continent = Continent.Africa, TwoLetterCode ="UG")]
         UGA = 231,
 
-        [Display(Name = "United States Minor Outlying Islands", GroupName = "OC", Description = "581", ShortName = "UM")]
+        [Country(Name = "United States Minor Outlying Islands", Continent = Continent.Oceania, TwoLetterCode ="UM")]
         UMI = 232,
 
-        [Display(Name = "United States", GroupName = "NA", Description = "840", ShortName = "US")]
+        [Country(Name = "United States", Continent = Continent.NorthAmerica, TwoLetterCode ="US")]
         USA = 233,
 
-        [Display(Name = "Uruguay", GroupName = "SA", Description = "858", ShortName = "UY")]
+        [Country(Name = "Uruguay", Continent = Continent.SouthAmerica, TwoLetterCode ="UY")]
         URY = 234,
 
-        [Display(Name = "Uzbekistan", GroupName = "AS", Description = "860", ShortName = "UZ")]
+        [Country(Name = "Uzbekistan", Continent = Continent.Asia, TwoLetterCode ="UZ")]
         UZB = 235,
 
-        [Display(Name = "Vatican", GroupName = "EU", Description = "336", ShortName = "VA")]
+        [Country(Name = "Vatican", Continent = Continent.Europe, TwoLetterCode ="VA")]
         VAT = 236,
 
-        [Display(Name = "Saint Vincent and the Grenadines", GroupName = "NA", Description = "670", ShortName = "VC")]
+        [Country(Name = "Saint Vincent and the Grenadines", Continent = Continent.NorthAmerica, TwoLetterCode ="VC")]
         VCT = 237,
 
-        [Display(Name = "Venezuela", GroupName = "SA", Description = "862", ShortName = "VE")]
+        [Country(Name = "Venezuela", Continent = Continent.SouthAmerica, TwoLetterCode ="VE")]
         VEN = 238,
 
-        [Display(Name = "British Virgin Islands", GroupName = "NA", Description = "092", ShortName = "VG")]
+        [Country(Name = "British Virgin Islands", Continent = Continent.NorthAmerica, TwoLetterCode ="VG")]
         VGB = 239,
 
-        [Display(Name = "U.S. Virgin Islands", GroupName = "NA", Description = "850", ShortName = "VI")]
+        [Country(Name = "U.S. Virgin Islands", Continent = Continent.NorthAmerica, TwoLetterCode ="VI")]
         VIR = 240,
 
-        [Display(Name = "Vietnam", GroupName = "AS", Description = "704", ShortName = "VN")]
+        [Country(Name = "Vietnam", Continent = Continent.Asia, TwoLetterCode ="VN")]
         VNM = 241,
 
-        [Display(Name = "Vanuatu", GroupName = "OC", Description = "548", ShortName = "VU")]
+        [Country(Name = "Vanuatu", Continent = Continent.Oceania, TwoLetterCode ="VU")]
         VUT = 242,
 
-        [Display(Name = "Wallis and Futuna", GroupName = "OC", Description = "876", ShortName = "WF")]
+        [Country(Name = "Wallis and Futuna", Continent = Continent.Oceania, TwoLetterCode ="WF")]
         WLF = 243,
 
-        [Display(Name = "Samoa", GroupName = "OC", Description = "882", ShortName = "WS")]
+        [Country(Name = "Samoa", Continent = Continent.Oceania, TwoLetterCode ="WS")]
         WSM = 244,
 
-        [Display(Name = "Yemen", GroupName = "AS", Description = "887", ShortName = "YE")]
+        [Country(Name = "Yemen", Continent = Continent.Asia, TwoLetterCode ="YE")]
         YEM = 245,
 
-        [Display(Name = "Mayotte", GroupName = "AF", Description = "175", ShortName = "YT")]
+        [Country(Name = "Mayotte", Continent = Continent.Africa, TwoLetterCode ="YT")]
         MYT = 246,
 
-        [Display(Name = "South Africa", GroupName = "AF", Description = "710", ShortName = "ZA")]
+        [Country(Name = "South Africa", Continent = Continent.Africa, TwoLetterCode ="ZA")]
         ZAF = 247,
 
-        [Display(Name = "Zambia", GroupName = "AF", Description = "894", ShortName = "ZM")]
+        [Country(Name = "Zambia", Continent = Continent.Africa, TwoLetterCode ="ZM")]
         ZMB = 248,
 
-        [Display(Name = "Zimbabwe", GroupName = "AF", Description = "716", ShortName = "ZW")]
+        [Country(Name = "Zimbabwe", Continent = Continent.Africa, TwoLetterCode ="ZW")]
         ZWE = 249,
 
-        [Display(Name = "Serbia and Montenegro", GroupName = "EU", Description = "891", ShortName = "CS")]
+        [Country(Name = "Serbia and Montenegro", Continent = Continent.Europe, TwoLetterCode ="CS")]
         SCG = 250,
 
-        [Display(Name = "Netherlands Antilles", GroupName = "NA", Description = "530", ShortName = "AN")]
+        [Country(Name = "Netherlands Antilles", Continent = Continent.NorthAmerica, TwoLetterCode ="AN")]
         ANT = 251,
 
-        [Display(Name = "Unknown", GroupName = "", Description = "", ShortName = "UK")]
+        [Country(Name = "Unknown", Continent = Continent.Unknown, TwoLetterCode ="UK")]
         UNK = 252,
+    }
+
+    /// <summary>
+    /// Contains a list of all continents for the countries.
+    /// </summary>
+    public enum Continent
+    {
+        Unknown,
+        Africa,
+        Antarctica,
+        Asia,
+        Europe,
+        NorthAmerica,
+        Oceania,
+        SouthAmerica
+    }
+
+    public class CountryAttribute : Attribute
+    {
+        public string Name          { get; set; }
+        public Continent Continent  { get; set; }
+        public string TwoLetterCode { get; set; }
     }
     
     public static class CountryDtoExtensions
     {
-        private static Dictionary<CountryDto, DisplayAttribute> _CountryDtoMap;
+        private static Dictionary<CountryDto, CountryAttribute> _countryDtoMap;
         private static Dictionary<string, CountryDto> _shortNameToCountryDto = new Dictionary<string, CountryDto>(StringComparer.OrdinalIgnoreCase);
-        
+
         static CountryDtoExtensions()
         {
-            _CountryDtoMap = new Dictionary<CountryDto, DisplayAttribute>();
+            _countryDtoMap = new Dictionary<CountryDto, CountryAttribute>();
             var type = typeof(CountryDto);
 
-            foreach (var CountryDto in Enum.GetValues<CountryDto>())
+            foreach (var countryDto in Enum.GetValues<CountryDto>())
             {
-                var memInfo     = type.GetMember(CountryDto.ToString());
+                var memInfo     = type.GetMember(countryDto.ToString());
                 var attributes  = memInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);
-                var displayAttr = (DisplayAttribute) attributes[0];
+                var displayAttr = (CountryAttribute) attributes[0];
 
-                _CountryDtoMap[CountryDto] = displayAttr;
-                _shortNameToCountryDto[displayAttr.ShortName] = CountryDto;
+                _countryDtoMap[countryDto] = displayAttr;
+                _shortNameToCountryDto[displayAttr.TwoLetterCode] = countryDto;
             }
         }
 
-        public static DisplayAttribute GetDisplayAttribute(this CountryDto CountryDto) => _CountryDtoMap[CountryDto];
-        public static CountryDto GetCountryDtoFromShortName(this string shortName)
+        /// <summary>
+        /// Gets a CountryAttribute which describes an individual country.
+        /// </summary>
+        public static CountryAttribute GetDisplayAttribute(this CountryDto countryDto) => _countryDtoMap[countryDto];
+
+        /// <summary>
+        /// Gets a country from a 2 letter country code.
+        /// </summary>
+        public static CountryDto GetCountryDtoFromTwoLetterCode(this string shortName)
         {
-            if (_shortNameToCountryDto.TryGetValue(shortName, out var CountryDto))
-                return CountryDto;
+            if (_shortNameToCountryDto.TryGetValue(shortName, out var countryDto))
+                return countryDto;
 
             return CountryDto.UNK;
         }

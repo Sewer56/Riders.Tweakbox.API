@@ -2,6 +2,7 @@
 using System.Net;
 using Application.Tests.Integrity.Helpers;
 using Moq;
+using Riders.Tweakbox.API.Application.Models.Config;
 using Riders.Tweakbox.API.Application.Services;
 using Riders.Tweakbox.API.Domain.Common;
 using Riders.Tweakbox.API.Infrastructure.Services;
@@ -11,6 +12,8 @@ namespace Application.Tests.Browser
 {
     public class ServerBrowserServiceTests
     {
+        private GeoIpService _ipService = new GeoIpService(new GeoIpSettings() {CronUpdateScheduleUtc = "0 6 ? * WED"}, new DateTimeService(), null);
+
         [Fact]
         public void RefreshServerList_RemovesItemWhenExpired()
         {
@@ -18,7 +21,7 @@ namespace Application.Tests.Browser
             var dateTimeProvider = new Mock<IDateTimeService>();
             dateTimeProvider.Setup(x => x.GetCurrentDateTime()).Returns(DateTime.UtcNow - TimeSpan.FromSeconds(Constants.ServerBrowser.RefreshTimeSeconds));
             
-            var browserService = new ServerBrowserService(dateTimeProvider.Object);
+            var browserService = new ServerBrowserService(dateTimeProvider.Object, _ipService);
             var ip             = DataGenerators.ServerBrowser.GetIP();
 
             // Act
@@ -39,7 +42,7 @@ namespace Application.Tests.Browser
             var dateTimeProvider = new Mock<IDateTimeService>();
             dateTimeProvider.Setup(x => x.GetCurrentDateTime()).Returns(DateTime.UtcNow - TimeSpan.FromSeconds(Constants.ServerBrowser.RefreshTimeSeconds));
             
-            var browserService = new ServerBrowserService(dateTimeProvider.Object);
+            var browserService = new ServerBrowserService(dateTimeProvider.Object, _ipService);
             var ip             = DataGenerators.ServerBrowser.GetIP();
 
             // Act
@@ -53,7 +56,7 @@ namespace Application.Tests.Browser
         public void CreateOrRefresh_ReturnedDataIsCorrect()
         {
             // Arrange
-            var browserService = new ServerBrowserService(new DateTimeService());
+            var browserService = new ServerBrowserService(new DateTimeService(), _ipService);
             var ip             = DataGenerators.ServerBrowser.GetIP();
             var data           = DataGenerators.ServerBrowser.GetPostServerRequest().Generate();
 
@@ -71,7 +74,7 @@ namespace Application.Tests.Browser
         public void Delete_DeletesWhenServerExists()
         {
             // Arrange
-            var browserService = new ServerBrowserService(new DateTimeService());
+            var browserService = new ServerBrowserService(new DateTimeService(), _ipService);
             var ip             = DataGenerators.ServerBrowser.GetIP();
             var data           = DataGenerators.ServerBrowser.GetPostServerRequest().Generate();
 
@@ -88,7 +91,7 @@ namespace Application.Tests.Browser
         public void Delete_DoesNotDeleteWhenGuidMismatch()
         {
             // Arrange
-            var browserService = new ServerBrowserService(new DateTimeService());
+            var browserService = new ServerBrowserService(new DateTimeService(), _ipService);
             var ip             = DataGenerators.ServerBrowser.GetIP();
             var data           = DataGenerators.ServerBrowser.GetPostServerRequest().Generate();
 
@@ -105,7 +108,7 @@ namespace Application.Tests.Browser
         public void Delete_DoesNotDeleteWhenServerDoesNotExist()
         {
             // Arrange
-            var browserService = new ServerBrowserService(new DateTimeService());
+            var browserService = new ServerBrowserService(new DateTimeService(), _ipService);
             var ip             = IPAddress.Parse("127.0.0.1");
             var data           = DataGenerators.ServerBrowser.GetPostServerRequest().Generate();
 

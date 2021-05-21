@@ -27,6 +27,12 @@ namespace Riders.Tweakbox.API.Domain.Models.Memory
         public MatchType Type { get; set; }
 
         /// <summary>
+        /// The country associated with this server.
+        /// Derived from the IP Address.
+        /// </summary>
+        public Country Country { get; set; }
+
+        /// <summary>
         /// The last time this server was refreshed(.
         /// </summary>
         public DateTime LastRefreshTime { get; set; }
