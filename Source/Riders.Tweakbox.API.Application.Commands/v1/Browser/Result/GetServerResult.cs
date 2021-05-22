@@ -41,6 +41,12 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
         public bool HasPassword { get; set; }
 
         /// <summary>
+        /// A list of semicolon ';' separated mods.
+        /// In alphabetical order (ordinal ignore case).
+        /// </summary>
+        public string Mods { get; set; }
+
+        /// <summary>
         /// List of players from the server.
         /// </summary>
         public List<ServerPlayerInfoResult> Players { get; set; }

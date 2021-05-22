@@ -94,6 +94,7 @@ namespace Application.Tests.Integrity.Helpers
                     .RuleFor(x => x.HasPassword, x => x.Random.Bool(0.5f))
                     .RuleFor(x => x.Name, x => x.Internet.UserName() + "'s Game")
                     .RuleFor(x => x.Type, x => x.PickRandom<MatchTypeDto>())
+                    .RuleFor(x => x.Mods, x => x.Random.String())
                     .RuleFor(x => x.Players, MakeValidPlayerData);
             }
 
