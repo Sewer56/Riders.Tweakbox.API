@@ -774,14 +774,35 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.User
     /// </summary>
     public enum Continent
     {
+        [Continent(Name = "Unknown")]
         Unknown,
+
+        [Continent(Name = "Africa", TwoLetterCode = "AF")]
         Africa,
+
+        [Continent(Name = "Antarctica", TwoLetterCode = "AN")]
         Antarctica,
+        
+        [Continent(Name = "Asia", TwoLetterCode = "AS")]
         Asia,
+
+        [Continent(Name = "Europe", TwoLetterCode = "EU")]
         Europe,
+
+        [Continent(Name = "North America", TwoLetterCode = "NA")]
         NorthAmerica,
+
+        [Continent(Name = "Oceania", TwoLetterCode = "OC")]
         Oceania,
+
+        [Continent(Name = "South America", TwoLetterCode = "SA")]
         SouthAmerica
+    }
+
+    public class ContinentAttribute : Attribute
+    {
+        public string Name          { get; set; }
+        public string TwoLetterCode { get; set; }
     }
 
     public class CountryAttribute : Attribute
@@ -790,32 +811,49 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.User
         public Continent Continent  { get; set; }
         public string TwoLetterCode { get; set; }
     }
-    
+
     public static class CountryDtoExtensions
     {
         private static Dictionary<CountryDto, CountryAttribute> _countryDtoMap;
+        private static Dictionary<Continent, ContinentAttribute> _continentMap;
         private static Dictionary<string, CountryDto> _shortNameToCountryDto = new Dictionary<string, CountryDto>(StringComparer.OrdinalIgnoreCase);
 
         static CountryDtoExtensions()
         {
             _countryDtoMap = new Dictionary<CountryDto, CountryAttribute>();
-            var type = typeof(CountryDto);
+            var countryType = typeof(CountryDto);
 
             foreach (var countryDto in Enum.GetValues<CountryDto>())
             {
-                var memInfo     = type.GetMember(countryDto.ToString());
-                var attributes  = memInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);
+                var memInfo     = countryType.GetMember(countryDto.ToString());
+                var attributes  = memInfo[0].GetCustomAttributes(typeof(CountryAttribute), false);
                 var displayAttr = (CountryAttribute) attributes[0];
 
                 _countryDtoMap[countryDto] = displayAttr;
                 _shortNameToCountryDto[displayAttr.TwoLetterCode] = countryDto;
+            }
+
+            var continentType = typeof(Continent);
+            _continentMap = new Dictionary<Continent, ContinentAttribute>();
+            foreach (var continent in Enum.GetValues<Continent>())
+            {
+                var memInfo     = continentType.GetMember(continent.ToString());
+                var attributes  = memInfo[0].GetCustomAttributes(typeof(ContinentAttribute), false);
+                var displayAttr = (ContinentAttribute) attributes[0];
+
+                _continentMap[continent] = displayAttr;
             }
         }
 
         /// <summary>
         /// Gets a CountryAttribute which describes an individual country.
         /// </summary>
-        public static CountryAttribute GetDisplayAttribute(this CountryDto countryDto) => _countryDtoMap[countryDto];
+        public static CountryAttribute GetCountryAttribute(this CountryDto countryDto) => _countryDtoMap[countryDto];
+
+        /// <summary>
+        /// Gets a ContinentAttribute which describes an individual continent.
+        /// </summary>
+        public static ContinentAttribute GetContinentAttribute(this Continent continent) => _continentMap[continent];
 
         /// <summary>
         /// Gets a country from a 2 letter country code.
