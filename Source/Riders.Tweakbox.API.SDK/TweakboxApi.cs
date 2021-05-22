@@ -27,6 +27,11 @@ namespace Riders.Tweakbox.API.SDK
         public TweakboxAuthenticationHandler AuthHandler { get; private set; }
         public PolicyHttpMessageHandler PolicyHandler { get; private set; }
         public HttpClient Client { get; private set; }
+        
+        /// <summary>
+        /// Returns true if the user has previously successfully authenticated.
+        /// </summary>
+        public bool IsAuthenticated => AuthHandler.CachedAuthResponse != null;
 
         public TweakboxApi(string url, DateTimeProvider provider = null)
         {
@@ -45,6 +50,22 @@ namespace Riders.Tweakbox.API.SDK
             Client = getClient(new DelegatingHandler[] { PolicyHandler, AuthHandler });
             SetupServices();
         }
+
+        /// <summary>
+        /// Allows you to authenticate with the API before making any API calls which require authentication.
+        /// </summary>
+        /// <param name="username">Username.</param>
+        /// <param name="password">Password.</param>
+        /// <returns>Either a successful login or authentication failure details.</returns>
+        public async Task<OneOf<AuthSuccessResponse, ErrorReponse>> TryAuthenticate(string username, string password)
+        {
+            return await AuthHandler.TryAuthenticate(username, password);
+        }
+
+        /// <summary>
+        /// Signs the user out by forgetting the cached authentication token.
+        /// </summary>
+        public void SignOut() => AuthHandler.SignOut();
 
         private void SetupHttpClientHandlers(DateTimeProvider provider)
         {
@@ -67,17 +88,6 @@ namespace Riders.Tweakbox.API.SDK
             IdentityApi = MakeRestService<IIdentityApi>(Client);
             Match    = MakeRestService<IMatchApi>(Client);
             Browser  = MakeRestService<IServerBrowserApi>(Client);
-        }
-
-        /// <summary>
-        /// Allows you to authenticate with the API before making any API calls which require authentication.
-        /// </summary>
-        /// <param name="username">Username.</param>
-        /// <param name="password">Password.</param>
-        /// <returns>Either a successful login or authentication failure details.</returns>
-        public async Task<OneOf<AuthSuccessResponse, ErrorReponse>> TryAuthenticate(string username, string password)
-        {
-            return await AuthHandler.TryAuthenticate(username, password);
         }
 
         private TService MakeRestService<TService>(HttpClient client)
