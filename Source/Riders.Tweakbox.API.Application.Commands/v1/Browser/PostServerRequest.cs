@@ -24,6 +24,11 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser
         public MatchTypeDto Type { get; set; }
 
         /// <summary>
+        /// True if there is a password in the hosted game.
+        /// </summary>
+        public bool HasPassword { get; set; }
+
+        /// <summary>
         /// List of players from the server.
         /// </summary>
         public List<ServerPlayerInfoResult> Players { get; set; }

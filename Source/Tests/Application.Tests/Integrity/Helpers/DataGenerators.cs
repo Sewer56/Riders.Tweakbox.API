@@ -91,6 +91,7 @@ namespace Application.Tests.Integrity.Helpers
                 return new Faker<PostServerRequest>()
                     .StrictMode(true)
                     .RuleFor(x => x.Port, x => x.Random.Int(0, 65535))
+                    .RuleFor(x => x.HasPassword, x => x.Random.Bool(0.5f))
                     .RuleFor(x => x.Name, x => x.Internet.UserName() + "'s Game")
                     .RuleFor(x => x.Type, x => x.PickRandom<MatchTypeDto>())
                     .RuleFor(x => x.Players, MakeValidPlayerData);
