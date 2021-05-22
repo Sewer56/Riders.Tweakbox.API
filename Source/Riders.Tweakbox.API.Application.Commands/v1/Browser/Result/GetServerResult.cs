@@ -10,6 +10,11 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
     public class GetServerResult
     {
         /// <summary>
+        /// Delimiter for the list of mods in the <see cref="Mods"/> field.
+        /// </summary>
+        public const char ModsDelimiter = ';';
+
+        /// <summary>
         /// IP Address of the Server Host.
         /// </summary>
         public string Address { get; set; }
