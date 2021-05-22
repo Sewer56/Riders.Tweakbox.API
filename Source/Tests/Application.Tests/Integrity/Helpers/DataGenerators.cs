@@ -114,7 +114,7 @@ namespace Application.Tests.Integrity.Helpers
             private static List<ServerPlayerInfoResult> MakeValidPlayerData(Faker faker, PostServerRequest request)
             {
                 var playerFaker = GetPlayerInfoResult();
-                var numPlayers  = faker.Random.Int(0, 8);
+                var numPlayers  = faker.Random.Int(0, request.Type.GetNumTeams() * request.Type.GetNumPlayersPerTeam());
                 var result      = new List<ServerPlayerInfoResult>();
 
                 for (int x = 0; x < numPlayers; x++)
