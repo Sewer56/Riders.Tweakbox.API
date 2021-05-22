@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using OneOf;
+using Polly;
+using Polly.Extensions.Http;
 using Refit;
 using Riders.Tweakbox.API.Application.Commands.v1.Error;
 using Riders.Tweakbox.API.Application.Commands.v1.User.Result;
@@ -17,18 +21,17 @@ namespace Riders.Tweakbox.API.SDK
     /// </summary>
     public class TweakboxApi : IDisposable
     {
-        public IIdentityApi IdentityApi        { get; private set; }
+        public IIdentityApi IdentityApi  { get; private set; }
         public IMatchApi Match           { get; private set; }
         public IServerBrowserApi Browser { get; private set; }
-        public TweakboxAuthenticationHandler Handler { get; private set; }
+        public TweakboxAuthenticationHandler AuthHandler { get; private set; }
+        public PolicyHttpMessageHandler PolicyHandler { get; private set; }
         public HttpClient Client { get; private set; }
 
         public TweakboxApi(string url, DateTimeProvider provider = null)
         {
-            Handler  = new TweakboxAuthenticationHandler(this, provider ?? new DateTimeProvider());
-            Handler.InnerHandler = new HttpClientHandler();
-
-            Client   = new HttpClient(Handler);
+            SetupHttpClientHandlers(provider);
+            Client = new HttpClient(PolicyHandler);
             Client.BaseAddress = new Uri(url);
             SetupServices();
         }
@@ -36,11 +39,27 @@ namespace Riders.Tweakbox.API.SDK
         /// <summary>
         /// Intended for testing but feel free to use.
         /// </summary>
-        public TweakboxApi(Func<DelegatingHandler, HttpClient> getClient, DateTimeProvider provider = null)
+        public TweakboxApi(Func<DelegatingHandler[], HttpClient> getClient, DateTimeProvider provider = null)
         {
-            Handler = new TweakboxAuthenticationHandler(this, provider ?? new DateTimeProvider());
-            Client  = getClient(Handler);
+            SetupHttpClientHandlers(provider);
+            Client = getClient(new DelegatingHandler[] { PolicyHandler, AuthHandler });
             SetupServices();
+        }
+
+        private void SetupHttpClientHandlers(DateTimeProvider provider)
+        {
+            var policy = HttpPolicyExtensions.HandleTransientHttpError().WaitAndRetryAsync(new TimeSpan[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(2),
+                TimeSpan.FromSeconds(3)
+            });
+
+            PolicyHandler = new PolicyHttpMessageHandler(policy);
+            AuthHandler   = new TweakboxAuthenticationHandler(this, provider ?? new DateTimeProvider());
+
+            PolicyHandler.InnerHandler = AuthHandler;
+            AuthHandler.InnerHandler   = new HttpClientHandler();
         }
 
         private void SetupServices()
@@ -58,7 +77,7 @@ namespace Riders.Tweakbox.API.SDK
         /// <returns>Either a successful login or authentication failure details.</returns>
         public async Task<OneOf<AuthSuccessResponse, ErrorReponse>> TryAuthenticate(string username, string password)
         {
-            return await Handler.TryAuthenticate(username, password);
+            return await AuthHandler.TryAuthenticate(username, password);
         }
 
         private TService MakeRestService<TService>(HttpClient client)
@@ -70,7 +89,7 @@ namespace Riders.Tweakbox.API.SDK
         public void Dispose()
         {
             Client?.Dispose();
-            Handler?.Dispose();
+            AuthHandler?.Dispose();
         }
     }
 }

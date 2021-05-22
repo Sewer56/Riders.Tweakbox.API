@@ -220,7 +220,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await RegisterAndAuthenticateAsync();
 
-            var lastResponse = Api.Handler.CachedAuthResponse;
+            var lastResponse = Api.AuthHandler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
@@ -240,7 +240,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await RegisterAndAuthenticateAsync();
 
-            var lastResponse = Api.Handler.CachedAuthResponse;
+            var lastResponse = Api.AuthHandler.CachedAuthResponse;
             await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
@@ -262,7 +262,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await RegisterAndAuthenticateAsync();
 
-            var lastResponse = Api.Handler.CachedAuthResponse;
+            var lastResponse = Api.AuthHandler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
@@ -283,7 +283,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await RegisterAndAuthenticateAsync();
 
-            var lastResponse = Api.Handler.CachedAuthResponse;
+            var lastResponse = Api.AuthHandler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken + 'a',
