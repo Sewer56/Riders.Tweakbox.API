@@ -56,8 +56,10 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Name == other.Name 
-                   && Port == other.Port 
-                   && Type == other.Type 
+                   && Port == other.Port
+                   && Type == other.Type
+                   && HasPassword == other.HasPassword 
+                   && Mods == other.Mods 
                    && Players.ListsEqual(other.Players);
         }
 
@@ -75,7 +77,7 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser
         [ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
-            return HashCode.Combine(Name, Port, (int) Type, Players);
+            return HashCode.Combine(Name, Port, (int) Type, HasPassword, Mods);
         }
     }
 }

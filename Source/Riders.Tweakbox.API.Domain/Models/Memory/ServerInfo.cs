@@ -43,6 +43,11 @@ namespace Riders.Tweakbox.API.Domain.Models.Memory
         public string Name { get; set; }
 
         /// <summary>
+        /// Mods running on this server.
+        /// </summary>
+        public string Mods { get; set; }
+
+        /// <summary>
         /// List of players from the server.
         /// </summary>
         public List<ServerPlayerInfo> Players { get; set; }
