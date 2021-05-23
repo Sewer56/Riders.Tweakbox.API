@@ -25,6 +25,8 @@ namespace Riders.Tweakbox.API.SDK
         public IIdentityApi IdentityApi  { get; private set; }
         public IMatchApi Match           { get; private set; }
         public IServerBrowserApi Browser { get; private set; }
+        
+        public ReturnExceptionAsErrorHandler ErrorHandler { get; private set; }
         public TweakboxAuthenticationHandler AuthHandler { get; private set; }
         public PolicyHttpMessageHandler PolicyHandler { get; private set; }
         public HttpClient Client { get; private set; }
@@ -37,7 +39,7 @@ namespace Riders.Tweakbox.API.SDK
         public TweakboxApi(string url, DateTimeProvider provider = null)
         {
             SetupHttpClientHandlers(provider);
-            Client = new HttpClient(PolicyHandler);
+            Client = new HttpClient(ErrorHandler);
             Client.BaseAddress = new Uri(url);
             SetupServices();
         }
@@ -48,7 +50,7 @@ namespace Riders.Tweakbox.API.SDK
         public TweakboxApi(Func<DelegatingHandler[], HttpClient> getClient, DateTimeProvider provider = null)
         {
             SetupHttpClientHandlers(provider);
-            Client = getClient(new DelegatingHandler[] { PolicyHandler, AuthHandler });
+            Client = getClient(new DelegatingHandler[] { ErrorHandler, PolicyHandler, AuthHandler });
             SetupServices();
         }
 
@@ -77,9 +79,11 @@ namespace Riders.Tweakbox.API.SDK
                 TimeSpan.FromSeconds(3)
             });
 
+            ErrorHandler  = new ReturnExceptionAsErrorHandler();
             PolicyHandler = new PolicyHttpMessageHandler(policy);
             AuthHandler   = new TweakboxAuthenticationHandler(this, provider ?? new DateTimeProvider());
 
+            ErrorHandler.InnerHandler  = PolicyHandler;
             PolicyHandler.InnerHandler = AuthHandler;
             AuthHandler.InnerHandler   = new HttpClientHandler();
         }
