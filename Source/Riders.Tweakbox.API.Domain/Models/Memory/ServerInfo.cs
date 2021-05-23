@@ -12,9 +12,19 @@ namespace Riders.Tweakbox.API.Domain.Models.Memory
         public Guid Id { get; set; }
 
         /// <summary>
+        /// The last time this server was refreshed.
+        /// </summary>
+        public DateTime LastRefreshTime { get; set; }
+
+        /// <summary>
         /// IP Address of the Server Host.
         /// </summary>
         public string Address { get; set; }
+
+        /// <summary>
+        /// Name of the server.
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// The port the host is listening on.
@@ -33,14 +43,9 @@ namespace Riders.Tweakbox.API.Domain.Models.Memory
         public Country Country { get; set; }
 
         /// <summary>
-        /// The last time this server was refreshed(.
+        /// Mods running on this server.
         /// </summary>
-        public DateTime LastRefreshTime { get; set; }
-
-        /// <summary>
-        /// Name of the server.
-        /// </summary>
-        public string Name { get; set; }
+        public bool HasPassword { get; set; }
 
         /// <summary>
         /// Mods running on this server.
