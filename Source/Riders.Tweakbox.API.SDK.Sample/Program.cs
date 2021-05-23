@@ -39,7 +39,7 @@ namespace Riders.Tweakbox.API.SDK.Sample
             }
 
             // Create Server
-            var serverCreate = await tweakbox.Browser.CreateOrRefresh(new PostServerRequest()
+            var serverCreate = await tweakbox.BrowserApi.CreateOrRefresh(new PostServerRequest()
             {
                 Name = "Sewer's Server",
                 Port = 1,
@@ -51,12 +51,12 @@ namespace Riders.Tweakbox.API.SDK.Sample
                 }
             });
 
-            var getAll = await tweakbox.Browser.GetAll();
+            var getAll = await tweakbox.BrowserApi.GetAll();
             if (getAll.StatusCode == HttpStatusCode.BadRequest)
                 Console.WriteLine("Failed to Get Server Browser Data");
 
             // Delete Server
-            await tweakbox.Browser.Delete(serverCreate.Content.Id, 1);
+            await tweakbox.BrowserApi.Delete(serverCreate.Content.Id, 1);
 
             // Login
             var loginResponse = await tweakbox.TryAuthenticate(Username, Password);
@@ -64,7 +64,7 @@ namespace Riders.Tweakbox.API.SDK.Sample
                 error => Console.WriteLine($"Failed to Login: {Join("\n", error.Errors)}"));
 
             // Get Past Match Data (Uses Authentication)
-            var matches = await tweakbox.Match.GetAll(null);
+            var matches = await tweakbox.MatchApi.GetAll(null);
             if (matches.StatusCode == HttpStatusCode.BadRequest)
                 Console.WriteLine("Failed to Get Match Data");
         }

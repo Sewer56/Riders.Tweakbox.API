@@ -23,7 +23,7 @@ namespace Integration.Tests
 
             // Act || Expire token and try accessing a restricted endpoint.
             dateTimeProviderMock.Setup(x => x.GetCurrentDateTimeUtc()).Returns(() => Api.AuthHandler.Token.ValidTo + TimeSpan.FromSeconds(1));
-            var matches = await Api.Match.GetAll();
+            var matches = await Api.MatchApi.GetAll();
 
             // Assert || First that token changed and second that response worked
             Assert.NotEqual(cachedResponse, Api.AuthHandler.CachedAuthResponse);
