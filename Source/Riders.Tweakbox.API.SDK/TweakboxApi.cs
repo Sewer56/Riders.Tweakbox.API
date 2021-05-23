@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using OneOf;
 using Polly;
@@ -100,6 +101,40 @@ namespace Riders.Tweakbox.API.SDK
         {
             Client?.Dispose();
             AuthHandler?.Dispose();
+        }
+    }
+
+    public static class TweakboxApiExtensions
+    {
+        /// <summary>
+        /// Takes an API Response and returns an error.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="response">Response returned from an API.</param>
+        /// <param name="error">The corresponding error.</param>
+        public static bool TryGetError<T>(this ApiResponse<T> response, out ErrorReponse error)
+        {
+            if (response.Error?.Content != null)
+            {
+                error = JsonSerializer.Deserialize<ErrorReponse>(response.Error.Content, RefitConstants.SerializerOptions);
+                return true;
+            }
+
+            error = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Takes an API Response and returns a tuple containing either an error or the desired response.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="response">Response returned from an API.</param>
+        public static OneOf<T, ErrorReponse> AsOneOf<T>(this ApiResponse<T> response)
+        {
+            if (response.Error?.Content != null)
+                return JsonSerializer.Deserialize<ErrorReponse>(response.Error.Content, RefitConstants.SerializerOptions);
+
+            return response.Content;
         }
     }
 }
