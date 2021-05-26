@@ -37,6 +37,11 @@ namespace Riders.Tweakbox.API.Domain.Models.Memory
         public MatchType Type { get; set; }
 
         /// <summary>
+        /// The built-in game mode assigned to this match.
+        /// </summary>
+        public GameMode GameMode { get; set; }
+
+        /// <summary>
         /// The country associated with this server.
         /// Derived from the IP Address.
         /// </summary>
