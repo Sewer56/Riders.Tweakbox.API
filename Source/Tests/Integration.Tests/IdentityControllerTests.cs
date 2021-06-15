@@ -220,7 +220,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await RegisterAndAuthenticateAsync();
 
-            var lastResponse = Api.Handler.CachedAuthResponse;
+            var lastResponse = Api.AuthHandler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
@@ -240,7 +240,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await RegisterAndAuthenticateAsync();
 
-            var lastResponse = Api.Handler.CachedAuthResponse;
+            var lastResponse = Api.AuthHandler.CachedAuthResponse;
             await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
@@ -248,7 +248,7 @@ namespace Integration.Tests
             });
 
             // Call API requiring auth.
-            var matchResponse = await Api.Match.GetAll(null);
+            var matchResponse = await Api.MatchApi.GetAll(null);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, matchResponse.StatusCode);
@@ -262,7 +262,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await RegisterAndAuthenticateAsync();
 
-            var lastResponse = Api.Handler.CachedAuthResponse;
+            var lastResponse = Api.AuthHandler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken,
@@ -283,7 +283,7 @@ namespace Integration.Tests
             // Try Create Default User Again
             await RegisterAndAuthenticateAsync();
 
-            var lastResponse = Api.Handler.CachedAuthResponse;
+            var lastResponse = Api.AuthHandler.CachedAuthResponse;
             var response = await Api.IdentityApi.Refresh(new RefreshTokenRequest()
             {
                 RefreshToken = lastResponse.RefreshToken + 'a',

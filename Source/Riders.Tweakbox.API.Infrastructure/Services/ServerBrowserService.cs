@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 using Riders.Tweakbox.API.Application.Commands.v1.Browser;
 using Riders.Tweakbox.API.Application.Commands.v1.Browser.Result;
 using Riders.Tweakbox.API.Application.Models;
@@ -48,7 +49,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
                 var country = city?.Country.IsoCode.GetCountryFromShortName() ?? Country.UNK;
                 existing = new ServerInfo()
                 {
-                    Address = source.ToString(),
+                    Address = source.MapToIPv4().ToString(),
                     Country = country
                 };
             }

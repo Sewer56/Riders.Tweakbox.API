@@ -31,7 +31,7 @@ namespace Integration.Tests.Common
             using var scope = Factory.Services.CreateScope();
             Task.Run(() => ClearDatabase(scope.ServiceProvider)).Wait();
 
-            Api = new TweakboxApi(handler => Factory.CreateDefaultClient(handler));
+            Api = new TweakboxApi(handlers => Factory.CreateDefaultClient(handlers));
         }
 
         protected async Task AuthenticateAsAdminAsync()

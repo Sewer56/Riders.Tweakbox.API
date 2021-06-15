@@ -25,7 +25,7 @@ namespace Integration.Tests
             await RegisterAndAuthenticateAsync();
 
             // Act
-            var response = await Api.Match.GetAll(null);
+            var response = await Api.MatchApi.GetAll(null);
             
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -43,8 +43,8 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act
-            await Api.Match.SeedMatches(matches, users.minId, users.maxId, 2, MatchTypeDto.RankedSolo);
-            var response = await Api.Match.GetAll(null);
+            await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId, 2, MatchTypeDto.RankedSolo);
+            var response = await Api.MatchApi.GetAll(null);
             
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -72,7 +72,7 @@ namespace Integration.Tests
 
             // Test Cases
             // Act
-            await Api.Match.SeedMatches(matches, users.minId, users.maxId, 250, gameMode);
+            await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId, 250, gameMode);
             
             // Assert
             var newUsers = await Api.IdentityApi.GetAll(new PaginationQuery() { PageSize = players, PageNumber = 0 });
@@ -115,7 +115,7 @@ namespace Integration.Tests
 
             // Test Cases
             // Act
-            await Api.Match.SeedMatches(matches, users.minId, users.maxId, 250, gameMode);
+            await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId, 250, gameMode);
             
             // Assert
             var newUsers = await Api.IdentityApi.GetAll(new PaginationQuery() { PageSize = players, PageNumber = 0 });
@@ -144,7 +144,7 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act
-            await Api.Match.SeedMatches(matches, users.minId, users.maxId, 250, MatchTypeDto.RankedSolo, players, 1);
+            await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId, 250, MatchTypeDto.RankedSolo, players, 1);
             
             // Assert
             var newUsers = await Api.IdentityApi.GetAll(new PaginationQuery() { PageSize = players, PageNumber = 0 });
@@ -169,7 +169,7 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act
-            await Api.Match.SeedMatches(matches, users.minId, users.maxId, 250, gameMode);
+            await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId, 250, gameMode);
             
             // Assert
             // As all players started with the same rating and all 3 teams were of 2 players,
@@ -201,8 +201,8 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act
-            await Api.Match.SeedMatches(matches, users.minId, users.maxId);
-            var response = await Api.Match.GetAll(null);
+            await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId);
+            var response = await Api.MatchApi.GetAll(null);
             
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -222,15 +222,15 @@ namespace Integration.Tests
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             // Act & Assert: Seeding
-            var seededMatches = await Api.Match.SeedMatches(matches, users.minId, users.maxId);
+            var seededMatches = await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId);
             Assert.NotEmpty(seededMatches);
             Assert.NotEmpty(context.RaceDetails.ToList());
 
             // Act & Assert: Delete
-            var deleted = await Api.Match.Delete(seededMatches[0].Id);
+            var deleted = await Api.MatchApi.Delete(seededMatches[0].Id);
             Assert.True(deleted.Content);
 
-            var matchResponses = await Api.Match.GetAll(null);
+            var matchResponses = await Api.MatchApi.GetAll(null);
             Assert.Empty(matchResponses.Content.Items);
 
             // Act & Assert: Cascade Deletion
@@ -249,10 +249,10 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act & Assert: Seeding
-            var seededMatches = await Api.Match.SeedMatches(matches, users.minId, users.maxId);
+            var seededMatches = await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId);
 
             // Act & Assert: Delete
-            var deleted = await Api.Match.Delete(seededMatches[0].Id + 1);
+            var deleted = await Api.MatchApi.Delete(seededMatches[0].Id + 1);
             Assert.Equal(HttpStatusCode.NotFound, deleted.StatusCode);
             Assert.False(deleted.Content);
         }
@@ -268,10 +268,10 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act & Assert: Seeding
-            var seededMatches = await Api.Match.SeedMatches(matches, users.minId, users.maxId);
+            var seededMatches = await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId);
 
             // Act & Assert: Delete
-            var get = await Api.Match.Get(seededMatches[0].Id);
+            var get = await Api.MatchApi.Get(seededMatches[0].Id);
 
             Assert.Equal(HttpStatusCode.OK, get.StatusCode);
             Assert.NotNull(get.Content);
@@ -290,10 +290,10 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act & Assert: Seeding
-            var seededMatches = await Api.Match.SeedMatches(matches, users.minId, users.maxId);
+            var seededMatches = await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId);
 
             // Act & Assert: Delete
-            var get = await Api.Match.Get(seededMatches[0].Id + 1);
+            var get = await Api.MatchApi.Get(seededMatches[0].Id + 1);
             Assert.Equal(HttpStatusCode.NotFound, get.StatusCode);
         }
 
@@ -308,7 +308,7 @@ namespace Integration.Tests
             var users = await SeedPlayersAsync(players);
 
             // Act & Assert: Seeding
-            var seededMatches = await Api.Match.SeedMatches(matches, users.minId, users.maxId);
+            var seededMatches = await Api.MatchApi.SeedMatches(matches, users.minId, users.maxId);
             var seededMatch = seededMatches[0];
             var playerOne = seededMatch.Teams[0][0];
             
@@ -318,8 +318,8 @@ namespace Integration.Tests
             seededMatch.StageNo = 0;
 
             // Act & Assert: Delete
-            var get = await Api.Match.Update(seededMatches[0].Id, Mapping.Mapper.Map<PostMatchRequest>(seededMatch));
-            var getMatch = await Api.Match.Get(seededMatches[0].Id);
+            var get = await Api.MatchApi.Update(seededMatches[0].Id, Mapping.Mapper.Map<PostMatchRequest>(seededMatch));
+            var getMatch = await Api.MatchApi.Get(seededMatches[0].Id);
 
             Assert.Equal(HttpStatusCode.OK, get.StatusCode);
             Assert.True(get.Content);

@@ -42,6 +42,11 @@ namespace Riders.Tweakbox.API.SDK.Handler
         }
 
         /// <summary>
+        /// Signs the user out by forgetting the cached token.
+        /// </summary>
+        public void SignOut() => CachedAuthResponse = null;
+
+        /// <summary>
         /// Allows you to authenticate with the API before making any API calls which require authentication.
         /// </summary>
         /// <param name="username">Username.</param>

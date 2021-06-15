@@ -132,7 +132,7 @@ namespace Riders.Tweakbox.API.Infrastructure.Services
             catch (Exception e)
             {
                 _logger?.LogInformation($"Failed to find IP Details for {address} " +
-                                        $"Exception: ");
+                                        $"Exception: {e.Message}");
 
                 Console.WriteLine(e);
                 return null;

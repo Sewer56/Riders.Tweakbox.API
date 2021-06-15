@@ -20,6 +20,11 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
         public string Address { get; set; }
 
         /// <summary>
+        /// Name of the server.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// The port the host is listening on.
         /// </summary>
         public int Port { get; set; }
@@ -30,15 +35,15 @@ namespace Riders.Tweakbox.API.Application.Commands.v1.Browser.Result
         public MatchTypeDto Type { get; set; }
 
         /// <summary>
+        /// The built-in game mode assigned to this match.
+        /// </summary>
+        public GameModeDto GameMode { get; set; }
+
+        /// <summary>
         /// The country associated with this server.
         /// Derived from the IP Address.
         /// </summary>
         public CountryDto Country { get; set; }
-
-        /// <summary>
-        /// Name of the server.
-        /// </summary>
-        public string Name { get; set; }
 
         /// <summary>
         /// True if there is a password in the hosted game.

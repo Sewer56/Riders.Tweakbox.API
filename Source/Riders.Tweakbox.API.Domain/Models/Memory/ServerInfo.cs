@@ -12,9 +12,19 @@ namespace Riders.Tweakbox.API.Domain.Models.Memory
         public Guid Id { get; set; }
 
         /// <summary>
+        /// The last time this server was refreshed.
+        /// </summary>
+        public DateTime LastRefreshTime { get; set; }
+
+        /// <summary>
         /// IP Address of the Server Host.
         /// </summary>
         public string Address { get; set; }
+
+        /// <summary>
+        /// Name of the server.
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// The port the host is listening on.
@@ -27,20 +37,25 @@ namespace Riders.Tweakbox.API.Domain.Models.Memory
         public MatchType Type { get; set; }
 
         /// <summary>
+        /// The built-in game mode assigned to this match.
+        /// </summary>
+        public GameMode GameMode { get; set; }
+
+        /// <summary>
         /// The country associated with this server.
         /// Derived from the IP Address.
         /// </summary>
         public Country Country { get; set; }
 
         /// <summary>
-        /// The last time this server was refreshed(.
+        /// Mods running on this server.
         /// </summary>
-        public DateTime LastRefreshTime { get; set; }
+        public bool HasPassword { get; set; }
 
         /// <summary>
-        /// Name of the server.
+        /// Mods running on this server.
         /// </summary>
-        public string Name { get; set; }
+        public string Mods { get; set; }
 
         /// <summary>
         /// List of players from the server.

@@ -17,7 +17,7 @@ namespace Integration.Tests
             // Act & Arrange
             var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
-            var result    = await Api.Browser.CreateOrRefresh(item);
+            var result    = await Api.BrowserApi.CreateOrRefresh(item);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
@@ -32,8 +32,8 @@ namespace Integration.Tests
             // Act & Arrange
             var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
-            await Api.Browser.CreateOrRefresh(item);
-            var getAll    = await Api.Browser.GetAll();
+            await Api.BrowserApi.CreateOrRefresh(item);
+            var getAll    = await Api.BrowserApi.GetAll();
 
             // Assert
             var mapped = Mapping.Mapper.Map<PostServerRequest>(getAll.Content.Results[0]);
@@ -46,9 +46,9 @@ namespace Integration.Tests
             // Act & Arrange
             var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
-            var result    = await Api.Browser.CreateOrRefresh(item);
-            await Api.Browser.Delete(result.Content.Id, item.Port);
-            var getAll    = await Api.Browser.GetAll();
+            var result    = await Api.BrowserApi.CreateOrRefresh(item);
+            await Api.BrowserApi.Delete(result.Content.Id, item.Port);
+            var getAll    = await Api.BrowserApi.GetAll();
 
             // Assert
             Assert.Empty(getAll.Content.Results);
@@ -60,8 +60,8 @@ namespace Integration.Tests
             // Act & Arrange
             var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
-            var result    = await Api.Browser.CreateOrRefresh(item);
-            var response  = await Api.Browser.Delete(Guid.NewGuid(), item.Port);
+            var result    = await Api.BrowserApi.CreateOrRefresh(item);
+            var response  = await Api.BrowserApi.Delete(Guid.NewGuid(), item.Port);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -73,8 +73,8 @@ namespace Integration.Tests
             // Act & Arrange
             var generator = DataGenerators.ServerBrowser.GetPostServerRequest();
             var item      = generator.Generate();
-            var result    = await Api.Browser.CreateOrRefresh(item);
-            var response  = await Api.Browser.Delete(result.Content.Id, item.Port + 1 % 65535);
+            var result    = await Api.BrowserApi.CreateOrRefresh(item);
+            var response  = await Api.BrowserApi.Delete(result.Content.Id, item.Port + 1 % 65535);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
