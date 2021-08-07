@@ -160,7 +160,7 @@ sudo systemctl start tweakbox.service
 
 ### Maintenance
 
-#### Updating BaGet-Reloaded
+#### Updating Tweakbox.API
 
 First stop the active server process:
 ```
